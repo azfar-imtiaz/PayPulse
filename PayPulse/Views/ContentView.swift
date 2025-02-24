@@ -43,8 +43,9 @@ struct ContentView: View {
                                 .font(.custom("Gotham-Book", size: 15))
                                 .foregroundStyle(Color.secondaryDarkGray)
                         }
-                        Spacer()
+                        
                     }
+                    Spacer()
                 }
                 .padding()
                 
@@ -67,4 +68,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .preferredColorScheme(.dark)
 }

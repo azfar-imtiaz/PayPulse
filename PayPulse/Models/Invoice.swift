@@ -21,6 +21,8 @@ struct Invoice: Identifiable {
     let moms_amount: Int
     let totalAmount: Int
     
+    let dateFormatter: DateFormatter = DateFormatter()
+    
     init(id: String, dueDate: String, dueDateMonthYear: String, ocr_reference: String, filename: String, electricity_amount: Int, hyra_amount: String, kallvatten_amount: Int, varmvatten_amount: Int, mervärdesskatt_amount: Int, moms_amount: Int, totalAmount: String) {
         self.id = id
         self.dueDate = dueDate
@@ -34,6 +36,8 @@ struct Invoice: Identifiable {
         self.mervärdesskatt_amount = mervärdesskatt_amount
         self.moms_amount = moms_amount
         self.totalAmount = Int(totalAmount.replacingOccurrences(of: ",", with: "")) ?? -1
+        
+        self.dateFormatter.dateFormat = "dd-MM-yyyy"
     }
     
     static func convertDateToMonthYear(from dateString: String) -> String? {
@@ -51,10 +55,7 @@ struct Invoice: Identifiable {
     }
     
     func getInvoiceDueYear() -> Int {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
-        
-        guard let dueDate = dateFormatter.date(from: self.dueDate) else {
+        guard let dueDate = self.dateFormatter.date(from: self.dueDate) else {
             return -1
         }
         
@@ -64,11 +65,19 @@ struct Invoice: Identifiable {
         return dueYear
     }
     
-    func isCurrentMonthInvoice() -> Bool {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd-MM-yyyy"
+    func getInvoiceDueMonth() -> String? {
+        guard let date = self.dateFormatter.date(from: self.dueDate) else {
+            return nil
+        }
         
-        guard let dueDate = dateFormatter.date(from: self.dueDate) else {
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "MMMM"
+        
+        return outputFormatter.string(from: date)
+    }
+    
+    func isCurrentMonthInvoice() -> Bool {
+        guard let dueDate = self.dateFormatter.date(from: self.dueDate) else {
             return false
         }
         
