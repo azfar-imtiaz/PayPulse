@@ -45,8 +45,6 @@ class InvoiceViewModel: ObservableObject {
                 }
             }
         }
-        
-        
     }
     
     func getCurrentMonthNameAndYear() -> String {
@@ -57,5 +55,41 @@ class InvoiceViewModel: ObservableObject {
     
     func getInvoicesByYearSorted() -> [[Int: [Invoice]].Keys.Element] {
         return self.invoicesByYear.keys.sorted() { $0 > $1 }
+    }
+    
+    func getFilteredData(for parameter: ParameterType, year: Int?, from invoices: [Invoice]) -> [(String, Int)] {
+        if let year = year {
+            return invoices
+                .filter { $0.getInvoiceDueYear() == year }
+                .map { ($0.getInvoiceDueMonth()!, getValue(for: parameter, from: $0)) }
+        } else {
+            return invoices
+                .reduce(into: [(String, Int)]()) { result, invoice in
+                    let value = getValue(for: parameter, from: invoice)
+//                    if let last = result.last, last.0 == "\(invoice.getInvoiceDueYear())" {
+//                        // MARK: Why are we doing this?
+//                        // Calculating average if there are multiple entries for a year
+//                        result[result.count - 1] = (last.0, (last.1 + value) / 2)
+//                    } else {
+//                        result.append(("\(invoice.getInvoiceDueYear())", value))
+//                    }
+                    result.append(("\(invoice.getInvoiceDueYear())", value))
+                }
+        }
+    }
+    
+    private func getValue(for parameter: ParameterType, from invoice: Invoice) -> Int {
+        switch parameter {
+        case .baseRent:
+            return invoice.hyra_amount
+        case .coldWater:
+            return invoice.kallvatten_amount
+        case .hotWater:
+            return invoice.varmvatten_amount
+        case .electricity:
+            return invoice.electricity_amount
+        case .totalRent:
+            return invoice.totalAmount
+        }
     }
 }
