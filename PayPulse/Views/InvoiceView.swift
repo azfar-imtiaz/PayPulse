@@ -12,6 +12,7 @@ struct InvoiceView: View {
     let invoice: Invoice
     @State private var showOCRToast: Bool = false
     @State private var showTotalAmountToast: Bool = false
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
     
     var body: some View {
@@ -87,6 +88,16 @@ struct InvoiceView: View {
         .background(Color.primaryOffWhite)
         .navigationTitle("Invoice Details")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "chevron.left.circle")
+                }
+            }
+        }
     }
     
     func showTextCopiedToast(text: String) {
