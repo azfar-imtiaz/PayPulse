@@ -27,6 +27,10 @@
 		<string>GothamCond-MediumItalic.otf</string>
 		<string>GothamCond-Thin.otf</string>
 		<string>GothamCond-ThinItalic.otf</string>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Montserrat-Medium.ttf</string>
+		<string>Montserrat-Regular.ttf</string>
+		<string>Montserrat-SemiBold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
