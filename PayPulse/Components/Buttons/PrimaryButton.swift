@@ -23,7 +23,8 @@ struct PrimaryButton<Content: View>: View {
                     .foregroundStyle(isDisabled ? .gray : Color.accent)
                 
                 buttonView
-                    .font(.custom("Gotham-Bold", size: 18))
+                    .font(.custom("Montserrat-Bold", size: 18))
+                    .foregroundStyle(Color.white)
             }
             .frame(width: 300, height: 50)
         }
