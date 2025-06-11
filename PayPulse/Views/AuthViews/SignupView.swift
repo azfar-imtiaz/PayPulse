@@ -1,23 +1,28 @@
 //
-//  LoginView.swift
+//  SignupView.swift
 //  PayPulse
 //
-//  Created by Azfar Imtiaz on 2025-06-09.
+//  Created by Azfar Imtiaz on 2025-06-11.
 //
 
 import SwiftUI
 
-struct LoginView: View {
+struct SignupView: View {
+    @State var name     : String = ""
     @State var email    : String = ""
     @State var password : String = ""
+    @State var gmailPassword : String = ""
+    
+    var toggleAuthView: () -> Void
     
     var body: some View {
         VStack {
+            /*
             /// MARK: Auth view header
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Login with")
-                    Text("your existing account.")
+                    Text("Sign up ")
+                    Text("with a new account.")
                 }
                 .foregroundStyle(Color.secondaryDarkGray)
                 .font(.custom("Montserrat-Bold", size: 26))
@@ -28,10 +33,17 @@ struct LoginView: View {
             .padding(.top, 40)
             
             Spacer()
+             */
             
-            /// MARK: Login form
+            /// MARK: Signup form
             
             VStack(alignment: .center, spacing: 20) {
+                LabeledTextField(
+                    text: $name,
+                    placeholderText: "Enter your full name",
+                    labelText: "Name"
+                )
+                
                 LabeledTextField(
                     text: $email,
                     placeholderText: "Enter your email address",
@@ -45,58 +57,42 @@ struct LoginView: View {
                     isSecure: true
                 )
                 
+                LabeledTextField(
+                    text: $gmailPassword,
+                    placeholderText: "Enter your Gmail app password",
+                    labelText: "Gmail app password (optional)"
+                )
+                
                 PrimaryButton(
-                    buttonView: Text("Login"),
+                    buttonView: Text("Sign up"),
                     action: {}
                 )
                 .padding(.top)
                 
                 HStack(spacing: 0) {
-                    Text("No account? Let's ")
+                    Text("Already have an account? ")
                         .font(.custom("Montserrat-Regular", size: 12))
                         .foregroundStyle(Color.secondaryDarkGray)
                     
                     TextButton(
-                        buttonText: "create one!",
+                        buttonText: "Sign in!",
                         textColor: Color.accentColorOrange,
                         font: "Montserrat-Regular",
                         fontSize: 12,
                         isUnderlined: true,
-                        action: {}
+                        action: {
+                            toggleAuthView()
+                        }
                     )
                 }
-                
-                HStack(spacing: 10) {
-                    HorizontalLine()
-                    
-                    Text("OR")
-                        .font(.custom("Montserrat-Regular", size: 12))
-                    
-                    HorizontalLine()
-                }
-                .foregroundStyle(Color.secondaryDarkGray)
-                .frame(width: 250)
-                .padding(.horizontal)
-                
-                SecondaryButton(
-                    buttonView: HStack {
-                        Image("google-logo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 30)
-                        
-                        Text("Continue with Google")
-                    },
-                    action: {}
-                )
             }
             
             
-            Spacer()
+            // Spacer()
         }
     }
 }
 
 #Preview {
-    LoginView()
+    SignupView(toggleAuthView: {})
 }
