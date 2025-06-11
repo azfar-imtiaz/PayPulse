@@ -15,19 +15,20 @@ struct AuthView: View {
             /// MARK: Auth view header
             HStack {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Hello")
+                    Text("PayPulse. Smart")
                     
                     Group {
                         if showingLogin {
-                            Text("again! Let's continue.")
+                            Text("connections. Log in.")
                                 .id("loginSuffix")
                                 .transition(.move(edge: .leading).combined(with: .opacity))
                         } else {
-                            Text("newcomer. Let's start!")
+                            Text("automation. Join us.")
                                 .id("signupSuffix")
                                 .transition(.move(edge: .trailing).combined(with: .opacity))
                         }
                     }
+                    .foregroundStyle(Color.gray)
                 }
                 .foregroundStyle(Color.secondaryDarkGray)
                 .font(.custom("Montserrat-Bold", size: 26))
@@ -42,7 +43,6 @@ struct AuthView: View {
             
             /// MARK: Flipping form card
             ZStack {
-                // if showingLogin {
                     // Login form
                     AuthCardView(
                         content: LoginView(toggleAuthView: {
@@ -56,8 +56,8 @@ struct AuthView: View {
                     .rotation3DEffect(.degrees(showingLogin ? 0 : 180), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
                     .opacity(showingLogin ? 1 : 0)
                     .zIndex(showingLogin ? 1 : 0) // ensure this card is on top when it's the front
-                    .animation(.easeInOut(duration: 0.8), value: showingLogin) // Card flip animation duration
-                // } else {
+                    .animation(.easeInOut(duration: 0.4), value: showingLogin) // Card flip animation duration
+                
                     // Signup form
                     AuthCardView(
                         content: SignupView(toggleAuthView: {
@@ -71,13 +71,12 @@ struct AuthView: View {
                     .rotation3DEffect(.degrees(showingLogin ? -180 : 0), axis: (x: 0, y: 1, z: 0), perspective: 0.5)
                     .opacity(showingLogin ? 0 : 1)
                     .zIndex(showingLogin ? 0 : 1) // ensure this card is on top when it's the front
-                    .animation(.easeInOut(duration: 0.8), value: showingLogin) // Card flip animation duration
-                // }
+                    .animation(.easeInOut(duration: 0.4), value: showingLogin) // Card flip animation duration
             }
-            .frame(height: 400)
             
             Spacer()
         }
+        .background(Color.primaryOffWhite)
     }
 }
 
