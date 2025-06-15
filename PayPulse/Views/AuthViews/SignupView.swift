@@ -79,7 +79,6 @@ struct SignupView: View {
                         textColor: Color.accentColorOrange,
                         font: "Montserrat-Regular",
                         fontSize: 12,
-                        isUnderlined: true,
                         action: {
                             toggleAuthView()
                         }

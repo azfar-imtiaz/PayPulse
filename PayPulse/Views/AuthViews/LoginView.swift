@@ -15,24 +15,6 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
-            /*
-            /// MARK: Auth view header
-            HStack {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Login with")
-                    Text("your existing account.")
-                }
-                .foregroundStyle(Color.secondaryDarkGray)
-                .font(.custom("Montserrat-Bold", size: 26))
-                
-                Spacer()
-            }
-            .padding(.leading)
-            .padding(.top, 40)
-            
-            Spacer()
-            */
-            
             /// MARK: Login form
             
             VStack(alignment: .center, spacing: 20) {
@@ -65,7 +47,6 @@ struct LoginView: View {
                         textColor: Color.accentColorOrange,
                         font: "Montserrat-Regular",
                         fontSize: 12,
-                        isUnderlined: true,
                         action: {
                             toggleAuthView()
                         }
