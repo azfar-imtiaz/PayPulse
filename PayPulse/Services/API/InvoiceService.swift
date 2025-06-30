@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OrderedCollections
 
 class InvoiceService {
     private let apiClient: PayPulseAPIClient
@@ -29,16 +30,20 @@ class InvoiceService {
         return invoiceCount
     }
     
-    func getRentalInvoices(type: String) async throws -> [InvoiceModel] {
-        let response: APISuccessResponse<[InvoiceModel]> = try await apiClient.request(
+    func getRentalInvoices(type: String) async throws -> OrderedDictionary<Int, [InvoiceModel]> {
+        let response: APISuccessResponse<InvoiceResponseModel> = try await apiClient.request(
             path: "invoices/\(type)",
             method: .get
         )
         
-        guard let invoices = response.data else {
-            return []
+        guard let responseData = response.data else {
+            return [:]
         }
         
-        return invoices
+        var modifiedInvoices: OrderedDictionary<Int, [InvoiceModel]> = OrderedDictionary(
+            uniqueKeysWithValues: responseData.invoices.sorted(by: { $0.key > $1.key })
+        )
+        
+        return modifiedInvoices
     }
 }

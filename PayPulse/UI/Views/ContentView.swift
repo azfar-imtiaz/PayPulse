@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    // @StateObject var viewModel = InvoiceViewModel()
-    
     let invoiceService: InvoiceService
     let userService: UserService
     
@@ -29,7 +27,7 @@ struct ContentView: View {
                 
                 HStack {
                     NavigationLink {
-                        InvoicesView()
+                        InvoicesView(invoiceService: invoiceService)
                     } label: {
                         VStack(alignment: .center) {
                             RoundedRectangle(cornerRadius: 8)

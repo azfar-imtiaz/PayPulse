@@ -8,21 +8,21 @@
 import SwiftUI
 
 struct PaymentDetailsView: View {
-    let paymentDetails: [String: Any]
+    let paymentDetails: [String: String]
     @Binding var showOCRToast: Bool
     @Binding var showTotalAmountToast: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            displayDueDate(value: paymentDetails["dueDate"] as! String)
+            displayDueDate(value: paymentDetails["dueDate"]!)
             
             Divider()
             
-            displayOCR(value: paymentDetails["ocr"] as! String)
+            displayOCR(value: paymentDetails["ocr"]!)
             
             Divider()
             
-            displayTotalAmount(value: paymentDetails["totalAmount"] as! Int)
+            displayTotalAmount(value: paymentDetails["totalAmount"]!)
         }
         .padding()
         .background(
@@ -71,7 +71,7 @@ struct PaymentDetailsView: View {
         }
     }
     
-    func displayTotalAmount(value: Int) -> some View {
+    func displayTotalAmount(value: String) -> some View {
         HStack(spacing: 5) {
             Text("Total Amount")
                 .font(.custom("Gotham-Medium", size: 16))
@@ -80,12 +80,12 @@ struct PaymentDetailsView: View {
             
             HStack(spacing: 5) {
                 // Text(value, format: .currency(code: "SEK"))
-                Text("\(Invoice.getAmountFormatted(amount: value)) kr")
+                Text("\(value) kr")
                     .font(.custom("Gotham-Book", size: 16))
                     .foregroundStyle(.gray)
                 
                 Button {
-                    copyTextToClipboard(text: String(value), isOCR: false)
+                    copyTextToClipboard(text: value, isOCR: false)
                 } label: {
                     Image("copy-icon")
                         .resizable()

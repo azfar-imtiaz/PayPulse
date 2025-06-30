@@ -24,6 +24,7 @@ struct LineChartView: View {
             let width = geo.size.width
             let height = geo.size.height
             
+            // TODO: This fucks up when min and max are the same (hyra amount being same in the latest year, for example)
             let minValue = data.map { $0.1 }.min() ?? 0
             let maxValue = data.map { $0.1 }.max() ?? 1 == minValue ? data.map { $0.1 }.max() ?? 1 + 10 : data.map { $0.1 }.max() ?? 1
             
