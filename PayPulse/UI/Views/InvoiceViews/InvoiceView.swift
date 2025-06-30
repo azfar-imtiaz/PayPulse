@@ -9,7 +9,7 @@ import SwiftUI
 import Toasts
 
 struct InvoiceView: View {
-    let invoice: Invoice
+    let invoice: InvoiceModel
     @State private var showOCRToast: Bool = false
     @State private var showTotalAmountToast: Bool = false
     @Environment(\.dismiss) private var dismiss
@@ -23,7 +23,7 @@ struct InvoiceView: View {
                     .font(.custom("Gotham-Medium", size: 20))
                     .foregroundStyle(Color.secondaryDarkGray)
                 
-                Text(invoice.id)
+                Text(invoice.invoiceID)
                     .font(.custom("Gotham-Book", size: 16))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
@@ -41,7 +41,7 @@ struct InvoiceView: View {
             PaymentDetailsView(
                 paymentDetails: [
                     "dueDate": invoice.dueDate,
-                    "ocr": invoice.ocr_reference,
+                    "ocr": invoice.ocr,
                     "totalAmount": invoice.totalAmount
                 ],
                 showOCRToast: $showOCRToast,
@@ -57,14 +57,14 @@ struct InvoiceView: View {
                 .padding(.horizontal)
             
             RentBreakdownView(breakdown: [
-                ("Base rent", invoice.hyra_amount),
-                ("Kallvatten", invoice.kallvatten_amount),
-                ("Varmvatten", invoice.varmvatten_amount),
-                ("Electricity", invoice.electricity_amount),
-                ("Moms", invoice.moms_amount),
+                ("Base rent", invoice.hyra),
+                ("Kallvatten", invoice.kallvatten ?? "0"),
+                ("Varmvatten", invoice.varmvatten ?? "0"),
+                ("Electricity", invoice.el ?? "0"),
+                ("Moms", invoice.moms),
                 ("Total", invoice.totalAmount)
             ])
-            .padding(.horizontal)
+            .padding(.horizontal)             
             
             Spacer()
             
@@ -107,5 +107,20 @@ struct InvoiceView: View {
 }
 
 #Preview {
-    InvoiceView(invoice: Invoice(id: "ID", dueDate: "2024-11-08", dueDateMonthYear: "November, 2024", ocr_reference: "1234567890", filename: "Hyresavi_akjdjaskdjsak", electricity_amount: -1, hyra_amount: "", kallvatten_amount: -1, varmvatten_amount: -1, mervärdesskatt_amount: -1, moms_amount: -1, totalAmount: "10,000"))
+    InvoiceView(
+        invoice: InvoiceModel(
+            invoiceID: "ID",
+            filename: "Hyresavi_akjdjaskdjsak",
+            hyra: "9,500",
+            el: "-1",
+            kallvatten: "-1",
+            varmvatten: "-1",
+            totalAmount: "10,000",
+            dueDateMonth: "05",
+            dueDateYear: "2025",
+            dueDate: "30-05-2025",
+            moms: "200",
+            ocr: "1234567890"
+        )
+    )
 }

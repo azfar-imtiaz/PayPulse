@@ -13,15 +13,22 @@ enum TabTitles: String {
 }
 
 struct InvoicesView: View {
-    @StateObject var viewModel = InvoiceViewModel()
+    let invoiceService: InvoiceService
+    @StateObject var viewModel: InvoicesViewModel
+    
     @State private var expandedYears: Set<Int> = []
     @State private var selectedTab: TabTitles = .invoices
     @Environment(\.dismiss) private var dismiss
     
+    init(invoiceService: InvoiceService) {
+        _viewModel = StateObject(wrappedValue: InvoicesViewModel(invoiceService: invoiceService))
+        self.invoiceService = invoiceService
+    }
+    
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
-                InvoicesListView()
+                InvoicesListView(viewModel: viewModel)
                     .tabItem {
                         Label("Invoices", systemImage: "list.bullet.rectangle.portrait.fill")
                     }
@@ -35,7 +42,9 @@ struct InvoicesView: View {
                     .tag(TabTitles.graphs)
             }
             .onAppear {
-                viewModel.fetchInvoices()
+                Task {
+                    await viewModel.getInvoices()
+                }
             }
         }
         .navigationBarBackButtonHidden()
@@ -56,5 +65,5 @@ struct InvoicesView: View {
 }
 
 #Preview {
-    InvoicesView()
+    InvoicesView(invoiceService: InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)))
 }

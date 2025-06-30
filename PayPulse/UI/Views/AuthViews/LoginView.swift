@@ -10,8 +10,8 @@ import SwiftUI
 struct LoginView: View {
     let authService: AuthService
     var toggleAuthView: () -> Void
-    @State var email    : String = ""
-    @State var password : String = ""
+    @State var email    : String = "azy.imtiaz@gmail.com"
+    @State var password : String = "PayPulse25!"
     @ObservedObject var viewModel: AuthViewModel
     
     init(authService: AuthService, toggleAuthView: @escaping () -> Void) {

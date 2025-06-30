@@ -66,13 +66,6 @@ class InvoiceViewModel: ObservableObject {
             return invoices
                 .reduce(into: [(String, Int)]()) { result, invoice in
                     let value = getValue(for: parameter, from: invoice)
-//                    if let last = result.last, last.0 == "\(invoice.getInvoiceDueYear())" {
-//                        // MARK: Why are we doing this?
-//                        // Calculating average if there are multiple entries for a year
-//                        result[result.count - 1] = (last.0, (last.1 + value) / 2)
-//                    } else {
-//                        result.append(("\(invoice.getInvoiceDueYear())", value))
-//                    }
                     result.append(("\(invoice.getInvoiceDueYear())", value))
                 }
         }

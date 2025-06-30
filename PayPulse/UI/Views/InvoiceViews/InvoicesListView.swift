@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct InvoicesListView: View {
-    @StateObject var viewModel = InvoiceViewModel()
+    @ObservedObject var viewModel: InvoicesViewModel
     @State private var expandedYears: Set<Int> = []
     
     var body: some View {
@@ -16,7 +16,7 @@ struct InvoicesListView: View {
             ScrollView {
                 
                 Section(header: getSectionHeader(text: "Latest invoice")) {
-                    if let latestInvoice = viewModel.latestInvoice, latestInvoice.isCurrentMonthInvoice() {
+                    if let latestInvoice = viewModel.latestInvoice, latestInvoice.isDueInCurrentMonth() {
                         NavigationLink {
                             InvoiceView(invoice: latestInvoice)
                         } label: {
@@ -28,15 +28,15 @@ struct InvoicesListView: View {
                 }
                 
                 // display all older invoices
-                let invoicesSortedByYear = viewModel.getInvoicesByYearSorted()
-                ForEach(invoicesSortedByYear, id: \.self) { year in
+                ForEach(Array(viewModel.invoices.keys), id: \.self ) { year in
+                    let yearString = String(year)
                     Section(header:
                         HStack {
-                            getSectionHeader(text: "\(year)")
+                            getSectionHeader(text: yearString)
                             Spacer()
                             Image(systemName: "chevron.down")
-                            .rotationEffect(.degrees(expandedYears.contains(year) ? 180 : 0))
-                            .foregroundStyle(Color.accentDeepOrange)
+                                .rotationEffect(.degrees(expandedYears.contains(year) ? 180 : 0))
+                                .foregroundStyle(Color.accentDeepOrange)
                         }
                         .onTapGesture {
                             withAnimation(.snappy(duration: 0.2)) {
@@ -49,12 +49,14 @@ struct InvoicesListView: View {
                         }
                     ) {
                         if expandedYears.contains(year) {
-                            let lastInvoiceId = viewModel.invoicesByYear[year]!.last?.id
-                            ForEach(viewModel.invoicesByYear[year]!) { invoice in
-                                NavigationLink {
-                                    InvoiceView(invoice: invoice)
-                                } label: {
-                                    invoiceListItemView(invoice: invoice, isLastInvoice: invoice.id == lastInvoiceId)
+                            let lastInvoiceID = viewModel.invoices[year]?.last?.invoiceID ?? ""
+                            if let invoicesForYear = viewModel.invoices[year] {
+                                ForEach(invoicesForYear) { invoice in
+                                    NavigationLink {
+                                        InvoiceView(invoice: invoice)
+                                    } label: {
+                                        invoiceListItemView(invoice: invoice, isLastInvoice: invoice.invoiceID == lastInvoiceID)
+                                    }
                                 }
                             }
                         }
@@ -69,14 +71,11 @@ struct InvoicesListView: View {
         .scrollContentBackground(.hidden)
         .navigationTitle("Rental Invoices")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            viewModel.fetchInvoices()
-        }
     }
     
-    func invoiceListItemView(invoice: Invoice, isLastInvoice: Bool) -> some View {
+    func invoiceListItemView(invoice: InvoiceModel, isLastInvoice: Bool) -> some View {
         VStack(alignment: .leading) {
-            Text("\(invoice.dueDateMonthYear)")
+            Text("\(invoice.dueDateMonth)-\(invoice.dueDateYear)")
                 .font(.custom("Gotham-Medium", size: 20))
                 .foregroundStyle(Color.secondaryDarkGray)
                 .padding(.vertical, 5)
@@ -86,7 +85,7 @@ struct InvoicesListView: View {
                     .foregroundStyle(Color.secondaryDarkGray)
                     .font(.custom("Gotham-Book", size: 16))
                 
-                Text(invoice.dueDate)
+                Text("\(invoice.getDueMonthName()), \(invoice.dueDateYear)")
                     .foregroundStyle(.gray)
                     .font(.custom("Gotham-Light", size: 16))
             }
@@ -97,7 +96,7 @@ struct InvoicesListView: View {
                     .foregroundStyle(Color.secondaryDarkGray)
                     .font(.custom("Gotham-Book", size: 16))
                 
-                Text("\(Invoice.getAmountFormatted(amount: invoice.totalAmount)) kr")
+                Text("\(invoice.totalAmount) kr")
                     .foregroundStyle(.gray)
                     .font(.custom("Gotham-Light", size: 16))
             }
@@ -125,17 +124,7 @@ struct InvoicesListView: View {
     
     func getSectionHeader(text: String) -> some View {
         HStack {
-//            RoundedRectangle(cornerRadius: 8)
-//                .stroke(Color.secondaryDarkGray, lineWidth: 1)
-//                .frame(width: 150, height: 30)
-//                .overlay {
-//                    Text(text)
-//                        .font(.custom("Gotham-Medium", size: 18))
-//                        .foregroundStyle(Color.accentDeepOrange)
-//                }
-                
-            
-            Text(text)
+            Text("\(text)")
                 .font(.custom("Gotham-Black", size: 18))
                 .foregroundStyle(Color.accentDeepOrange)
             
@@ -146,5 +135,13 @@ struct InvoicesListView: View {
 }
 
 #Preview {
-    InvoicesListView()
+    InvoicesListView(
+        viewModel: InvoicesViewModel(
+            invoiceService: InvoiceService(
+                apiClient: PayPulseAPIClient(
+                    authManager: AuthManager.shared
+                )
+            )
+        )
+    )
 }

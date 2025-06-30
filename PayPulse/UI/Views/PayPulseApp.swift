@@ -50,9 +50,7 @@ struct PayPulseApp: App {
                     .installToast(position: .bottom)
                     .environmentObject(authManager)
             } else {
-                AuthView(
-                    authService: authService
-                )
+                AuthView(authService: authService)
                     .environmentObject(authManager)
             }
         }
