@@ -96,24 +96,35 @@ class InvoicesViewModel: ObservableObject {
         formatter.numberStyle = .decimal
         switch parameter {
         case .baseRent:
-            return Int(invoice.hyra.replacing(",", with: ""))!
+            // return Int(invoice.hyra.replacing(",", with: ""))!
+            return invoice.hyra
         case .coldWater:
+            /*
             guard let kalvatten = invoice.kallvatten else {
                 return 0
             }
             return Int(kalvatten)!
+             */
+            return invoice.kallvatten
         case .hotWater:
+            /*
             guard let varmvatten = invoice.varmvatten else {
                 return 0
             }
             return Int(varmvatten)!
+             */
+            return invoice.varmvatten
         case .electricity:
+            /*
             guard let el = invoice.el else {
                 return 0
             }
             return Int(el)!
+             */
+            return invoice.el
         case .totalRent:
-            return Int(invoice.totalAmount.replacing(",", with: ""))!
+            // return Int(invoice.totalAmount.replacing(",", with: ""))!
+            return invoice.totalAmount
         }
     }
 }

@@ -27,7 +27,7 @@ struct ContentView: View {
                 
                 HStack {
                     NavigationLink {
-                        InvoicesView(invoiceService: invoiceService)
+                        RentalInvoicesLandingPage(invoiceService: invoiceService)
                     } label: {
                         VStack(alignment: .center) {
                             RoundedRectangle(cornerRadius: 8)

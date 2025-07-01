@@ -40,7 +40,8 @@ class InvoiceService {
             return [:]
         }
         
-        var modifiedInvoices: OrderedDictionary<Int, [InvoiceModel]> = OrderedDictionary(
+        // sort the invoices by years, in descending order
+        let modifiedInvoices: OrderedDictionary<Int, [InvoiceModel]> = OrderedDictionary(
             uniqueKeysWithValues: responseData.invoices.sorted(by: { $0.key > $1.key })
         )
         

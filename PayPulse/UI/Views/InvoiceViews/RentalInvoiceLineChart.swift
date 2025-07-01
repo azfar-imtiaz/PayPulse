@@ -8,7 +8,7 @@
 import SwiftUI
 import Toasts
 
-struct LineChartView: View {
+struct RentalInvoiceLineChart: View {
     let data: [(String, Int)]
     @State private var animationProgress: CGFloat = 0.0
     @State private var showAmountToast: Bool = false
@@ -54,7 +54,7 @@ struct LineChartView: View {
                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                     
                     // draw the Y-axis labels
-                    let label = Invoice.getAmountFormatted(amount: gridValue)
+                    let label = Utils.formatNumber(gridValue)
                     Text(label)
                         .font(.caption)
                         .foregroundColor(Color.secondaryDarkGray)
@@ -141,7 +141,7 @@ struct LineChartView: View {
     
     func showAmountToast(value: Int) {
         let toast = ToastValue(
-            message: "\(Invoice.getAmountFormatted(amount: value)) SEK",
+            message: "\(Utils.formatNumber(value)) SEK",
             duration: 2
         )
         presentToast(toast)
@@ -153,5 +153,5 @@ struct LineChartView: View {
 }
 
 #Preview {
-    LineChartView(data: [])
+    RentalInvoiceLineChart(data: [])
 }

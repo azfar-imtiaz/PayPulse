@@ -10,15 +10,15 @@ import Foundation
 struct InvoiceModel: Codable, Identifiable {
     let invoiceID: String
     let filename: String
-    let hyra: String
-    let el: String?
-    let kallvatten: String?
-    let varmvatten: String?
-    let totalAmount: String
+    let hyra: Int
+    let el: Int
+    let kallvatten: Int
+    let varmvatten: Int
+    let totalAmount: Int
     let dueDateMonth: String
     let dueDateYear: String
     let dueDate: String
-    let moms: String
+    let moms: Int
     let ocr: String
     
     var id: String { invoiceID }
