@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RentalInvoicesChartView: View {
+struct RentalChartView: View {
     @State private var selectedYear: Int? = nil
     @State private var selectedParam: ParameterType = .totalRent
     @ObservedObject var viewModel: InvoicesViewModel
@@ -43,7 +43,7 @@ struct RentalInvoicesChartView: View {
                 Text("No data available for the selected year.")
                     .padding()
             } else {
-                RentalInvoiceLineChart(data: filteredData)
+                RentalLineChart(data: filteredData)
                     .padding([.top, .horizontal])
                     .padding(.bottom, 30)
             }

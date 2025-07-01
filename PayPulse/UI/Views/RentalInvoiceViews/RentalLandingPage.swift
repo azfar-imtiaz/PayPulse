@@ -12,7 +12,7 @@ enum TabTitles: String {
     case graphs
 }
 
-struct RentalInvoicesLandingPage: View {
+struct RentalLandingPage: View {
     let invoiceService: InvoiceService
     @StateObject var viewModel: InvoicesViewModel
     
@@ -28,13 +28,13 @@ struct RentalInvoicesLandingPage: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
-                RentalInvoicesListView(viewModel: viewModel)
+                RentalListView(viewModel: viewModel)
                     .tabItem {
                         Label("Invoices", systemImage: "list.bullet.rectangle.portrait.fill")
                     }
                     .tag(TabTitles.invoices)
                 
-                RentalInvoicesChartView(viewModel: viewModel)
+                RentalChartView(viewModel: viewModel)
                     .background(Color.primaryOffWhite)
                     .tabItem {
                         Label("Charts", systemImage: "chart.xyaxis.line")
@@ -65,5 +65,5 @@ struct RentalInvoicesLandingPage: View {
 }
 
 #Preview {
-    RentalInvoicesLandingPage(invoiceService: InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)))
+    RentalLandingPage(invoiceService: InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)))
 }

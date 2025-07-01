@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RentalInvoicesListView: View {
+struct RentalListView: View {
     @ObservedObject var viewModel: InvoicesViewModel
     @State private var expandedYears: Set<Int> = []
     
@@ -18,7 +18,7 @@ struct RentalInvoicesListView: View {
                 Section(header: getSectionHeader(text: "Latest invoice")) {
                     if let latestInvoice = viewModel.latestInvoice, latestInvoice.isDueInCurrentMonth() {
                         NavigationLink {
-                            InvoiceDetailsView(invoice: latestInvoice)
+                            RentalDetailsView(invoice: latestInvoice)
                         } label: {
                             invoiceListItemView(invoice: latestInvoice, isLastInvoice: false)
                         }
@@ -53,7 +53,7 @@ struct RentalInvoicesListView: View {
                             if let invoicesForYear = viewModel.invoices[year] {
                                 ForEach(invoicesForYear) { invoice in
                                     NavigationLink {
-                                        InvoiceDetailsView(invoice: invoice)
+                                        RentalDetailsView(invoice: invoice)
                                     } label: {
                                         invoiceListItemView(invoice: invoice, isLastInvoice: invoice.invoiceID == lastInvoiceID)
                                     }
@@ -135,7 +135,7 @@ struct RentalInvoicesListView: View {
 }
 
 #Preview {
-    RentalInvoicesListView(
+    RentalListView(
         viewModel: InvoicesViewModel(
             invoiceService: InvoiceService(
                 apiClient: PayPulseAPIClient(

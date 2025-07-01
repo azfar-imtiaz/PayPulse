@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AuthCardView<Content: View>: View {
+struct AuthCard<Content: View>: View {
     let content: Content
     
     var body: some View {        
@@ -18,7 +18,7 @@ struct AuthCardView<Content: View>: View {
 }
 
 #Preview {
-    AuthCardView(
+    AuthCard(
         content: Text("Template")
     )
 }
