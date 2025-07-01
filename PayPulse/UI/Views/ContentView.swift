@@ -8,18 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    let invoiceService: InvoiceService
-    let userService: UserService
+    let invoiceService : InvoiceService
+    let userService    : UserService
     
     var body: some View {
         NavigationStack {
             VStack {
                 
                 HStack {
+                    Text("PayPulse")
+                        .font(.custom("Montserrat-Bold", size: 26))
+                        .foregroundStyle(.black)
+                    Spacer()
+                }
+                .padding(.leading)
+                .padding(.top, 40)
+                
+                HStack {
                     Text("All your invoices, one place.")
-                        .font(.custom("GothamCond-Medium", size: 24))
+                        // .font(.custom("GothamCond-Medium", size: 24))
+                        .font(.custom("Montserrat-Bold", size: 22))
                         .foregroundStyle(.gray)
-                        .font(.title2)
                     
                     Spacer()
                 }
@@ -30,21 +39,16 @@ struct ContentView: View {
                         RentalLandingPage(invoiceService: invoiceService)
                     } label: {
                         VStack(alignment: .center) {
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.secondaryDarkGray, lineWidth: 2)
+                            RectangleRoundedCorners(strokeWidth: 2)
                                 .frame(width: 130, height: 130)
                                 .overlay {
-                                    Image("invoice-icon")
-                                        .resizable()
-                                        .frame(width: 50, height: 50)
-                                        .foregroundStyle(Color.accentDeepOrange)
+                                    Icon(name: "invoice-icon", size: 50)
                                 }
                             
                             Text("Rental invoices")
                                 .font(.custom("Gotham-Book", size: 15))
                                 .foregroundStyle(Color.secondaryDarkGray)
-                        }
-                        
+                        }                        
                     }
                     Spacer()
                 }
@@ -52,9 +56,7 @@ struct ContentView: View {
                 
                 Spacer()
             }
-            .background(Color.primaryOffWhite)
-            .navigationTitle("PayPulse")
-            .navigationBarTitleDisplayMode(.large)
+            .background(Color.primaryOffWhite)            
 //            .toolbar {
 //                ToolbarItem(placement: .topBarLeading) {
 //                    Image("PayPulse-logo")

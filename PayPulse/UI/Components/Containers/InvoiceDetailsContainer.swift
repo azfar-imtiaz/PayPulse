@@ -16,8 +16,7 @@ struct InvoiceDetailsContainer<Content: View>: View {
         }
         .padding()
         .background(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color.secondaryDarkGray, lineWidth: 1)
+            RectangleRoundedCorners()
         )
     }
 }

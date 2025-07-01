@@ -15,10 +15,7 @@ struct CopyTextButton: View {
         Button {
             action()
         } label: {
-            Image("copy-icon")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 20, height: 20)
+            Icon(name: "copy-icon")
         }
     }
 }
