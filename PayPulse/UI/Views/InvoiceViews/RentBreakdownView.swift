@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RentBreakdownView: View {
-    let breakdown: [(category: String, amount: String)]
+    let breakdown: [(category: String, amount: Int)]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -40,7 +40,7 @@ struct RentBreakdownView: View {
                             .foregroundStyle(Color.secondaryDarkGray)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        Text(amount)
+                        Text(Utils.formatNumber(amount))
                             .font(.custom("Gotham-Book", size: 16))
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .foregroundStyle(.gray)
@@ -58,7 +58,7 @@ struct RentBreakdownView: View {
                     .foregroundStyle(Color.secondaryDarkGray)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text(breakdown.last!.amount)    // , format: .number)
+                Text(Utils.formatNumber(breakdown.last!.amount))
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .foregroundStyle(.gray)
@@ -75,12 +75,12 @@ struct RentBreakdownView: View {
 #Preview {
     RentBreakdownView(
         breakdown: [
-            ("baseRent", "9732"),
-            ("kallvatten", "125"),
-            ("varmvatten", "235"),
-            ("el", "241"),
-            ("moms", "600"),
-            ("total", "10000")
+            ("baseRent", 9732),
+            ("kallvatten", 125),
+            ("varmvatten", 235),
+            ("el", 241),
+            ("moms", 600),
+            ("total", 10000)
         ]
     )
 }

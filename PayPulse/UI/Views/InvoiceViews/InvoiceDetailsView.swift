@@ -8,7 +8,7 @@
 import SwiftUI
 import Toasts
 
-struct InvoiceView: View {
+struct InvoiceDetailsView: View {
     let invoice: InvoiceModel
     @State private var showOCRToast: Bool = false
     @State private var showTotalAmountToast: Bool = false
@@ -58,9 +58,9 @@ struct InvoiceView: View {
             
             RentBreakdownView(breakdown: [
                 ("Base rent", invoice.hyra),
-                ("Kallvatten", invoice.kallvatten ?? "0"),
-                ("Varmvatten", invoice.varmvatten ?? "0"),
-                ("Electricity", invoice.el ?? "0"),
+                ("Kallvatten", invoice.kallvatten),
+                ("Varmvatten", invoice.varmvatten),
+                ("Electricity", invoice.el),
                 ("Moms", invoice.moms),
                 ("Total", invoice.totalAmount)
             ])
@@ -107,19 +107,19 @@ struct InvoiceView: View {
 }
 
 #Preview {
-    InvoiceView(
+    InvoiceDetailsView(
         invoice: InvoiceModel(
             invoiceID: "ID",
             filename: "Hyresavi_akjdjaskdjsak",
-            hyra: "9,500",
-            el: "-1",
-            kallvatten: "-1",
-            varmvatten: "-1",
-            totalAmount: "10,000",
+            hyra: 9500,
+            el: -1,
+            kallvatten: -1,
+            varmvatten: -1,
+            totalAmount: 10000,
             dueDateMonth: "05",
             dueDateYear: "2025",
             dueDate: "30-05-2025",
-            moms: "200",
+            moms: 200,
             ocr: "1234567890"
         )
     )
