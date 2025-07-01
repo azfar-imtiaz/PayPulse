@@ -47,7 +47,7 @@ struct AuthView: View {
             /// MARK: Flipping form card
             ZStack {
                     // Login form
-                    AuthCardView(
+                    AuthCard(
                         content: LoginView(
                             authService: authService,
                             toggleAuthView: {
@@ -64,7 +64,7 @@ struct AuthView: View {
                     .animation(.easeInOut(duration: 0.4), value: showingLogin) // Card flip animation duration
                 
                     // Signup form
-                    AuthCardView(
+                    AuthCard(
                         content: SignupView(
                             authService: authService,
                             toggleAuthView: {

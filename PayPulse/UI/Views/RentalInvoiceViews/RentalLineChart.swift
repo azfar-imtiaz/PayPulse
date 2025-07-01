@@ -8,7 +8,7 @@
 import SwiftUI
 import Toasts
 
-struct RentalInvoiceLineChart: View {
+struct RentalLineChart: View {
     let data: [(String, Int)]
     @State private var animationProgress: CGFloat = 0.0
     @State private var showAmountToast: Bool = false
@@ -153,5 +153,5 @@ struct RentalInvoiceLineChart: View {
 }
 
 #Preview {
-    RentalInvoiceLineChart(data: [])
+    RentalLineChart(data: [])
 }
