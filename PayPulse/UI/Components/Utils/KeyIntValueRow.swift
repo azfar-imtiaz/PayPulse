@@ -1,5 +1,5 @@
 //
-//  KeyValueRow.swift
+//  KeyIntValueRow.swift
 //  PayPulse
 //
 //  Created by Azfar Imtiaz on 2025-07-02.
@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct KeyValueRow: View {
+struct KeyIntValueRow: View {
     let key              : String
-    let value            : Any
+    let value            : Int
     var textSize         : CGFloat = 16
     var makeValueBold    : Bool = false
     var showCopyButton   : Bool = false
+    var showCurrency     : Bool = false
     var copyButtonAction : (() -> Void)? = nil
     
     var body: some View {
@@ -26,22 +27,35 @@ struct KeyValueRow: View {
             // add code to properly format the date
             if showCopyButton, let action = copyButtonAction {
                 HStack(spacing: 5) {
-                    displayValue(value: value, isBold: makeValueBold)
+                    displayIntValue(value: value, isBold: makeValueBold, showCurrency: showCurrency)
                     CopyTextButton(action: action)
                 }
             } else {
-                displayValue(value: value, isBold: makeValueBold)
+                displayIntValue(value: value, isBold: makeValueBold, showCurrency: showCurrency)
             }
         }
     }
     
-    func displayValue(value: Any, isBold: Bool = false) -> some View {
+    @ViewBuilder
+    func displayIntValue(value: Int, isBold: Bool = false, showCurrency: Bool = false) -> some View {
+        let formattedValue = Utils.formatNumber(value)
         Group {
-            if let stringValue = value as? String {
-                isBold ? Text(stringValue).bold() : Text(stringValue)
-            } else if let intValue = value as? Int {
-                let formattedValue = Utils.formatNumber(intValue)
-                isBold ? Text(formattedValue).bold() : Text(formattedValue)
+            switch isBold {
+            case true:
+                Group {
+                    if showCurrency {
+                        Text("\(formattedValue) SEK")
+                    } else {
+                        Text("\(formattedValue)")
+                    }
+                }
+                .bold()
+            default:
+                if showCurrency {
+                    Text("\(formattedValue) SEK")
+                } else {
+                    Text("\(formattedValue)")
+                }
             }
         }
         .font(.custom("Gotham-Book", size: textSize))
@@ -51,5 +65,5 @@ struct KeyValueRow: View {
 }
 
 #Preview {
-    KeyValueRow(key: "Header", value: "Value")
+    KeyIntValueRow(key: "Header", value: 123)
 }

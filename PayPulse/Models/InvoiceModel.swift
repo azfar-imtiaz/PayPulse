@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct InvoiceModel: Codable, Identifiable {
+struct InvoiceModel: Codable, Identifiable, Hashable {
     let invoiceID: String
     let filename: String
     let hyra: Int

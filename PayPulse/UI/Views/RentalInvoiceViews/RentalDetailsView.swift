@@ -39,11 +39,9 @@ struct RentalDetailsView: View {
             .padding(.horizontal)
             
             PaymentDetailsView(
-                paymentDetails: [
-                    "dueDate": invoice.dueDate,
-                    "ocr": invoice.ocr,
-                    "totalAmount": invoice.totalAmount
-                ],
+                dueDate: invoice.dueDate,
+                ocrRef: invoice.ocr,
+                totalAmount: invoice.totalAmount,
                 showOCRToast: $showOCRToast,
                 showTotalAmountToast: $showTotalAmountToast
             )
@@ -56,14 +54,14 @@ struct RentalDetailsView: View {
                 .foregroundStyle(Color.secondaryDarkGray)
                 .padding(.horizontal)
             
-            RentBreakdownView(breakdown: [
-                ("Base rent", invoice.hyra),
-                ("Kallvatten", invoice.kallvatten),
-                ("Varmvatten", invoice.varmvatten),
-                ("Electricity", invoice.el),
-                ("Moms", invoice.moms),
-                ("Total", invoice.totalAmount)
-            ])
+            RentBreakdownView(
+                baseRent: invoice.hyra,
+                kallvatten: invoice.kallvatten,
+                varmvatten: invoice.varmvatten,
+                electricity: invoice.el,
+                moms: invoice.moms,
+                totalAmount: invoice.totalAmount
+            )
             .padding(.horizontal)             
             
             Spacer()
