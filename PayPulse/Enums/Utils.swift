@@ -24,4 +24,17 @@ enum Utils {
             return formattedString
         }
     }
+    
+    static func hasDueDateExpired(_ dateString: String) -> Bool {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        guard let date = formatter.date(from: dateString) else {
+            // invalid format of date
+            return false
+        }
+        
+        return Date() > date
+    }
 }
