@@ -29,7 +29,7 @@ struct RentalLandingPage: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
+            ZStack(alignment: .center) {
                 TabView(selection: $selectedTab) {
                     RentalListView(viewModel: viewModel, selectedYear: $selectedYear)
                         .tabItem {
@@ -64,7 +64,7 @@ struct RentalLandingPage: View {
                 } label: {
                     Image(systemName: "chevron.left.circle")
                         .foregroundStyle(
-                            selectedTab == .graphs ? colorScheme == .dark ? Color.secondaryDarkGray : Color.primaryOffWhite : Color.primaryOffWhite
+                            computeToolbarTextColor()
                         )
                 }
             }
@@ -74,7 +74,7 @@ struct RentalLandingPage: View {
                     .font(.headline)
                     .fontWeight(.semibold)
                     .foregroundStyle(
-                        selectedTab == .graphs ? colorScheme == .dark ? Color.secondaryDarkGray : Color.primaryOffWhite : Color.primaryOffWhite
+                        computeToolbarTextColor()
                     )
             }
         }
@@ -100,6 +100,21 @@ struct RentalLandingPage: View {
                 }
                  */
             }
+        }
+    }
+    
+    private func computeToolbarTextColor() -> Color {
+        if selectedTab == .graphs {
+            switch colorScheme {
+            case .dark:
+                return Color.secondaryDarkGray
+            case .light:
+                return Color.secondaryDarkGray
+            @unknown default:
+                return Color.primaryOffWhite
+            }
+        } else {
+            return Color.primaryOffWhite
         }
     }
 }
