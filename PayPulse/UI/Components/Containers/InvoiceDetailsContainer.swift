@@ -23,10 +23,10 @@ struct InvoiceDetailsContainer<Content: View>: View {
 
 #Preview {
     InvoiceDetailsContainer {
-        VStack {
-            Text("Heading")
-            Spacer()
-            Text("Normal text")
-        }
+        InvoiceSummary(
+            vendor: "Wallenstam",
+            dueDate: "12-11-2021",
+            totalAmount: 5000
+        )        
     }
 }

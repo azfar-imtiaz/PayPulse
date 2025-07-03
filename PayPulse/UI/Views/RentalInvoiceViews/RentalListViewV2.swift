@@ -13,18 +13,6 @@ struct RentalListViewV2: View {
     
     var body: some View {
         VStack {
-            /*
-            HStack {
-                Text("Rental invoices")
-                    .font(.custom("Montserrat-Bold", size: 26))
-                    .foregroundStyle(.white)
-                
-                Spacer()
-            }
-            .padding(.leading)
-            .padding(.vertical, 20)
-             */
-            
             yearsHeader(years: Array(viewModel.invoices.keys))
             // yearsHeader(years: [2025, 2024, 2023, 2022, 2021, 2020, 2019])
                 .padding(.horizontal)
@@ -45,44 +33,10 @@ struct RentalListViewV2: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     if let invoices = viewModel.invoices[selectedYear] {
                         ForEach(invoices) { invoice in
-                            // component
-                            HStack(alignment: .bottom, spacing: 25) {
-                                Text(invoice.getDueMonthName())
-                                    .font(.custom("Montserrat-SemiBold", size: 24))
-                                    .foregroundStyle(Color.accentDeepOrange)
-                                    .frame(width: 70)
-                                
-                                NavigationLink {
-                                    RentalDetailsView(invoice: invoice)
-                                } label: {
-                                    // component
-                                    RectangleRoundedCorners()
-                                        .frame(height: 80)
-                                        .overlay {
-                                            VStack {
-                                                HStack(alignment: .top) {
-                                                    Text("Wallenstam")
-                                                        .font(.custom("Montserrat-SemiBold", size: 16))
-                                                        .foregroundStyle(Color.secondaryDarkGray)
-                                                    Spacer()
-                                                    let hasDueDatePassed = Utils.hasDueDateExpired(invoice.dueDate)
-                                                    Circle()
-                                                        .fill(hasDueDatePassed ? .green : .accentDeepOrange)
-                                                        .frame(width: 8, height: 8)
-                                                }
-                                                
-                                                HStack {
-                                                    Text("\(Utils.formatNumber(invoice.totalAmount)) SEK")
-                                                    Spacer()
-                                                    Text(invoice.dueDate)
-                                                }
-                                                .font(.custom("Montserrat-Regular", size: 14))
-                                                .foregroundStyle(.gray)
-                                            }
-                                            .padding()
-                                        }
-                                }
-                            }
+                            InvoiceSummaryWithDate(
+                                invoice: invoice,
+                                vendor: "Wallenstam"
+                            )
                             .padding([.horizontal, .top])
                         }
                     }
