@@ -37,4 +37,10 @@ enum Utils {
         
         return Date() > date
     }
+    
+    static func getCurrentYear() -> Int {
+        let calender = Calendar.current
+        let year = calender.component(.year, from: Date())
+        return year
+    }
 }
