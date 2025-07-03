@@ -28,7 +28,8 @@ struct RentalLandingPage: View {
     var body: some View {
         NavigationStack {
             TabView(selection: $selectedTab) {
-                RentalListView(viewModel: viewModel)
+                // RentalListView(viewModel: viewModel)
+                RentalListViewV2(viewModel: viewModel, selectedYear: 2025)
                     .tabItem {
                         Label("Invoices", systemImage: "list.bullet.rectangle.portrait.fill")
                     }
@@ -54,6 +55,7 @@ struct RentalLandingPage: View {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left.circle")
+                        .foregroundStyle(.white)
                 }
             }
         }

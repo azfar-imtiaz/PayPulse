@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct RentBreakdownView: View {
-    let breakdown: [(category: String, amount: Int)]
+    let baseRent: Int
+    let kallvatten: Int
+    let varmvatten: Int
+    let electricity: Int
+    let moms: Int
+    let totalAmount: Int
     
     var body: some View {
         InvoiceDetailsContainer {
@@ -18,34 +23,27 @@ struct RentBreakdownView: View {
             Divider()
             
             // Table rows
-            ForEach(breakdown, id: \.category) { category, amount in
-                let comparisonResult = category.compare("total", options: [.caseInsensitive])
-                if comparisonResult != .orderedSame {
-                    KeyValueRow(key: category, value: amount)
-                }
-            }
+            KeyIntValueRow(key: "Hyra", value: baseRent)
+            KeyIntValueRow(key: "Kallvatten", value: kallvatten)
+            KeyIntValueRow(key: "Varmvatten", value: varmvatten)
+            KeyIntValueRow(key: "El", value: electricity)
+            KeyIntValueRow(key: "Moms", value: moms)
             
             Divider()
             
             // Total row            
-            KeyValueRow(
-                key: "Total",
-                value: breakdown.last!.amount,
-                makeValueBold: true
-            )
+            KeyIntValueRow(key: "Total", value: totalAmount, makeValueBold: true)
         }
     }
 }
 
 #Preview {
     RentBreakdownView(
-        breakdown: [
-            ("baseRent", 9732),
-            ("kallvatten", 125),
-            ("varmvatten", 235),
-            ("el", 241),
-            ("moms", 600),
-            ("total", 10000)
-        ]
+        baseRent: 9732,
+        kallvatten: 125,
+        varmvatten: 235,
+        electricity: 241,
+        moms: 600,
+        totalAmount: 10000
     )
 }

@@ -8,26 +8,28 @@
 import SwiftUI
 
 struct PaymentDetailsView: View {
-    let paymentDetails: [String: Any]
+    let dueDate     : String
+    let ocrRef      : String
+    let totalAmount : Int
     @Binding var showOCRToast: Bool
     @Binding var showTotalAmountToast: Bool
     
     var body: some View {
         InvoiceDetailsContainer {
-            KeyValueRow(
+            KeyStringValueRow(
                 key: "Due Date",
-                value: paymentDetails["dueDate"] as Any
+                value: dueDate
             )
             
             Divider()
             
-            KeyValueRow(
+            KeyStringValueRow(
                 key: "OCR Reference",
-                value: paymentDetails["ocr"] as Any,
+                value: ocrRef,
                 showCopyButton: true,
                 copyButtonAction: {
                     copyTextToClipboard(
-                        text: paymentDetails["ocr"] as! String,
+                        text: ocrRef,
                         isOCR: true
                     )
                 }
@@ -35,13 +37,14 @@ struct PaymentDetailsView: View {
             
             Divider()
             
-            KeyValueRow(
+            KeyIntValueRow(
                 key: "Total Amount",
-                value: paymentDetails["totalAmount"] as Any,
+                value: totalAmount,
                 showCopyButton: true,
+                showCurrency: true,
                 copyButtonAction: {
                     copyTextToClipboard(
-                        text: paymentDetails["totalAmount"] as! String,
+                        text: "\(totalAmount)",
                         isOCR: false
                     )
                 }
@@ -62,11 +65,9 @@ struct PaymentDetailsView: View {
 
 #Preview {
     PaymentDetailsView(
-        paymentDetails: [
-            "dueDate": "12/30/21",
-            "ocr": "123456789",
-            "totalAmount": 10000
-        ],
+        dueDate: "30-05-2025",
+        ocrRef: "1231231231",
+        totalAmount: 15000,
         showOCRToast: .constant(false),
         showTotalAmountToast: .constant(false)
     )
