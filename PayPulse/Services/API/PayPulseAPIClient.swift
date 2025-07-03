@@ -14,7 +14,8 @@ protocol APIClientProtocol {
         method: HTTPMethod,
         parameters: Parameters?,
         encoding: ParameterEncoding,
-        headers: HTTPHeaders?
+        headers: HTTPHeaders?,
+        attachBearerToken: Bool
     ) async throws -> APISuccessResponse<T>
 }
 
@@ -34,22 +35,29 @@ class PayPulseAPIClient: APIClientProtocol {
         method: HTTPMethod,
         parameters: Parameters? = nil,
         encoding: ParameterEncoding = URLEncoding.default,
-        headers: HTTPHeaders? = nil
+        headers: HTTPHeaders? = nil,
+        attachBearerToken: Bool = true
     ) async throws -> APISuccessResponse<T> {
         guard let url = URL(string: baseURLString)?.appendingPathComponent(path) else {
             throw APIError.invalidURL
         }
+        print("(apiClient): Request validated.")
         
         var commonHeaders = headers ?? HTTPHeaders()
         
         if encoding is JSONEncoding {
+            print("(apiClient): Adding content-type header to request.")
             commonHeaders["Content-Type"] = "application/json"
         }
         
-        if let token = authManager.accessToken, !token.isEmpty {
-            commonHeaders["Authorization"] = "\(authManager.tokenType ?? "Bearer") \(token)"
+        if attachBearerToken {
+            if let token = authManager.accessToken, !token.isEmpty {
+                print("(apiClient): Adding bearer token to request.")
+                commonHeaders["Authorization"] = "\(authManager.tokenType ?? "Bearer") \(token)"
+            }
         }
         
+        print("(apiClient): Making request...")
         let dataTask = session.request(
             url,
             method: method,
@@ -59,14 +67,19 @@ class PayPulseAPIClient: APIClientProtocol {
         )
             .serializingDecodable(APISuccessResponse<T>.self, decoder: JSONDecoder())
         
+        print("(apiClient): Awaiting response...")
         let response = await dataTask.response
+        
+        print("(apiClient): Response received!")
         
         switch response.result {
         case .success(let apiResponse):
             if let httpResponse = response.response, (200..<300).contains(httpResponse.statusCode) {
+                print("(apiClient): Request was successful! Received \(httpResponse.statusCode) code.")
                 return apiResponse
             } else {
                 // This should never be triggered - it means the backend is throwing errors with 2xx response codes
+                print("(apiClient): Request failed with \(response.response?.statusCode) code.")
                 throw APIError.unknown(NSError(
                     domain: "PayPulseAPIClient",
                     code: response.response?.statusCode ?? 0,
@@ -74,6 +87,7 @@ class PayPulseAPIClient: APIClientProtocol {
                 )
             }
         case .failure(let afError):
+            print("(apiClient): Request failed: \(afError.localizedDescription)")
             let customError = APIError.fromAFError(afError, data: response.data)
             throw customError
         }
