@@ -42,6 +42,15 @@ struct PayPulseApp: App {
     
     var body: some Scene {
         WindowGroup {
+            /*
+            ContentView(
+                invoiceService: invoiceService,
+                userService: userService
+            )
+                .installToast(position: .bottom)
+                .environmentObject(authManager)
+             */
+            
             if authManager.isAuthenticated {
                 ContentView(
                     invoiceService: invoiceService,
@@ -53,6 +62,7 @@ struct PayPulseApp: App {
                 AuthView(authService: authService)
                     .environmentObject(authManager)
             }
+            
         }
     }
     

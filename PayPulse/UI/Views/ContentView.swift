@@ -18,11 +18,11 @@ struct ContentView: View {
                 HStack {
                     Text("PayPulse")
                         .font(.custom("Montserrat-Bold", size: 26))
-                        .foregroundStyle(.black)
+                        .foregroundStyle(Color.secondaryDarkGray)
                     Spacer()
                 }
                 .padding(.leading)
-                .padding(.top, 40)
+                .padding(.top, 20)
                 
                 HStack {
                     Text("All your invoices, one place.")

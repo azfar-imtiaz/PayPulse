@@ -93,6 +93,7 @@ struct RentalDetailsView: View {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left.circle")
+                        .foregroundStyle(Color.primaryOffWhite)
                 }
             }
         }
