@@ -49,7 +49,7 @@ struct RentalLandingPage: View {
                     loadInvoices()
                 }
                 
-                LoadingDotsView(showSpinner: $showSpinner)
+                LoadingDotsView(isLoading: $showSpinner, loadingText: "Loading invoices...")
             }
         }
         .navigationBarBackButtonHidden()

@@ -62,6 +62,12 @@ struct PayPulseApp: App {
                 AuthView(authService: authService)
                     .environmentObject(authManager)
             }
+             
+            
+            /*
+            AuthView(authService: authService)
+                .environmentObject(authManager)
+             */
             
         }
     }
