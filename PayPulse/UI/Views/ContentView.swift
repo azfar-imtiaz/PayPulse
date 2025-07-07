@@ -11,6 +11,8 @@ struct ContentView: View {
     let invoiceService : InvoiceService
     let userService    : UserService
     
+    @EnvironmentObject var authManager: AuthManager
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -56,7 +58,17 @@ struct ContentView: View {
                 
                 Spacer()
             }
-            .background(Color.primaryOffWhite)            
+            .background(Color.primaryOffWhite)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        authManager.logout()
+                    } label: {
+                        Image(systemName: "iphone.and.arrow.forward.outward")
+                            .foregroundStyle(Color.secondaryDarkGray)
+                    }
+                }
+            }
 //            .toolbar {
 //                ToolbarItem(placement: .topBarLeading) {
 //                    Image("PayPulse-logo")

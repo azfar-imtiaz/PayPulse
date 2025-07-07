@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct LoadingDotsView: View {
-    @Binding var showSpinner        : Bool
+    @Binding var isLoading          : Bool
     @State private var dotScales    : [CGFloat] = [1.0, 1.0, 1.0]
     @State private var currentIndex : Int = 0
     
-    let loadingText : String = "Loading..."
+    var loadingText : String = "Loading..."
     let dotColors   : [Color] = [Color.primaryOffWhite, Color.secondaryDarkGray, Color.accentDeepOrange]
     
     var body: some View {
         ZStack {
-            if showSpinner {
-                Color.black.opacity(0.4)
+            if isLoading {
+                Color.black.opacity(0.6)
                     .ignoresSafeArea(edges: .all)
                 
                 VStack {
@@ -41,8 +41,8 @@ struct LoadingDotsView: View {
                     }
                     
                     Text(loadingText)
-                        .font(.custom("Montserrat-Regular", size: 14))
-                        .foregroundStyle(Color.accentDeepOrange)
+                        .font(.custom("Montserrat-SemiBold", size: 16))
+                        .foregroundStyle(.white)
                         .padding(.top)
                 }
             }
@@ -50,7 +50,7 @@ struct LoadingDotsView: View {
     }
     
     private func startPulsingAnimation() {
-        guard showSpinner else {
+        guard isLoading else {
             return
         }
         
@@ -65,7 +65,7 @@ struct LoadingDotsView: View {
             
             currentIndex = currentIndex == dotScales.count - 1 ? 0 : currentIndex + 1
             
-            if showSpinner {
+            if isLoading {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     startPulsingAnimation()
                 }
@@ -76,6 +76,6 @@ struct LoadingDotsView: View {
 
 #Preview {
     LoadingDotsView(
-        showSpinner: .constant(true)
+        isLoading: .constant(true)
     )
 }

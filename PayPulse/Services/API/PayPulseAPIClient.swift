@@ -65,7 +65,7 @@ class PayPulseAPIClient: APIClientProtocol {
             encoding: encoding,
             headers: commonHeaders
         )
-            .serializingDecodable(APISuccessResponse<T>.self, decoder: JSONDecoder())
+        .serializingDecodable(APISuccessResponse<T>.self, decoder: JSONDecoder())
         
         print("(apiClient): Awaiting response...")
         let response = await dataTask.response
@@ -88,6 +88,9 @@ class PayPulseAPIClient: APIClientProtocol {
             }
         case .failure(let afError):
             print("(apiClient): Request failed: \(afError.localizedDescription)")
+            if afError.responseCode == 401 {
+                throw APIError.backendError(code: .tokenExpired, message: "Token has expired - log in again!")
+            }
             let customError = APIError.fromAFError(afError, data: response.data)
             throw customError
         }
