@@ -31,6 +31,7 @@ struct RentalLandingPage: View {
         NavigationStack {
             ZStack(alignment: .center) {
                 TabView(selection: $selectedTab) {
+                    
                     RentalListView(viewModel: viewModel, selectedYear: $selectedYear)
                         .tabItem {
                             Label("Invoices", systemImage: "list.bullet.rectangle.portrait.fill")
@@ -47,13 +48,8 @@ struct RentalLandingPage: View {
                 .onAppear {
                     loadInvoices()
                 }
-            }
-            .blur(radius: showSpinner ? 3.0 : 0.0)
-            
-            if showSpinner {
-                ProgressView()
-                    .foregroundStyle(Color.accentDeepOrange)
-                    .padding()
+                
+                LoadingDotsView(showSpinner: $showSpinner)
             }
         }
         .navigationBarBackButtonHidden()
