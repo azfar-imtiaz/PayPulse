@@ -23,11 +23,14 @@ class PayPulseAPIClient: APIClientProtocol {
     private let authManager: any AuthManagerProtocol
     private let session: Session
     
-    private let baseURLString = "https://6volksdhtf.execute-api.eu-west-1.amazonaws.com"
+    private let version = "v1"
+    
+    private let baseURLString: String
     
     init(authManager: any AuthManagerProtocol) {
         self.authManager = authManager
         self.session = Session.default
+        baseURLString = "https://6volksdhtf.execute-api.eu-west-1.amazonaws.com/\(version)"
     }
     
     func request<T: Decodable>(
