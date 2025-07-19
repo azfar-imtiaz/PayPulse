@@ -19,14 +19,28 @@ struct RentalLineChart: View {
         data.map { "\($0.0):\($0.1)" }.joined(separator: ",")
     }
     
+    private var adjustedMinMax: (min: Int, max: Int) {
+        let rawMin = data.map { $0.1 }.min() ?? 0
+        let rawMax = data.map { $0.1 }.max() ?? 1
+
+        if rawMin == rawMax {
+            let min = max(0, rawMin - 5)
+            // let max = rawMax + 5
+            let max = rawMax
+            return (min, max)
+        } else {
+            return (rawMin, rawMax)
+        }
+    }
+    
     var body: some View {
         GeometryReader { geo in
             let width = geo.size.width
             let height = geo.size.height
             
             // TODO: This fucks up when min and max are the same (hyra amount being same in the latest year, for example)
-            let minValue = data.map { $0.1 }.min() ?? 0
-            let maxValue = data.map { $0.1 }.max() ?? 1 == minValue ? data.map { $0.1 }.max() ?? 1 + 10 : data.map { $0.1 }.max() ?? 1
+            let minValue = adjustedMinMax.min
+            let maxValue = adjustedMinMax.max
             
             let yStep = (Int(maxValue) - minValue) / 5
             let leftPadding: CGFloat = max(width * 0.08, 20)
