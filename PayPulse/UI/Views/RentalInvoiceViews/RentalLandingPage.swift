@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Toasts
 
 enum TabTitles: String {
     case invoices
@@ -18,8 +19,10 @@ struct RentalLandingPage: View {
     @State private var selectedTab : TabTitles = .invoices
     @State var selectedYear        : Int = Utils.getCurrentYear()
     @State var showSpinner         : Bool = false
+    @State var loadingText         : String = ""
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.presentToast) var presentToast
     @Environment(\.colorScheme) private var colorScheme
     
     init(invoiceService: InvoiceService) {
@@ -49,7 +52,7 @@ struct RentalLandingPage: View {
                     loadInvoices()
                 }
                 
-                LoadingDotsView(isLoading: $showSpinner, loadingText: "Loading invoices...")
+                LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
             }
         }
         .navigationBarBackButtonHidden()
@@ -70,11 +73,22 @@ struct RentalLandingPage: View {
                         computeToolbarTextColor()
                     )
             }
+            
+            if selectedTab == .invoices {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        ingestLatestInvoice()
+                    } label: {
+                        getIconColored(iconName: "refresh-ccw-dot")
+                    }
+                }
+            }
         }
     }
     
     private func loadInvoices() {
         showSpinner = true
+        loadingText = "Loading invoices..."
         
         Task {
             defer {
@@ -92,6 +106,30 @@ struct RentalLandingPage: View {
                     viewModel.invoices = [] // Clear any partial data
                 }
                  */
+            }
+        }
+    }
+    
+    private func ingestLatestInvoice() {
+        showSpinner = true
+        loadingText = "Fetching latest invoice..."
+        
+        Task {
+            defer {
+                showSpinner = false
+            }
+            
+            do {
+                let ingestionStatus = try await viewModel.ingestLatestInvoice()
+                let toastValue: ToastValue
+                if ingestionStatus {
+                    toastValue = ToastValue(icon: Icon(name: "circle-check"), message: viewModel.successMessage ?? "Latest invoice ingested successfully!")
+                } else {
+                    toastValue = ToastValue(icon: Icon(name: "circle-x"), message: viewModel.errorMessage ?? "Error ingesting latest invoice.")
+                }
+                presentToast(toastValue)
+            } catch {
+                print("Error ingesting invoice!")
             }
         }
     }
