@@ -12,8 +12,10 @@ struct RentalDetailsView: View {
     let invoice: InvoiceModel
     @State private var showOCRToast: Bool = false
     @State private var showTotalAmountToast: Bool = false
+    
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -92,16 +94,23 @@ struct RentalDetailsView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Image(systemName: "chevron.left.circle")
-                        .foregroundStyle(Color.secondaryDarkGray)
+                    Icon(name: getIconNameColored(iconName: "circle-arrow-left"))
                 }
             }
         }
     }
     
     func showTextCopiedToast(text: String) {
-        let toast = ToastValue(icon: Image("copy-icon"), message: "\(text) copied!")
+        let toast = ToastValue(icon: Image("copy"), message: "\(text) copied!")
         presentToast(toast)
+    }
+    
+    private func getIconNameColored(iconName: String) -> String {
+        if colorScheme == .dark {
+            return "\(iconName)-light"
+        } else {
+            return "\(iconName)-dark"
+        }
     }
 }
 

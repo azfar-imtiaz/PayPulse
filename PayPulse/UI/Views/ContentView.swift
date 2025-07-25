@@ -12,6 +12,7 @@ struct ContentView: View {
     let userService    : UserService
     
     @EnvironmentObject var authManager: AuthManager
+    @Environment(\.colorScheme) private var colorScheme
     
     var body: some View {
         NavigationStack {
@@ -44,7 +45,7 @@ struct ContentView: View {
                             RectangleRoundedCorners(strokeWidth: 2)
                                 .frame(width: 130, height: 130)
                                 .overlay {
-                                    Icon(name: "invoice-icon", size: 50)
+                                    Icon(name: "file-spreadsheet", size: 50)
                                 }
                             
                             Text("Rental invoices")
@@ -64,8 +65,7 @@ struct ContentView: View {
                     Button {
                         authManager.logout()
                     } label: {
-                        Image(systemName: "iphone.and.arrow.forward.outward")
-                            .foregroundStyle(Color.secondaryDarkGray)
+                        Icon(name: getIconNameColored(iconName: "log-out"))
                     }
                 }
             }
@@ -77,6 +77,14 @@ struct ContentView: View {
 //                        .frame(width: 70, height: 70, alignment: .leading)
 //                }
 //            }
+        }
+    }
+    
+    private func getIconNameColored(iconName: String) -> String {
+        if colorScheme == .dark {
+            return "\(iconName)-light"
+        } else {
+            return "\(iconName)-dark"
         }
     }
 }

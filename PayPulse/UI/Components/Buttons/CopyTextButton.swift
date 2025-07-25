@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct CopyTextButton: View {
-    let icon: String = "copy-icon"
+    let icon: String = "copy"
     let action: () -> Void
     
     var body: some View {
         Button {
             action()
         } label: {
-            Icon(name: "copy-icon")
+            Icon(name: icon)
         }
     }
 }
