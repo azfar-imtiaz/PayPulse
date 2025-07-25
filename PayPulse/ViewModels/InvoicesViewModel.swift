@@ -14,6 +14,7 @@ class InvoicesViewModel: ObservableObject {
     @Published var invoices              : OrderedDictionary<Int, [InvoiceModel]> = [:]
     @Published var latestInvoice         : InvoiceModel? = nil      // this is not being used anymore
     @Published var errorMessage          : String?
+    @Published var successMessage        : String?
     
     private let invoiceService: InvoiceService
     
@@ -30,6 +31,21 @@ class InvoicesViewModel: ObservableObject {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to ingest invoices: \(self.errorMessage ?? "Unknown error")")
         }
+    }
+    
+    func ingestLatestInvoice() async throws -> Bool {
+        successMessage = nil
+        errorMessage = nil
+        
+        do {
+            let message = try await invoiceService.ingestLatestInvoice(type: "rental")
+            self.successMessage = message
+            return true
+        } catch {
+            self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
+            print("Failed to ingest latest invoice: \(self.errorMessage ?? "Unknown error")")
+        }
+        return false
     }
     
     func getInvoices() async throws {
