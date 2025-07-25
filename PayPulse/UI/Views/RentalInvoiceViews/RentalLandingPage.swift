@@ -58,10 +58,7 @@ struct RentalLandingPage: View {
                 Button {
                     dismiss()
                 } label: {
-                    Image(systemName: "chevron.left.circle")
-                        .foregroundStyle(
-                            computeToolbarTextColor()
-                        )
+                    getIconColored(iconName: "circle-arrow-left")
                 }
             }
             
@@ -111,6 +108,25 @@ struct RentalLandingPage: View {
             }
         } else {
             return Color.primaryOffWhite
+        }
+    }
+    
+    private func getIconColored(iconName: String) -> Image {
+        if selectedTab == .graphs {
+            switch colorScheme {
+            case .dark:
+                return Image("\(iconName)-light")
+            case .light:
+                return Image("\(iconName)-dark")
+            @unknown default:
+                return Image("\(iconName)-light")
+            }
+        } else {
+            if colorScheme == .dark {
+                return Image("\(iconName)-dark")
+            } else {
+                return Image("\(iconName)-light")
+            }
         }
     }
 }
