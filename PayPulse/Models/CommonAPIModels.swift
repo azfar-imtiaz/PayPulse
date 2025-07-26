@@ -11,6 +11,7 @@ import Foundation
 
 struct APISuccessResponse<T: Decodable>: Decodable {
     let message: String
+    let code: Int
     let data: T?
 }
 

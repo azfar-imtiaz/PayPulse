@@ -15,6 +15,7 @@ class InvoicesViewModel: ObservableObject {
     @Published var latestInvoice         : InvoiceModel? = nil      // this is not being used anymore
     @Published var errorMessage          : String?
     @Published var successMessage        : String?
+    @Published var reloadInvoices        : Bool = false
     
     private let invoiceService: InvoiceService
     
@@ -38,8 +39,15 @@ class InvoicesViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            let message = try await invoiceService.ingestLatestInvoice(type: "rental")
-            self.successMessage = message
+            let responseCode = try await invoiceService.ingestLatestInvoice(type: "rental")
+            if responseCode == 200 {
+                self.successMessage = "This month's invoice already exists."
+            } else if responseCode == 201 {
+                self.successMessage = "Invoice found and processed!"
+                reloadInvoices = true
+            } else if responseCode == 204 {
+                self.successMessage = "Invoice not yet available."
+            }
             return true
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
