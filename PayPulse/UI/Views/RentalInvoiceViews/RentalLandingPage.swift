@@ -49,6 +49,7 @@ struct RentalLandingPage: View {
                         .tag(TabTitles.graphs)
                 }
                 .onAppear {
+                    loadingText = "Loading invoices..."
                     loadInvoices()
                 }
                 
@@ -56,6 +57,12 @@ struct RentalLandingPage: View {
             }
         }
         .navigationBarBackButtonHidden()
+        .onChange(of: viewModel.reloadInvoices) { _, newValue in
+            if newValue {
+                loadingText = "Reloading invoices..."
+                loadInvoices()
+            }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -88,7 +95,6 @@ struct RentalLandingPage: View {
     
     private func loadInvoices() {
         showSpinner = true
-        loadingText = "Loading invoices..."
         
         Task {
             defer {

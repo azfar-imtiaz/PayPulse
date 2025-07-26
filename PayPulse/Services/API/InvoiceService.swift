@@ -30,14 +30,14 @@ class InvoiceService {
         return invoiceCount
     }
     
-    func ingestLatestInvoice(type: String) async throws -> String {
+    func ingestLatestInvoice(type: String) async throws -> Int {
         let response: APISuccessResponse<EmptyData> = try await apiClient.request(
             path: "invoices/\(type)/ingest/latest",
             method: .post,
             parameters: nil
         )
         
-        return response.message
+        return response.code
     }
     
     func getRentalInvoices(type: String) async throws -> OrderedDictionary<Int, [InvoiceModel]> {
