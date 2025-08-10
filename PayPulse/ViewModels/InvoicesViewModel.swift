@@ -12,10 +12,10 @@ import OrderedCollections
 class InvoicesViewModel: ObservableObject {
     @Published var invoiceIngestionCount : InvoiceCountModel = InvoiceCountModel(invoiceCount: 0)
     @Published var invoices              : OrderedDictionary<Int, [InvoiceModel]> = [:]
-    @Published var latestInvoice         : InvoiceModel? = nil      // this is not being used anymore
     @Published var errorMessage          : String?
     @Published var successMessage        : String?
     @Published var reloadInvoices        : Bool = false
+    @Published var invoicesHaveLoaded    : Bool = false
     
     private let invoiceService: InvoiceService
     
@@ -60,9 +60,9 @@ class InvoicesViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            self.invoices = try await invoiceService.getRentalInvoices(type: "rental")
-            if self.invoices.count > 0 {
-                self.latestInvoice = getLatestInvoice(invoices: self.invoices)
+            let data = try await invoiceService.getRentalInvoices(type: "rental")
+            await MainActor.run {
+                self.invoices = data
             }
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription

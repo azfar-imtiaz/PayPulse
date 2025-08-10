@@ -17,37 +17,37 @@ struct RentalChartView: View {
     }
     var body: some View {
         VStack {
-            
-            HStack {
-                Picker("Parameter", selection: $selectedParam) {
-                    ForEach(ParameterType.allCases, id: \.self) { param in
-                        Text(param.rawValue).tag(param)
+            if viewModel.invoicesHaveLoaded {
+                HStack {
+                    Picker("Parameter", selection: $selectedParam) {
+                        ForEach(ParameterType.allCases, id: \.self) { param in
+                            Text(param.rawValue).tag(param)
+                        }
                     }
-                }
-                .pickerStyle(.menu)
-                
-                Spacer()
-                
-                Picker("Select year", selection: $selectedYear) {
-                    Text("All years").tag(nil as Int?)
-                    ForEach(viewModel.invoices.keys.map { Int($0) }, id: \.self) { year in
-                        Text(String(year)).tag(year as Int?)
+                    .pickerStyle(.menu)
+                    
+                    Spacer()
+                    
+                    Picker("Select year", selection: $selectedYear) {
+                        Text("All years").tag(nil as Int?)
+                        ForEach(viewModel.invoices.keys.map { Int($0) }, id: \.self) { year in
+                            Text(String(year)).tag(year as Int?)
+                        }
                     }
+                    .pickerStyle(.menu)
                 }
-                .pickerStyle(.menu)
+                .frame(width: UIScreen.main.bounds.width * 0.7)
+                .padding()
+                
+                if filteredData.isEmpty {
+                    Text("No data available for the selected year.")
+                        .padding()
+                } else {
+                    RentalLineChart(data: filteredData)
+                        .padding([.top, .horizontal])
+                        .padding(.bottom, 30)
+                }
             }
-            .frame(width: UIScreen.main.bounds.width * 0.7)
-            .padding()
-            
-            if filteredData.isEmpty {
-                Text("No data available for the selected year.")
-                    .padding()
-            } else {
-                RentalLineChart(data: filteredData)
-                    .padding([.top, .horizontal])
-                    .padding(.bottom, 30)
-            }
-            
         }
     }
 }
