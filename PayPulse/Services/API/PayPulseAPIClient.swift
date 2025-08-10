@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import OSLog
 
 protocol APIClientProtocol {
     func request<T: Decodable>(
@@ -22,6 +23,7 @@ protocol APIClientProtocol {
 class PayPulseAPIClient: APIClientProtocol {
     private let authManager: any AuthManagerProtocol
     private let session: Session
+    private static let logger = Logger(subsystem: "PayPulse", category: "APIClient")
     
     private let version = "v1"
     
@@ -31,6 +33,7 @@ class PayPulseAPIClient: APIClientProtocol {
         self.authManager = authManager
         self.session = Session.default
         baseURLString = "https://6volksdhtf.execute-api.eu-west-1.amazonaws.com/\(version)"
+        Self.logger.debug("API client initialized!")
     }
     
     func request<T: Decodable>(
@@ -44,23 +47,23 @@ class PayPulseAPIClient: APIClientProtocol {
         guard let url = URL(string: baseURLString)?.appendingPathComponent(path) else {
             throw APIError.invalidURL
         }
-        print("(apiClient): Request validated.")
+        Self.logger.debug("(apiClient): Request validated.")
         
         var commonHeaders = headers ?? HTTPHeaders()
         
         if encoding is JSONEncoding {
-            print("(apiClient): Adding content-type header to request.")
+            Self.logger.debug("(apiClient): Adding content-type header to request.")
             commonHeaders["Content-Type"] = "application/json"
         }
         
         if attachBearerToken {
             if let token = authManager.accessToken, !token.isEmpty {
-                print("(apiClient): Adding bearer token to request.")
+                Self.logger.debug("(apiClient): Adding bearer token to request.")
                 commonHeaders["Authorization"] = "\(authManager.tokenType ?? "Bearer") \(token)"
             }
         }
         
-        print("(apiClient): Making request...")
+        Self.logger.debug("(apiClient): Making request...")
         let dataTask = session.request(
             url,
             method: method,
@@ -70,19 +73,29 @@ class PayPulseAPIClient: APIClientProtocol {
         )
         .serializingDecodable(APISuccessResponse<T>.self, decoder: JSONDecoder())
         
-        print("(apiClient): Awaiting response...")
+        Self.logger.debug("(apiClient): Awaiting response...")
         let response = await dataTask.response
         
-        print("(apiClient): Response received!")
+        Self.logger.debug("(apiClient): Response received!")
+        
+        let statusCode = response.response?.statusCode
+        if statusCode == 204 {
+            Self.logger.info("(apiClient): 204 response intercepted!")
+            return APISuccessResponse<T>(
+                message: "No content",
+                code: 204,
+                data: nil
+            )
+        }
         
         switch response.result {
         case .success(let apiResponse):
             if let httpResponse = response.response, (200..<300).contains(httpResponse.statusCode) {
-                print("(apiClient): Request was successful! Received \(httpResponse.statusCode) code.")
+                Self.logger.info("(apiClient): Request was successful! Received \(httpResponse.statusCode) code.")
                 return apiResponse
             } else {
                 // This should never be triggered - it means the backend is throwing errors with 2xx response codes
-                print("(apiClient): Request failed with \(response.response?.statusCode) code.")
+                Self.logger.error("(apiClient): Request failed with \(statusCode ?? -1) code.")
                 throw APIError.unknown(NSError(
                     domain: "PayPulseAPIClient",
                     code: response.response?.statusCode ?? 0,
@@ -90,7 +103,7 @@ class PayPulseAPIClient: APIClientProtocol {
                 )
             }
         case .failure(let afError):
-            print("(apiClient): Request failed: \(afError.localizedDescription)")
+            Self.logger.error("(apiClient): Request failed: \(afError.localizedDescription)")
             if afError.responseCode == 401 {
                 throw APIError.backendError(code: .tokenExpired, message: "Token has expired - log in again!")
             }
