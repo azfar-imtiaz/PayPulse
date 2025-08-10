@@ -34,19 +34,29 @@ struct RentalLandingPage: View {
         NavigationStack {
             ZStack(alignment: .center) {
                 TabView(selection: $selectedTab) {
-                    
-                    RentalListView(viewModel: viewModel, selectedYear: $selectedYear)
-                        .tabItem {
-                            Label("Invoices", systemImage: "list.bullet.rectangle.portrait.fill")
+                    if viewModel.invoicesHaveLoaded {
+                        RentalListView(
+                            viewModel: viewModel,
+                            selectedYear: $selectedYear,
+                            showSpinner: $showSpinner
+                        ) {
+                            ingestInvoicesWithPolling()
                         }
-                        .tag(TabTitles.invoices)
-                    
-                    RentalChartView(viewModel: viewModel)
-                        .background(Color.primaryOffWhite)
-                        .tabItem {
-                            Label("Charts", systemImage: "chart.xyaxis.line")
+                            .tabItem {
+                                Label("Invoices", systemImage: "list.bullet.rectangle.portrait.fill")
+                            }
+                            .tag(TabTitles.invoices)
+                        
+                        // the charts view shouldn't be displayed unless some invoices have been loaded
+                        if viewModel.invoices.count > 0 {
+                            RentalChartView(viewModel: viewModel)
+                                .background(Color.primaryOffWhite)
+                                .tabItem {
+                                    Label("Charts", systemImage: "chart.xyaxis.line")
+                                }
+                                .tag(TabTitles.graphs)
                         }
-                        .tag(TabTitles.graphs)
+                    }
                 }
                 .onAppear {
                     loadingText = "Loading invoices..."
@@ -70,6 +80,7 @@ struct RentalLandingPage: View {
                 } label: {
                     getIconColored(iconName: "circle-arrow-left")
                 }
+                .disabled(showSpinner)
             }
             
             ToolbarItem(placement: .principal) {
@@ -82,11 +93,14 @@ struct RentalLandingPage: View {
             }
             
             if selectedTab == .invoices {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        ingestLatestInvoice()
-                    } label: {
-                        getIconColored(iconName: "refresh-ccw-dot")
+                if viewModel.invoices.count > 0 {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            ingestLatestInvoice()
+                        } label: {
+                            getIconColored(iconName: "refresh-ccw-dot")
+                        }
+                        .disabled(showSpinner)
                     }
                 }
             }
@@ -95,10 +109,12 @@ struct RentalLandingPage: View {
     
     private func loadInvoices() {
         showSpinner = true
+        viewModel.invoicesHaveLoaded = false
         
         Task {
             defer {
                 showSpinner = false
+                viewModel.invoicesHaveLoaded = true
             }
             
             do {
@@ -116,13 +132,58 @@ struct RentalLandingPage: View {
         }
     }
     
+    private func ingestInvoicesWithPolling() {
+        showSpinner = true
+        viewModel.invoicesHaveLoaded = false
+        
+        let maxAttempts = 5
+        let delayInSeconds = 2
+        
+        Task {
+            defer {
+                showSpinner = false
+                viewModel.invoicesHaveLoaded = true
+            }
+            
+            do {
+                loadingText = "Ingesting invoices..."
+                try await viewModel.ingestInvoices()
+                
+                loadingText = "Loading invoices..."
+                for _ in 0..<maxAttempts {
+                    try await viewModel.getInvoices()
+                    if viewModel.invoices.count > 0 {
+                        print("Invoices have loaded!")
+                        return
+                    }
+                    
+                    try? await Task.sleep(nanoseconds: UInt64(delayInSeconds) * 1_000_000_000)
+                            print("No invoices found yet. Trying again...")
+                }
+                
+                // TODO: Throw error here
+                print("Could not load invoices!")
+            } catch {
+                // TODO: Handle errors here
+                print("Error!")
+                let toastValue = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: viewModel.errorMessage ?? "Could not ingest invoices"
+                )
+                presentToast(toastValue)
+            }
+        }
+    }
+    
     private func ingestLatestInvoice() {
         showSpinner = true
+        viewModel.invoicesHaveLoaded = false
         loadingText = "Fetching latest invoice..."
         
         Task {
             defer {
                 showSpinner = false
+                viewModel.invoicesHaveLoaded = true
             }
             
             do {
@@ -151,7 +212,11 @@ struct RentalLandingPage: View {
                 return Color.primaryOffWhite
             }
         } else {
-            return Color.primaryOffWhite
+            if viewModel.invoices.count > 0 {
+                return Color.primaryOffWhite
+            } else {
+                return Color.secondaryDarkGray
+            }
         }
     }
     
@@ -167,9 +232,9 @@ struct RentalLandingPage: View {
             }
         } else {
             if colorScheme == .dark {
-                return Image("\(iconName)-dark")
+                return viewModel.invoices.count > 0 ? Image("\(iconName)-dark") : Image("\(iconName)-light")
             } else {
-                return Image("\(iconName)-light")
+                return viewModel.invoices.count > 0 ? Image("\(iconName)-light") : Image("\(iconName)-dark")
             }
         }
     }
