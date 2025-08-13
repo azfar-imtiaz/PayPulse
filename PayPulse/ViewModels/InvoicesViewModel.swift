@@ -34,7 +34,7 @@ class InvoicesViewModel: ObservableObject {
         }
     }
     
-    func ingestLatestInvoice() async throws -> Bool {
+    func ingestLatestInvoice() async throws -> (displayToast: Bool, ingestionStatus: Bool) {
         successMessage = nil
         errorMessage = nil
         
@@ -42,18 +42,19 @@ class InvoicesViewModel: ObservableObject {
             let responseCode = try await invoiceService.ingestLatestInvoice(type: "rental")
             if responseCode == 200 {
                 self.successMessage = "This month's invoice already exists."
+                return (displayToast: true, ingestionStatus: true)
             } else if responseCode == 201 {
                 self.successMessage = "Invoice found and processed!"
-                reloadInvoices = true
+                return (displayToast: false, ingestionStatus: true)
             } else if responseCode == 204 {
                 self.successMessage = "Invoice not yet available."
+                return (displayToast: true, ingestionStatus: true)
             }
-            return true
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to ingest latest invoice: \(self.errorMessage ?? "Unknown error")")
         }
-        return false
+        return (displayToast: true, ingestionStatus: false)
     }
     
     func getInvoices() async throws {

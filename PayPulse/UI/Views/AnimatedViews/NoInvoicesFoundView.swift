@@ -39,7 +39,7 @@ struct NoInvoicesFoundView: View {
                         try await loadInvoicesAction()
                     }
                 },
-                isDisabled: showSpinnerUI/Views/RentalInvoiceViews/RentalListView.swift
+                isDisabled: showSpinner
             )
             
             Spacer()

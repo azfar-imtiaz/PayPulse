@@ -60,7 +60,7 @@ struct RentalLandingPage: View {
                 }
                 .onAppear {
                     loadingText = "Loading invoices..."
-                    loadInvoices()
+                    loadInvoices(isReload: false)
                 }
                 
                 LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
@@ -70,7 +70,7 @@ struct RentalLandingPage: View {
         .onChange(of: viewModel.reloadInvoices) { _, newValue in
             if newValue {
                 loadingText = "Reloading invoices..."
-                loadInvoices()
+                loadInvoices(isReload: true)
             }
         }
         .toolbar {
@@ -107,7 +107,7 @@ struct RentalLandingPage: View {
         }
     }
     
-    private func loadInvoices() {
+    private func loadInvoices(isReload: Bool) {
         showSpinner = true
         viewModel.invoicesHaveLoaded = false
         
@@ -118,7 +118,14 @@ struct RentalLandingPage: View {
             }
             
             do {
+                if isReload {
+                    try await Task.sleep(nanoseconds: 3_000_000_000)
+                }
                 try await viewModel.getInvoices()
+                if isReload {
+                    let toastValue = ToastValue(icon: Icon(name: "circle-check"), message: viewModel.successMessage ?? "Latest invoice ingested successfully!")
+                    presentToast(toastValue)
+                }
             } catch {
                 // TODO: Handle errors here
                 print("Error!")
@@ -187,14 +194,18 @@ struct RentalLandingPage: View {
             }
             
             do {
-                let ingestionStatus = try await viewModel.ingestLatestInvoice()
+                let (displayToast, ingestionStatus) = try await viewModel.ingestLatestInvoice()
                 let toastValue: ToastValue
-                if ingestionStatus {
-                    toastValue = ToastValue(icon: Icon(name: "circle-check"), message: viewModel.successMessage ?? "Latest invoice ingested successfully!")
+                if displayToast {
+                    if ingestionStatus {
+                        toastValue = ToastValue(icon: Icon(name: "circle-check"), message: viewModel.successMessage ?? "Latest invoice ingested successfully!")
+                    } else {
+                        toastValue = ToastValue(icon: Icon(name: "circle-x"), message: viewModel.errorMessage ?? "Error ingesting latest invoice.")
+                    }
+                    presentToast(toastValue)
                 } else {
-                    toastValue = ToastValue(icon: Icon(name: "circle-x"), message: viewModel.errorMessage ?? "Error ingesting latest invoice.")
+                    viewModel.reloadInvoices = true
                 }
-                presentToast(toastValue)
             } catch {
                 print("Error ingesting invoice!")
             }
