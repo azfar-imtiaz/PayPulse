@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RentalListView: View {
-    @ObservedObject var viewModel : InvoicesViewModel
+    @StateObject var viewModel    : InvoicesViewModel
     @Binding var selectedYear     : Int
     @Binding var showSpinner      : Bool
     var loadInvoicesAction        : () async throws -> Void
