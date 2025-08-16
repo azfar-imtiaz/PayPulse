@@ -118,22 +118,15 @@ struct RentalLineChart: View {
                     
                     // Handle different label formats
                     if label.contains("-") {
-                        // This is a year-quarter or year-month format (e.g., "2023-Q1")
+                        // This is a year-quarter format (e.g., "2023-Q1") - show only year
                         let components = label.split(separator: "-")
                         if components.count == 2 {
                             let year = String(components[0])
-                            let period = String(components[1])
                             
-                            // Show year on top, period on bottom
-                            VStack(spacing: 2) {
-                                Text(year)
-                                    .font(.custom("Gotham-Medium", size: 10))
-                                    .foregroundStyle(Color.secondaryDarkGray.opacity(0.8))
-                                Text(period)
-                                    .font(.custom("Gotham-Light", size: 12))
-                                    .foregroundStyle(Color.secondaryDarkGray)
-                            }
-                            .position(x: x, y: height + 20)
+                            Text(year)
+                                .font(.custom("Gotham-Light", size: 12))
+                                .foregroundStyle(Color.secondaryDarkGray)
+                                .position(x: x, y: height + 15)
                         }
                     }
                     // this means all years is selected with yearly aggregation, the label is year
@@ -145,12 +138,9 @@ struct RentalLineChart: View {
                                 .position(x: x, y: height + 15)
                         }
                     }
-                    // this means quarterly data without year prefix (e.g., "Q2", "Q3")
+                    // this means quarterly data without year prefix (e.g., "Q2", "Q3") - don't show any label
                     else if label.hasPrefix("Q") {
-                        Text(label)
-                            .font(.custom("Gotham-Light", size: 12))
-                            .foregroundStyle(Color.secondaryDarkGray)
-                            .position(x: x, y: height + 15)
+                        // Don't show quarter labels - users will understand from the dots
                     }
                     // this means a specific year is selected, the label is month
                     else {

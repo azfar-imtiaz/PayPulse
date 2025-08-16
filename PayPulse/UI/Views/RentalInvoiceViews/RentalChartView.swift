@@ -29,7 +29,7 @@ struct RentalChartView: View {
                     Spacer()
                     
                     Picker("Select year", selection: $selectedYear) {
-                        Text("All years").tag(nil as Int?)
+                        Text("Quarterly").tag(nil as Int?)
                         ForEach(viewModel.invoices.keys.map { Int($0) }, id: \.self) { year in
                             Text(String(year)).tag(year as Int?)
                         }
