@@ -16,7 +16,7 @@ struct InvoiceSummary: View {
         VStack {
             HStack(alignment: .top) {
                 Text(vendor)
-                    .font(.custom("Montserrat-SemiBold", size: 16))
+                    .font(.buttonStandard)
                     .foregroundStyle(Color.secondaryDarkGray)
                 Spacer()
                 let hasDueDatePassed = Utils.hasDueDateExpired(dueDate)
@@ -30,7 +30,7 @@ struct InvoiceSummary: View {
                 Spacer()
                 Text(dueDate)
             }
-            .font(.custom("Montserrat-Regular", size: 14))
+            .font(.bodyStandard)
             .foregroundStyle(.gray)
         }
     }

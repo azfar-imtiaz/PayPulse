@@ -20,7 +20,7 @@ struct PickerButtonContent: View {
             
             HStack {
                 Text(displayText)
-                    .font(.custom("Montserrat-SemiBold", size: 14))
+                    .font(.buttonSmall)
                     .foregroundStyle(Color.secondaryDarkGray)
                     .lineLimit(1)
                     .truncationMode(.tail)
@@ -51,7 +51,7 @@ struct PickerDropdownItem: View {
         } label: {
             HStack {
                 Text(displayText)
-                    .font(.custom("Montserrat-Regular", size: 14))
+                    .font(.bodyStandard)
                     .foregroundStyle(isSelected ? Color.accentColor : Color.secondaryDarkGray)
                 
                 Spacer()

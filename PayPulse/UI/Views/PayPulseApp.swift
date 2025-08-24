@@ -98,11 +98,11 @@ struct PayPulseApp: App {
         }
         
         UINavigationBar.appearance().largeTitleTextAttributes = [
-            .font: UIFont(name: "Montserrat-ExtraBold", size: 36)!,
+            .font: UIFont(name: Typography.FontName.extraBold, size: Typography.Size.navigation)!,
             .foregroundColor: UIColor(Color.secondaryDarkGray)
         ]
         UINavigationBar.appearance().titleTextAttributes = [
-            .font: UIFont(name: "Montserrat-Medium", size: 18)!,
+            .font: UIFont(name: Typography.FontName.medium, size: Typography.Size.headline)!,
             .foregroundColor: UIColor(Color.secondaryDarkGray)
         ]
     }

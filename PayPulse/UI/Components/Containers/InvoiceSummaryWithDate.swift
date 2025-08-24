@@ -14,7 +14,7 @@ struct InvoiceSummaryWithDate: View {
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 15) {
             Text(invoice.getDueMonthName())
-                .font(.custom("Montserrat-SemiBold", size: 24))
+                .font(.headingMedium)
                 .foregroundStyle(Color.accentDeepOrange)
                 .frame(width: 70, alignment: .leading)
             

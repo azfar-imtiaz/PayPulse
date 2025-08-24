@@ -37,7 +37,7 @@ struct AuthView: View {
                         .foregroundStyle(Color.gray)
                     }
                     .foregroundStyle(Color.secondaryDarkGray)
-                    .font(.custom("Montserrat-Bold", size: 26))
+                    .font(.headingLarge)
                     .animation(.easeInOut(duration: 0.4), value: showingLogin)
                     
                     Spacer()

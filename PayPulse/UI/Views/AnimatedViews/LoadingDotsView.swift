@@ -41,7 +41,7 @@ struct LoadingDotsView: View {
                     }
                     
                     Text(loadingText)
-                        .font(.custom("Montserrat-SemiBold", size: 16))
+                        .font(.buttonStandard)
                         .foregroundStyle(.white)
                         .padding(.top)
                 }

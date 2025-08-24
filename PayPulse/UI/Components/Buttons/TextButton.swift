@@ -10,8 +10,7 @@ import SwiftUI
 struct TextButton: View {
     var buttonText   : String
     var textColor    : Color = .secondaryDarkGray
-    var font         : String = "Montserrat-SemiBold"
-    var fontSize     : CGFloat = 12
+    var font         : Font = .bodySmall
     var isUnderlined : Bool = false
     var action       : () -> Void
     
@@ -21,7 +20,7 @@ struct TextButton: View {
         } label: {
             Text(buttonText)
                 .foregroundStyle(textColor)
-                .font(.custom(font, size: fontSize))
+                .font(font)
                 .underline(isUnderlined)
         }
     }

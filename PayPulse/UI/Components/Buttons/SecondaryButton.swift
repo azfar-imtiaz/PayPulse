@@ -21,7 +21,7 @@ struct SecondaryButton<Content: View>: View {
                     .foregroundStyle(Color.secondary)
                 
                 buttonView
-                    .font(.custom("Montserrat-SemiBold", size: 16))
+                    .font(.buttonStandard)
                     .foregroundStyle(Color.secondaryDarkGray)
             }
             .frame(width: 300, height: 50)

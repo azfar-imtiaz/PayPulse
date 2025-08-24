@@ -22,10 +22,10 @@ struct NoInvoicesFoundView: View {
             
             Group {
                 Text("No invoices found!")
-                    .font(.custom("Montserrat-SemiBold", size: 16))
+                    .font(.buttonStandard)
                 
                 Text("Click the button below to fetch rental invoices from your inbox.")
-                    .font(.custom("Montserrat-Regular", size: 14))
+                    .font(.bodyStandard)
             }
             .foregroundStyle(Color.secondaryDarkGray)
             .multilineTextAlignment(.center)

@@ -17,7 +17,7 @@ struct LabeledTextField: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(labelText)
                 .foregroundStyle(Color.secondaryDarkGray)
-                .font(.custom("Montserrat-SemiBold", size: 16))
+                .font(.formLabel)
                 .padding(.leading, 12)
             
             InputTextField(text: $text, placeholderText: placeholderText, isSecure: isSecure)

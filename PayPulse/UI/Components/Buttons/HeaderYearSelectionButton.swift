@@ -20,7 +20,7 @@ struct HeaderYearSelectionButton: View {
                 .id(year)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)
-                .font(.custom("Montserrat-Bold", size: 16))
+                .font(.tableHeader)
                 .foregroundStyle(
                     year == selectedYear ? Color.secondaryDarkGray : Color.primaryOffWhite
                 )

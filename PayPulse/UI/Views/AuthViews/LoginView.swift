@@ -55,14 +55,13 @@ struct LoginView: View {
                     
                     HStack(spacing: 0) {
                         Text("No account? Let's ")
-                            .font(.custom("Montserrat-Regular", size: 12))
+                            .font(.bodySmall)
                             .foregroundStyle(Color.secondaryDarkGray)
                         
                         TextButton(
                             buttonText: "create one!",
                             textColor: Color.accentColorOrange,
-                            font: "Montserrat-Regular",
-                            fontSize: 12,
+                            font: .bodySmall,
                             action: {
                                 toggleAuthView()
                             }
@@ -73,7 +72,7 @@ struct LoginView: View {
                         HorizontalLine()
                         
                         Text("OR")
-                            .font(.custom("Montserrat-Regular", size: 12))
+                            .font(.bodySmall)
                         
                         HorizontalLine()
                     }

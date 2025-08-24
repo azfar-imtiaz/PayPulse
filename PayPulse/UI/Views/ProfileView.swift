@@ -23,7 +23,7 @@ struct ProfileView: View {
                 AuthCard(content: 
                     VStack(alignment: .leading, spacing: 20) {
                         Text("Account Information")
-                            .font(.custom("Montserrat-Bold", size: 18))
+                            .font(.headingSmall)
                             .foregroundStyle(Color.secondaryDarkGray)
                         
                         VStack(alignment: .leading, spacing: 20) {
@@ -127,12 +127,12 @@ struct UserInfoRow: View {
     var body: some View {
         HStack {
             Text(label)
-                .font(.custom("Montserrat-Medium", size: 14))
+                .font(.tableKey)
                 .foregroundStyle(Color.secondaryDarkGray.opacity(0.7))
                 .frame(width: 80, alignment: .leading)
             
             Text(value)
-                .font(.custom("Montserrat-Regular", size: 14))
+                .font(.tableValue)
                 .foregroundStyle(Color.secondaryDarkGray)
             
             Spacer()

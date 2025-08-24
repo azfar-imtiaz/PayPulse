@@ -33,7 +33,7 @@ struct SignupView: View {
                     Text("with a new account.")
                 }
                 .foregroundStyle(Color.secondaryDarkGray)
-                .font(.custom("Montserrat-Bold", size: 26))
+                .font(.headingLarge)
                 
                 Spacer()
             }
@@ -88,14 +88,13 @@ struct SignupView: View {
                 
                 HStack(spacing: 0) {
                     Text("Already have an account? ")
-                        .font(.custom("Montserrat-Regular", size: 12))
+                        .font(.bodySmall)
                         .foregroundStyle(Color.secondaryDarkGray)
                     
                     TextButton(
                         buttonText: "Sign in!",
                         textColor: Color.accentColorOrange,
-                        font: "Montserrat-Regular",
-                        fontSize: 12,
+                        font: .bodySmall,
                         action: {
                             toggleAuthView()
                         }

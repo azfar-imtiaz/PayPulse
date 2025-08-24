@@ -4,29 +4,6 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Gotham-Bold.otf</string>
-		<string>Gotham-Black.otf</string>
-		<string>Gotham-BoldItalic.otf</string>
-		<string>Gotham-Book.otf</string>
-		<string>Gotham-BookItalic.otf</string>
-		<string>Gotham-Light.otf</string>
-		<string>Gotham-LightItalic.otf</string>
-		<string>Gotham-Medium.otf</string>
-		<string>Gotham-MediumItalic.otf</string>
-		<string>Gotham-Thin.otf</string>
-		<string>Gotham-ThinItalic.otf</string>
-		<string>Gotham-XLight.otf</string>
-		<string>Gotham-XLightItalic.otf</string>
-		<string>GothamCond-Bold.otf</string>
-		<string>GothamCond-BoldItalic.otf</string>
-		<string>GothamCond-Book.otf</string>
-		<string>GothamCond-BookItalic.otf</string>
-		<string>GothamCond-Light.otf</string>
-		<string>GothamCond-LightItalic.otf</string>
-		<string>GothamCond-Medium.otf</string>
-		<string>GothamCond-MediumItalic.otf</string>
-		<string>GothamCond-Thin.otf</string>
-		<string>GothamCond-ThinItalic.otf</string>
 		<string>Montserrat-Bold.ttf</string>
 		<string>Montserrat-Medium.ttf</string>
 		<string>Montserrat-Regular.ttf</string>

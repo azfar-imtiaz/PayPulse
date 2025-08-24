@@ -20,7 +20,7 @@ struct ContentView: View {
                 
                 HStack {
                     Text("PayPulse")
-                        .font(.custom("Montserrat-Bold", size: 26))
+                        .font(.headingLarge)
                         .foregroundStyle(Color.secondaryDarkGray)
                     Spacer()
                     NavigationLink {
@@ -35,8 +35,8 @@ struct ContentView: View {
                 
                 HStack {
                     Text("All your invoices, one place.")
-                        // .font(.custom("Montserrat-Medium", size: 24))
-                        .font(.custom("Montserrat-Bold", size: 22))
+                        // .font(.headingMedium)
+                        .font(.headingStandard)
                         .foregroundStyle(.gray)
                     
                     Spacer()
@@ -55,7 +55,7 @@ struct ContentView: View {
                                 }
                             
                             Text("Rental invoices")
-                                .font(.custom("Montserrat-Regular", size: 15))
+                                .font(.uiLabel)
                                 .foregroundStyle(Color.secondaryDarkGray)
                         }                        
                     }

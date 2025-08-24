@@ -19,7 +19,7 @@ struct KeyIntValueRow: View {
     var body: some View {
         HStack(spacing: 5) {
             Text(key)
-                .font(.custom("Montserrat-Bold", size: textSize))
+                .font(.tableHeader)
                 .foregroundStyle(Color.secondaryDarkGray)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -57,7 +57,7 @@ struct KeyIntValueRow: View {
                 }
             }
         }
-        .font(.custom("Montserrat-Regular", size: textSize))
+        .font(.tableValue)
         .foregroundStyle(.gray)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }

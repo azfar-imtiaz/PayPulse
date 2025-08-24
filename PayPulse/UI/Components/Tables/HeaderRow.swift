@@ -11,7 +11,7 @@ struct HeaderRow: View {
     let key              : String
     let value            : String
     let textSize         : CGFloat = 16
-    let fontName         : String = "Montserrat-Bold"
+    let font         : Font = .tableHeader
     
     var body: some View {
         HStack(spacing: 5) {
@@ -21,7 +21,7 @@ struct HeaderRow: View {
             Text(value)
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
-        .font(.custom(fontName, size: textSize))
+        .font(font)
         .foregroundStyle(Color.secondaryDarkGray)
     }
 }
