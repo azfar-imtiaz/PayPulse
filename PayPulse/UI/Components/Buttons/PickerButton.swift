@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomPickerButton<T: Hashable>: View {
+struct PickerButton<T: Hashable>: View {
     let title: String
     let selectedValue: T
     let options: [T]
@@ -56,7 +56,7 @@ struct CustomPickerButton<T: Hashable>: View {
                     } label: {
                         HStack {
                             Text(displayText(option))
-                                .font(.custom("Montserrat-Regular", size: 16))
+                                .font(.custom("Montserrat-Regular", size: 14))
                                 .foregroundStyle(isSelected ? Color.accentColor : Color.secondaryDarkGray)
                             
                             Spacer()
@@ -90,7 +90,7 @@ struct CustomPickerButton<T: Hashable>: View {
 
 #Preview {
     VStack(spacing: 20) {
-        CustomPickerButton(
+        PickerButton(
             title: "Parameter",
             selectedValue: ParameterType.totalRent,
             options: ParameterType.allCases,
@@ -98,7 +98,7 @@ struct CustomPickerButton<T: Hashable>: View {
             onSelectionChange: { _ in }
         )
         
-        CustomPickerButton(
+        PickerButton(
             title: "Year",
             selectedValue: nil as Int?,
             options: [nil, 2023, 2024, 2025],

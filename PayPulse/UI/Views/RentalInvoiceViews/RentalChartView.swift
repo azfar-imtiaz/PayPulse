@@ -19,7 +19,7 @@ struct RentalChartView: View {
         VStack {
             if viewModel.invoicesHaveLoaded {
                 HStack {
-                    CustomPickerButton(
+                    PickerButton(
                         title: "Parameter",
                         selectedValue: selectedParam,
                         options: ParameterType.allCases,
@@ -30,7 +30,7 @@ struct RentalChartView: View {
                     
                     Spacer()
                     
-                    CustomPickerButton(
+                    PickerButton(
                         title: "Year",
                         selectedValue: selectedYear,
                         options: [nil] + viewModel.invoices.keys.map { Int($0) }.sorted(),
