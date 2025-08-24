@@ -124,7 +124,7 @@ struct RentalLineChart: View {
                             let year = String(components[0])
                             
                             Text(year)
-                                .font(.custom("Gotham-Light", size: 12))
+                                .font(.custom("Montserrat-Light", size: 12))
                                 .foregroundStyle(Color.secondaryDarkGray)
                                 .position(x: x, y: height + 15)
                         }
@@ -133,7 +133,7 @@ struct RentalLineChart: View {
                     else if isNumeric(text: label) {
                         if i == 0 || data[i].0 != data[i-1].0 {
                             Text(label)
-                                .font(.custom("Gotham-Light", size: 12))
+                                .font(.custom("Montserrat-Light", size: 12))
                                 .foregroundStyle(Color.secondaryDarkGray)
                                 .position(x: x, y: height + 15)
                         }
@@ -145,7 +145,7 @@ struct RentalLineChart: View {
                     // this means a specific year is selected, the label is month
                     else {
                         Text(label.prefix(3))
-                            .font(.custom("Gotham-Light", size: 12))
+                            .font(.custom("Montserrat-Light", size: 12))
                             .foregroundStyle(Color.secondaryDarkGray)
                             .position(x: x, y: height + 15)
                     }

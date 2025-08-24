@@ -22,11 +22,11 @@ struct RentalDetailsView: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 Text("Invoice ID")
-                    .font(.custom("Gotham-Medium", size: 20))
+                    .font(.custom("Montserrat-Medium", size: 18))
                     .foregroundStyle(Color.secondaryDarkGray)
                 
                 Text(invoice.invoiceID)
-                    .font(.custom("Gotham-Book", size: 16))
+                    .font(.custom("Montserrat-Regular", size: 16))
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .foregroundStyle(.gray)
@@ -36,7 +36,7 @@ struct RentalDetailsView: View {
             Spacer()
             
             Text("Payment Details")
-                .font(.custom("Gotham-Medium", size: 20))
+                .font(.custom("Montserrat-Medium", size: 18))
                 .foregroundStyle(Color.secondaryDarkGray)
             .padding(.horizontal)
             
@@ -52,7 +52,7 @@ struct RentalDetailsView: View {
             Spacer()
             
             Text("Rent Breakdown")
-                .font(.custom("Gotham-Medium", size: 20))
+                .font(.custom("Montserrat-Medium", size: 18))
                 .foregroundStyle(Color.secondaryDarkGray)
                 .padding(.horizontal)
             

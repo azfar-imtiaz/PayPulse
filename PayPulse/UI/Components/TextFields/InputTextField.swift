@@ -26,7 +26,7 @@ struct InputTextField: View {
                 }
             }
                 .foregroundStyle(Color.secondaryDarkGray)
-                .font(.custom("Gotham-Book", size: 16))
+                .font(.custom("Montserrat-Regular", size: 16))
                 .padding(.leading, 12)
         }
         .frame(width: 300, height: 50)

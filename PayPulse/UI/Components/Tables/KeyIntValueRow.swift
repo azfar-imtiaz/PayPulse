@@ -19,8 +19,7 @@ struct KeyIntValueRow: View {
     var body: some View {
         HStack(spacing: 5) {
             Text(key)
-                .bold()
-                .font(.custom("Gotham-Medium", size: textSize))
+                .font(.custom("Montserrat-Bold", size: textSize))
                 .foregroundStyle(Color.secondaryDarkGray)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -58,7 +57,7 @@ struct KeyIntValueRow: View {
                 }
             }
         }
-        .font(.custom("Gotham-Book", size: textSize))
+        .font(.custom("Montserrat-Regular", size: textSize))
         .foregroundStyle(.gray)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }

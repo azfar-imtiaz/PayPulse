@@ -35,7 +35,7 @@ struct ContentView: View {
                 
                 HStack {
                     Text("All your invoices, one place.")
-                        // .font(.custom("GothamCond-Medium", size: 24))
+                        // .font(.custom("Montserrat-Medium", size: 24))
                         .font(.custom("Montserrat-Bold", size: 22))
                         .foregroundStyle(.gray)
                     
@@ -55,7 +55,7 @@ struct ContentView: View {
                                 }
                             
                             Text("Rental invoices")
-                                .font(.custom("Gotham-Book", size: 15))
+                                .font(.custom("Montserrat-Regular", size: 15))
                                 .foregroundStyle(Color.secondaryDarkGray)
                         }                        
                     }
