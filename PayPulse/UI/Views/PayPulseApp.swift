@@ -7,9 +7,6 @@
 
 import SwiftUI
 import UserNotifications
-import AWSSNS
-import AWSCore
-import AWSMobileClientXCF
 import Toasts
 
 @main

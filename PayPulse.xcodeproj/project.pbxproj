@@ -10,10 +10,6 @@
 		261CAA402E10BBC100F5D3DE /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 261CAA3F2E10BBC100F5D3DE /* Alamofire */; };
 		261CAA542E1342C400F5D3DE /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 261CAA532E1342C400F5D3DE /* OrderedCollections */; };
 		261CAD002E48CF8900F5D3DE /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 261CACFF2E48CF8900F5D3DE /* Lottie */; };
-		26AE7F0F2CE7A37E00288749 /* AWSSNS in Frameworks */ = {isa = PBXBuildFile; productRef = 26AE7F0E2CE7A37E00288749 /* AWSSNS */; };
-		26AE7F112CEFA05D00288749 /* AWSDynamoDB in Frameworks */ = {isa = PBXBuildFile; productRef = 26AE7F102CEFA05D00288749 /* AWSDynamoDB */; };
-		26AE7F132CEFA10F00288749 /* AWSMobileClientXCF in Frameworks */ = {isa = PBXBuildFile; productRef = 26AE7F122CEFA10F00288749 /* AWSMobileClientXCF */; };
-		26AE7F1F2CEFA8BA00288749 /* AWSCognitoIdentityProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 26AE7F1E2CEFA8BA00288749 /* AWSCognitoIdentityProvider */; };
 		26E029062D22FB1C00A35820 /* Toasts in Frameworks */ = {isa = PBXBuildFile; productRef = 26E029052D22FB1C00A35820 /* Toasts */; };
 /* End PBXBuildFile section */
 
@@ -48,12 +44,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				26E029062D22FB1C00A35820 /* Toasts in Frameworks */,
-				26AE7F132CEFA10F00288749 /* AWSMobileClientXCF in Frameworks */,
-				26AE7F1F2CEFA8BA00288749 /* AWSCognitoIdentityProvider in Frameworks */,
 				261CAA402E10BBC100F5D3DE /* Alamofire in Frameworks */,
-				26AE7F112CEFA05D00288749 /* AWSDynamoDB in Frameworks */,
 				261CAA542E1342C400F5D3DE /* OrderedCollections in Frameworks */,
-				26AE7F0F2CE7A37E00288749 /* AWSSNS in Frameworks */,
 				261CAD002E48CF8900F5D3DE /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,10 +89,6 @@
 			);
 			name = PayPulse;
 			packageProductDependencies = (
-				26AE7F0E2CE7A37E00288749 /* AWSSNS */,
-				26AE7F102CEFA05D00288749 /* AWSDynamoDB */,
-				26AE7F122CEFA10F00288749 /* AWSMobileClientXCF */,
-				26AE7F1E2CEFA8BA00288749 /* AWSCognitoIdentityProvider */,
 				26E029052D22FB1C00A35820 /* Toasts */,
 				261CAA3F2E10BBC100F5D3DE /* Alamofire */,
 				261CAA532E1342C400F5D3DE /* OrderedCollections */,
@@ -135,7 +123,6 @@
 			mainGroup = 26AE7EF02CE790B400288749;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				26AE7F0D2CE7A37E00288749 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */,
 				26E029042D22FB1C00A35820 /* XCRemoteSwiftPackageReference "swiftui-toasts" */,
 				261CAA3E2E10BBC100F5D3DE /* XCRemoteSwiftPackageReference "Alamofire" */,
 				261CAA522E1342C400F5D3DE /* XCRemoteSwiftPackageReference "swift-collections" */,
@@ -407,14 +394,6 @@
 				minimumVersion = 4.5.2;
 			};
 		};
-		26AE7F0D2CE7A37E00288749 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/aws-amplify/aws-sdk-ios-spm";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.37.2;
-			};
-		};
 		26E029042D22FB1C00A35820 /* XCRemoteSwiftPackageReference "swiftui-toasts" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sunghyun-k/swiftui-toasts.git";
@@ -440,26 +419,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 261CACFE2E48CF8900F5D3DE /* XCRemoteSwiftPackageReference "lottie-spm" */;
 			productName = Lottie;
-		};
-		26AE7F0E2CE7A37E00288749 /* AWSSNS */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 26AE7F0D2CE7A37E00288749 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
-			productName = AWSSNS;
-		};
-		26AE7F102CEFA05D00288749 /* AWSDynamoDB */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 26AE7F0D2CE7A37E00288749 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
-			productName = AWSDynamoDB;
-		};
-		26AE7F122CEFA10F00288749 /* AWSMobileClientXCF */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 26AE7F0D2CE7A37E00288749 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
-			productName = AWSMobileClientXCF;
-		};
-		26AE7F1E2CEFA8BA00288749 /* AWSCognitoIdentityProvider */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 26AE7F0D2CE7A37E00288749 /* XCRemoteSwiftPackageReference "aws-sdk-ios-spm" */;
-			productName = AWSCognitoIdentityProvider;
 		};
 		26E029052D22FB1C00A35820 /* Toasts */ = {
 			isa = XCSwiftPackageProductDependency;
