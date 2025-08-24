@@ -19,22 +19,27 @@ struct RentalChartView: View {
         VStack {
             if viewModel.invoicesHaveLoaded {
                 HStack {
-                    Picker("Parameter", selection: $selectedParam) {
-                        ForEach(ParameterType.allCases, id: \.self) { param in
-                            Text(param.rawValue).tag(param)
-                        }
-                    }
-                    .pickerStyle(.menu)
+                    CustomPickerButton(
+                        title: "Parameter",
+                        selectedValue: selectedParam,
+                        options: ParameterType.allCases,
+                        displayText: { $0.rawValue },
+                        onSelectionChange: { selectedParam = $0 }
+                    )
+                    .frame(width: 140)
                     
                     Spacer()
                     
-                    Picker("Select year", selection: $selectedYear) {
-                        Text("Quarterly").tag(nil as Int?)
-                        ForEach(viewModel.invoices.keys.map { Int($0) }, id: \.self) { year in
-                            Text(String(year)).tag(year as Int?)
-                        }
-                    }
-                    .pickerStyle(.menu)
+                    CustomPickerButton(
+                        title: "Year",
+                        selectedValue: selectedYear,
+                        options: [nil] + viewModel.invoices.keys.map { Int($0) }.sorted(),
+                        displayText: { value in
+                            value == nil ? "Quarterly" : String(value!)
+                        },
+                        onSelectionChange: { selectedYear = $0 }
+                    )
+                    .frame(width: 120)
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.7)
                 .padding()
