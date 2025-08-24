@@ -22,11 +22,11 @@ struct RentalDetailsView: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 Text("Invoice ID")
-                    .font(.headingSmall)
+                    .font(.bodyLarge)
                     .foregroundStyle(Color.secondaryDarkGray)
                 
                 Text(invoice.invoiceID)
-                    .font(.bodyLarge)
+                    .font(.bodyStandard)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .foregroundStyle(.gray)
@@ -36,7 +36,7 @@ struct RentalDetailsView: View {
             Spacer()
             
             Text("Payment Details")
-                .font(.headingSmall)
+                .font(.bodyLarge)
                 .foregroundStyle(Color.secondaryDarkGray)
             .padding(.horizontal)
             
@@ -52,7 +52,7 @@ struct RentalDetailsView: View {
             Spacer()
             
             Text("Rent Breakdown")
-                .font(.headingSmall)
+                .font(.bodyLarge)
                 .foregroundStyle(Color.secondaryDarkGray)
                 .padding(.horizontal)
             
