@@ -73,6 +73,7 @@ struct PickerButton<T: Hashable>: View {
                             Rectangle()
                                 .fill(isSelected ? Color.accentColor.opacity(0.1) : Color.clear)
                         )
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(PlainButtonStyle())
                     
