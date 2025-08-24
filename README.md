@@ -89,46 +89,7 @@ The project uses Swift Package Manager for dependency management:
 - **SwiftUI Collections** (1.2.0): Advanced data structures
 - **Lottie** (4.5.2): Animations
 
-### Installation Steps
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/azfar-imtiaz/PayPulse.git
-   cd PayPulse
-   ```
-
-2. **Open in Xcode**:
-   ```bash
-   open PayPulse.xcodeproj
-   ```
-
-3. **Install Dependencies**:
-   - Dependencies are automatically resolved by Xcode via Swift Package Manager
-   - If needed, go to File → Add Package Dependencies
-
-4. **Build and Run**:
-   - Select your target device/simulator
-   - Press `⌘+R` to build and run the application
-
-### Backend Setup
-
-To run the full application, you'll need to set up the backend infrastructure:
-
-1. Clone the backend repository:
-   ```bash
-   git clone https://github.com/azfar-imtiaz/PayPulse-Cloud.git
-   ```
-
-2. Follow the backend setup instructions in the PayPulse-Cloud repository
-
 ## Development
-
-### Key Commands
-
-- **Build**: `⌘+B`
-- **Run**: `⌘+R` 
-- **Test**: `⌘+U`
-- **Clean Build Folder**: `⌘+Shift+K`
 
 ### Typography System
 
@@ -139,13 +100,6 @@ PayPulse uses a centralized typography system with Montserrat fonts:
 - **Interactive**: `.buttonLarge`, `.buttonStandard`, `.buttonSmall`
 - **Data Display**: `.tableHeader`, `.tableKey`, `.tableValue`
 
-### Contributing
-
-1. Create a feature branch from `main`
-2. Make your changes following the existing code style
-3. Ensure all tests pass
-4. Create a pull request with a clear description
-
 ### Code Style Guidelines
 
 - Follow SwiftUI and Swift naming conventions
@@ -154,20 +108,12 @@ PayPulse uses a centralized typography system with Montserrat fonts:
 - Implement proper error handling
 - Write meaningful commit messages
 
-## Security
-
-- Sensitive credentials and certificates are excluded from version control
-- JWT tokens are securely stored using KeychainHelper
-- API communications use HTTPS
-- Push notification certificates are managed separately
-
 ## Future Enhancements
 
-- Enhanced data analytics and reporting
-- Invoice categorization and tagging
-- Export functionality for financial records
-- Push notifications for due dates
-- Multi-tenant support for property managers
+- Add support for other types of invoices
+- Fetch all invoices from user's Gmail account
+- Add support for signing in with Gmail
+- User should be able to upload invoices using photos
 
 ## Support
 
