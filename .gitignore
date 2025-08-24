@@ -60,3 +60,10 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Apple certificates and keys
+*.p8
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
