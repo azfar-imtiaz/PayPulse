@@ -23,6 +23,12 @@ struct ContentView: View {
                         .font(.custom("Montserrat-Bold", size: 26))
                         .foregroundStyle(Color.secondaryDarkGray)
                     Spacer()
+                    NavigationLink {
+                        ProfileView()
+                    } label: {
+                        Utils.getIconColored(colorScheme: colorScheme, iconName: "user")
+                    }
+                    .padding(.trailing)
                 }
                 .padding(.leading)
                 .padding(.top, 20)
@@ -60,23 +66,6 @@ struct ContentView: View {
                 Spacer()
             }
             .background(Color.primaryOffWhite)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        authManager.logout()
-                    } label: {
-                        Icon(name: getIconNameColored(iconName: "log-out"))
-                    }
-                }
-            }
-//            .toolbar {
-//                ToolbarItem(placement: .topBarLeading) {
-//                    Image("PayPulse-logo")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 70, height: 70, alignment: .leading)
-//                }
-//            }
         }
     }
     

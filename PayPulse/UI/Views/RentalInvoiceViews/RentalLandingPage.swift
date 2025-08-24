@@ -154,7 +154,7 @@ struct RentalLandingPage: View {
             
             do {
                 loadingText = "Ingesting invoices..."
-                try await viewModel.ingestInvoices()
+                await viewModel.ingestInvoices()
                 
                 loadingText = "Loading invoices..."
                 for _ in 0..<maxAttempts {

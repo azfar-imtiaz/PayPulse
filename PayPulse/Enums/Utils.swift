@@ -1,3 +1,4 @@
+Enums/Utils.swift
 //
 //  Utils.swift
 //  PayPulse
@@ -5,6 +6,7 @@
 //  Created by Azfar Imtiaz on 2025-07-01.
 //
 
+import SwiftUI
 import Foundation
 
 enum Utils {
@@ -42,5 +44,17 @@ enum Utils {
         let calender = Calendar.current
         let year = calender.component(.year, from: Date())
         return year
+    }
+    
+    static func getIconColored(colorScheme: ColorScheme, iconName: String) -> Image {
+        // This function returns the light or dark icon SVG depending upon the color scheme
+        switch colorScheme {
+        case .light:
+            return Image("\(iconName)-dark")
+        case .dark:
+            return Image("\(iconName)-light")
+        @unknown default:
+            return Image("\(iconName)-light")
+        }
     }
 }

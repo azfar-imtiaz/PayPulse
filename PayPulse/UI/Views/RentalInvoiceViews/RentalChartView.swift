@@ -39,9 +39,9 @@ struct RentalChartView: View {
                         },
                         onSelectionChange: { selectedYear = $0 }
                     )
-                    .frame(width: 120)
+                    .frame(width: 140)
                 }
-                .frame(width: UIScreen.main.bounds.width * 0.7)
+                .frame(width: UIScreen.main.bounds.width * 0.75)
                 .padding()
                 
                 if filteredData.isEmpty {
