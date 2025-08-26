@@ -24,7 +24,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.secondaryDarkGray)
                     Spacer()
                     NavigationLink {
-                        ProfileView()
+                        ProfileView(userService: userService)
                     } label: {
                         Utils.getIconColored(colorScheme: colorScheme, iconName: "user")
                     }
