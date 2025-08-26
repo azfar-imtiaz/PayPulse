@@ -8,61 +8,78 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @EnvironmentObject var authManager: AuthManager
+    let userService : UserService
+    @ObservedObject var viewModel : UserViewModel
+    
     @State private var showDeleteConfirmation = false
     @State private var showLogoutConfirmation = false
     @State private var isDeleting = false
+    @State private var showSpinner = false
+    @State private var loadingText = "Loading user information..."
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject var authManager: AuthManager
+    
+    init(userService: UserService) {
+        _viewModel = ObservedObject(wrappedValue: UserViewModel(userService: userService))
+        self.userService = userService
+    }
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 30) {
-                // User Information Card
-                AuthCard(content: 
-                    VStack(alignment: .leading, spacing: 20) {
+            ZStack {
+                VStack(spacing: 30) {
+                    // User Information Card
+                    AuthCard(content:
+                                VStack(alignment: .leading, spacing: 20) {
                         Text("Account Information")
                             .font(.headingSmall)
                             .foregroundStyle(Color.secondaryDarkGray)
                         
                         VStack(alignment: .leading, spacing: 20) {
-                            UserInfoRow(label: "Name", value: "John Doe")
-                            UserInfoRow(label: "Email", value: "john.doe@example.com")
-                            UserInfoRow(label: "Status", value: "Active")
+                            UserInfoRow(label: "Name:", value: viewModel.username)
+                            UserInfoRow(label: "Email:", value: viewModel.userEmail)
+                            UserInfoRow(label: "Created on:", value: viewModel.userCreatedOn)
                         }
                     }
-                )
-                .background(Color.clear)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.secondaryDarkGray, lineWidth: 1)
-                )
-                .padding()
-                
-                Spacer()
-                
-                // Action Buttons
-                VStack(spacing: 16) {
-                    SecondaryButton(
-                        buttonView: Text("Logout"),
-                        action: {
-                            showLogoutConfirmation = true
-                        }
                     )
+                    .background(Color.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.secondaryDarkGray, lineWidth: 1)
+                    )
+                    .padding()
                     
-                    DestructiveButton(
-                        buttonView: Text("Delete Account"),
-                        action: {
-                            showDeleteConfirmation = true
-                        },
-                        isDisabled: isDeleting
-                    )
+                    Spacer()
+                    
+                    // Action Buttons
+                    VStack(spacing: 16) {
+                        SecondaryButton(
+                            buttonView: Text("Logout"),
+                            action: {
+                                showLogoutConfirmation = true
+                            }
+                        )
+                        
+                        DestructiveButton(
+                            buttonView: Text("Delete Account"),
+                            action: {
+                                showDeleteConfirmation = true
+                            },
+                            isDisabled: isDeleting
+                        )
+                    }
                 }
+                .onAppear {
+                    loadUserInfo()
+                }
+                .background(Color.primaryOffWhite)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                
+                LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
             }
-            .background(Color.primaryOffWhite)
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     let iconName = "circle-arrow-left"
@@ -100,6 +117,7 @@ struct ProfileView: View {
     }
     
     private func deleteAccount() {
+        // TODO: Move this implementation into the view model
         guard let userService = authManager.userService else { return }
         
         isDeleting = true
@@ -118,6 +136,22 @@ struct ProfileView: View {
             }
         }
     }
+    
+    private func loadUserInfo() {
+        showSpinner = true
+        
+        Task {
+            defer {
+                showSpinner = false
+            }
+            
+            do {
+                _ = try await viewModel.getUserInfo()
+            } catch {
+                // show toast notification here
+            }
+        }
+    }
 }
 
 struct UserInfoRow: View {
@@ -129,7 +163,7 @@ struct UserInfoRow: View {
             Text(label)
                 .font(.tableKey)
                 .foregroundStyle(Color.secondaryDarkGray.opacity(0.7))
-                .frame(width: 80, alignment: .leading)
+                .frame(width: 100, alignment: .leading)
             
             Text(value)
                 .font(.tableValue)
@@ -141,6 +175,6 @@ struct UserInfoRow: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(userService: UserService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)))
         .environmentObject(AuthManager.shared)
 }

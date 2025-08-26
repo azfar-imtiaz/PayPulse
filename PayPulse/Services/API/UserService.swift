@@ -22,4 +22,17 @@ class UserService {
         
         return response.message
     }
+    
+    func getUserInfo() async throws -> UserModel? {
+        let response: APISuccessResponse<UserModel> = try await apiClient.request(
+            path: "/user/me",
+            method: .get
+        )
+        
+        if let data = response.data {
+            return data
+        }
+        
+        return nil
+    }
 }
