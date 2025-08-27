@@ -14,13 +14,13 @@ class UserService {
         self.apiClient = apiClient
     }
     
-    func deleteUser() async throws -> String {
+    func deleteUser() async throws -> Int {
         let response: APISuccessResponse<EmptyData> = try await apiClient.request(
             path: "/delete/me",
             method: .delete
         )
         
-        return response.message
+        return response.code
     }
     
     func getUserInfo() async throws -> UserModel? {
