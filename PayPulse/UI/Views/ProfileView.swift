@@ -117,22 +117,18 @@ struct ProfileView: View {
     }
     
     private func deleteAccount() {
-        // TODO: Move this implementation into the view model
-        guard let userService = authManager.userService else { return }
-        
-        isDeleting = true
+        showSpinner = true
         
         Task {
+            defer {
+                showSpinner = false
+            }
+            
             do {
-                _ = try await userService.deleteUser()
-                await MainActor.run {
-                    authManager.logout()
-                }
+                try await viewModel.deleteUser(authManager: authManager)
+                // show viewModel.successMessage toast
             } catch {
-                await MainActor.run {
-                    isDeleting = false
-                    // Could add toast notification here for error
-                }
+                // show viewModel.errorMessage toast
             }
         }
     }
@@ -148,7 +144,7 @@ struct ProfileView: View {
             do {
                 _ = try await viewModel.getUserInfo()
             } catch {
-                // show toast notification here
+                // show viewModel.errorMessage toast notification here
             }
         }
     }

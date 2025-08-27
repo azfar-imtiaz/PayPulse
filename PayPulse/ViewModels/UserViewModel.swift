@@ -13,6 +13,7 @@ class UserViewModel: ObservableObject {
     @Published var userEmail     : String = ""
     @Published var userCreatedOn : String = ""
     @Published var errorMessage  : String?
+    @Published var successMessage: String?
     
     private let userService: UserService
     private static let logger = Logger(subsystem: "PayPulse", category: "UserViewModel")
@@ -22,13 +23,13 @@ class UserViewModel: ObservableObject {
     }
     
     func getUserInfo() async throws {
-        errorMessage = nil
+        self.errorMessage = nil
         
         do {
             if let userModel = try await userService.getUserInfo() {
                 self.username = userModel.name
                 self.userEmail = userModel.email
-                self.userCreatedOn = userModel.createdOn
+                self.userCreatedOn = userModel.createdOn                
             } else {
                 self.username = "Unknown"
                 self.userEmail = "Unknown"
@@ -36,7 +37,27 @@ class UserViewModel: ObservableObject {
             }
         } catch(let error) {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
-            Self.logger.error("The following error occurred: \(error.localizedDescription)")
+            Self.logger.error("(getUserInfo): The following error occurred: \(error.localizedDescription)")
+        }
+    }
+    
+    @MainActor
+    func deleteUser(authManager: AuthManager) async throws {
+        errorMessage = nil
+        
+        do {
+            let responseCode = try await userService.deleteUser()
+            if responseCode == 200 {
+                successMessage = "User account deleted successfully!"
+                Self.logger.info("(deleteUser): User account deleted successfully! Logging the user out...")
+                authManager.logout()
+            } else {
+                errorMessage = "Failed to delete user account."
+                Self.logger.error("(deleteUser): Failed to delete user account with \(responseCode) error code.")
+            }
+        } catch (let error) {
+            self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
+            Self.logger.error("(deleteUser): The following error occurred: \(error.localizedDescription)")
         }
     }
 }
