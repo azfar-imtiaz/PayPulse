@@ -6,10 +6,6 @@
     <key>GIDClientID</key>
     <string>623709424238-bggrm8506j6fqc845ee862cv9jiqi60a.apps.googleusercontent.com</string>
     
-    <!-- Web Client ID - this tells GoogleSignIn SDK which web client to use for auth codes -->
-    <key>GIDServerClientID</key>
-    <string>623709424238-2332dvgidmepsd23j603do3divuj5sh2.apps.googleusercontent.com</string>
-    
     <!-- URL scheme back to iOS Client ID -->
     <key>CFBundleURLTypes</key>
     <array>

@@ -5,25 +5,22 @@
 //  Created by Azfar Imtiaz on 2025-09-01.
 //
 
-import WebKit
-import Security
 import Foundation
 import GoogleSignIn
 
 class GmailAuthService {
     private let iOSClientID : String = "623709424238-bggrm8506j6fqc845ee862cv9jiqi60a.apps.googleusercontent.com"
-    private let webClientID : String = "623709424238-2332dvgidmepsd23j603do3divuj5sh2.apps.googleusercontent.com"
-    // private let config      : GIDConfiguration
+    private let gmailScopes = ["https://www.googleapis.com/auth/gmail.readonly"]
     
     init() {
         configureGoogleSignIn()
     }
     
     func configureGoogleSignIn() {
-        GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: iOSClientID, serverClientID: webClientID)
+        GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: iOSClientID)
     }
     
-    func signin(presentingViewController: UIViewController, completion: @escaping (Result<GmailAuthRequest, APIError>) -> Void) {
+    func signInForGmailAccess(presentingViewController: UIViewController, completion: @escaping (Result<GmailAuthRequest, APIError>) -> Void) {
         
         GIDSignIn.sharedInstance.disconnect() { [weak self] error in
             DispatchQueue.main.async {
@@ -31,19 +28,17 @@ class GmailAuthService {
                     print("Disconnect error (may be normal): \(error.localizedDescription)")
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    self?.performFreshSignIn(presentingViewController: presentingViewController, completion: completion)
-                }                
+                self?.performSignIn(presentingViewController: presentingViewController, completion: completion)
             }
         }
     }
     
-    func performFreshSignIn(presentingViewController: UIViewController, completion: @escaping (Result<GmailAuthRequest, APIError>) -> Void) {
+    private func performSignIn(presentingViewController: UIViewController, completion: @escaping (Result<GmailAuthRequest, APIError>) -> Void) {
         
         GIDSignIn.sharedInstance.signIn(
             withPresenting: presentingViewController,
             hint: nil,
-            additionalScopes: ["https://www.googleapis.com/auth/gmail.readonly"]
+            additionalScopes: gmailScopes
         ) { [weak self] result, error in
             DispatchQueue.main.async {
                 if let error = error {
@@ -62,6 +57,9 @@ class GmailAuthService {
                     return
                 }
                 
+                self?.handleSuccessfulSignIn(result: result, completion: completion)
+                
+                /*
                 guard let serverAuthCode = result.serverAuthCode else {
                     print("Failed to get authorization code. Check GIDServerClientID configuration.")
                     completion(.failure(.gmailError(message: "Failed to get authorization code. Check GIDServerClientID configuration.")))
@@ -76,143 +74,40 @@ class GmailAuthService {
                 
                 let model = GmailAuthRequest(authCode: serverAuthCode, email: email)
                 completion(.success(model))
+                 */
             }
-        }
-        
-        /*
-         THIS IS THE OLDER IMPLEMENTATION
-        let config = GIDConfiguration(clientID: iOSClientID, serverClientID: webClientID)
-        GIDSignIn.sharedInstance.configuration = config
-        
-        GIDSignIn.sharedInstance.signIn(
-            withPresenting: presentingViewController,
-            hint: nil,
-            additionalScopes: ["https://www.googleapis.com/auth/gmail.readonly"]
-        ) { result, error in
-            if let error = error {
-                print("Full error details: \(error)")
-                print("Error code: \((error as NSError).code)")
-                print("Error domain: \((error as NSError).domain)")
-                print("Error userInfo: \((error as NSError).userInfo)")
-                
-                completion(.failure(.gmailError(message: "There was a problem connecting to the Gmail service: \(error.localizedDescription)")))
-                return
-            }
-            
-            print(result?.user.profile?.email)
-            print(result?.user.profile?.name)
-            print(result?.serverAuthCode)
-            
-            guard let user = result?.user, let serverAuthCode = result?.serverAuthCode, let email = user.profile?.email else {
-                completion(.failure(.gmailError(message: "Missing auth code or email from Gmail response.")))
-                return
-            }
-            
-            let model = GmailAuthRequest(authCode: serverAuthCode, email: email)
-            completion(.success(model))
-        }
-         */
-    }
-    
-    private func clearWebKitData(completion: @escaping () -> Void) {
-        print("🌐 Clearing Safari/WebKit data...")
-        
-        let dataStore = WKWebsiteDataStore.default()
-        
-        // Get all website data types
-        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
-        
-        // Clear all website data from all time
-        dataStore.removeData(ofTypes: dataTypes, modifiedSince: .distantPast) {
-            print("✅ Cleared all WebKit website data")
-            
-            // Also clear HTTP cookies specifically
-            self.clearHTTPCookies()
-            
-            completion()
         }
     }
     
-    private func clearHTTPCookies() {
-        print("🍪 Clearing HTTP cookies...")
+    private func handleSuccessfulSignIn(result: GIDSignInResult, completion: @escaping (Result<GmailAuthRequest, APIError>) -> Void) {
+        let user = result.user
         
-        // Clear shared HTTP cookie storage
-        if let cookies = HTTPCookieStorage.shared.cookies {
-            for cookie in cookies {
-                HTTPCookieStorage.shared.deleteCookie(cookie)
-            }
-            print("✅ Cleared \(cookies.count) HTTP cookies")
-        }
+        let accessToken = user.accessToken.tokenString
+        let refreshToken = user.refreshToken.tokenString
         
-        // Clear cookies from distant past
-        HTTPCookieStorage.shared.removeCookies(since: .distantPast)
-        print("✅ Cleared all historical cookies")
-    }
-    
-    private func clearAuthUserDefaults() {
-        print("Clearing auth-related UserDefaults...")
+        let userEmail = user.profile?.email ?? ""
+        let username = user.profile?.name ?? ""
+        let grantedScopes = user.grantedScopes ?? []
         
-        // Clear common GoogleSignIn UserDefaults keys
-        let defaults = UserDefaults.standard
-        let googleKeys = [
-            "com.google.GIDSignIn",
-            "GoogleSignIn",
-            "GIDSignIn",
-            "google_signin_configuration",
-            "com.google.gid.client_id"
-        ]
+        print("Access token: \(String(accessToken.prefix(20)))...")
+        print("Refresh token: \(String(refreshToken.prefix(20)))...")
+        print("User: \(username) (\(userEmail))")
+        print("Granted scopes: \(grantedScopes)")
         
-        for key in googleKeys {
-            defaults.removeObject(forKey: key)
-        }
-        
-        defaults.synchronize()
-        print("Cleared UserDefaults")
-    }
-    
-    private func clearAllKeychainEntries() {
-        print("Clearing all keychain entries...")
-                
-        // Clear all keychain classes that could contain auth data
-        let secItemClasses = [
-            kSecClassGenericPassword,
-            kSecClassInternetPassword,
-            kSecClassCertificate,
-            kSecClassKey,
-            kSecClassIdentity
-        ]
-        
-        for secItemClass in secItemClasses {
-            // Clear both regular and iCloud sync keychain entries
-            let queries: [(query: CFDictionary, description: String)] = [
-                // Regular keychain entries
-                (
-                    query: [kSecClass: secItemClass] as CFDictionary,
-                    description: "\(secItemClass)"
-                ),
-                
-                // iCloud synced keychain entries
-                (
-                    query: [
-                        kSecClass: secItemClass,
-                        kSecAttrSynchronizable: kSecAttrSynchronizableAny,
-                    ] as CFDictionary,
-                    description: "\(secItemClass) (sync)"
-                )
+        let model = GmailAuthRequest(
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            username: username,
+            userEmail: userEmail,
+            grantedScopes: grantedScopes,
+            tokenType: "Bearer",
+            expiresIn: 3600,
+            clientInfo: [
+                "platform": "iOS",
+                "appVersion": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown",
+                "timestamp": ISO8601DateFormatter().string(from: Date())
             ]
-            
-            for queryInfo in queries {
-                let status = SecItemDelete(queryInfo.query)
-                
-                switch status {
-                case errSecSuccess:
-                    print("✅ Cleared \(queryInfo.description)")
-                case errSecItemNotFound:
-                    print("ℹ️ No items found for \(queryInfo.description)")
-                default:
-                    print("⚠️ Status \(status) for \(queryInfo.description)")
-                }
-            }
-        }
+        )
+        completion(.success(model))
     }
 }

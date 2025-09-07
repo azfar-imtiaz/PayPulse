@@ -68,7 +68,7 @@ class UserViewModel: ObservableObject {
     @MainActor
     func connectToGmail(presentingViewController: UIViewController) async throws -> GmailResponseModel {
         let gmailRequestModel = try await withCheckedThrowingContinuation { continuation in
-            gmailService.signin(presentingViewController: presentingViewController) { result in
+            gmailService.signInForGmailAccess(presentingViewController: presentingViewController) { result in
                 switch result {
                 case .success(let model):
                     continuation.resume(returning: model)
@@ -78,8 +78,7 @@ class UserViewModel: ObservableObject {
             }
         }
         
-        let gmailRequest = GmailAuthRequest(authCode: gmailRequestModel.authCode, email: gmailRequestModel.email)
-        let gmailModel = try await userService.connectToGmail(gmailRequest: gmailRequest)
+        let gmailModel = try await userService.connectToGmail(gmailRequest: gmailRequestModel)
         return gmailModel
     }
 }
