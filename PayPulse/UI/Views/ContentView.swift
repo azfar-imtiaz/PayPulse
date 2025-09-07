@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     let invoiceService : InvoiceService
     let userService    : UserService
+    let gmailService   : GmailAuthService
     
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.colorScheme) private var colorScheme
@@ -24,7 +25,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.secondaryDarkGray)
                     Spacer()
                     NavigationLink {
-                        ProfileView(userService: userService)
+                        ProfileView(userService: userService, gmailService: gmailService)
                     } label: {
                         Utils.getIconColored(colorScheme: colorScheme, iconName: "user")
                     }

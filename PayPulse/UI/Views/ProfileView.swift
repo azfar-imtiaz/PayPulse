@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import GoogleSignInSwift
 
 struct ProfileView: View {
     let userService : UserService
+    let gmailService: GmailAuthService
     @ObservedObject var viewModel : UserViewModel
     
     @State private var showDeleteConfirmation = false
@@ -21,9 +23,10 @@ struct ProfileView: View {
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
     
-    init(userService: UserService) {
-        _viewModel = ObservedObject(wrappedValue: UserViewModel(userService: userService))
+    init(userService: UserService, gmailService: GmailAuthService) {
+        _viewModel = ObservedObject(wrappedValue: UserViewModel(userService: userService, gmailAuthService: gmailService))
         self.userService = userService
+        self.gmailService = gmailService
     }
     
     var body: some View {
@@ -49,6 +52,15 @@ struct ProfileView: View {
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(Color.secondaryDarkGray, lineWidth: 1)
                     )
+                    .padding()
+                    
+                    Spacer()
+                    
+                    // TODO: There needs to be an if condition based on the Gmail connection status from the updated loadUserInfo function. This should also contain a field mentioning gmailConnectionStatus. If the status is true, do not show this button.
+                    GoogleSignInButton {
+                        connectToGmail()
+                    }
+                    .frame(height: 50)
                     .padding()
                     
                     Spacer()
@@ -148,6 +160,23 @@ struct ProfileView: View {
             }
         }
     }
+    
+    private func connectToGmail() {
+        showSpinner = true
+        
+        Task {
+            defer {
+                showSpinner = false
+            }
+            
+            do {
+                if let rootVC = UIApplication.shared.windows.first?.rootViewController {
+                    let response = try await viewModel.connectToGmail(presentingViewController: rootVC)
+                    print(response.googleEmail)
+                }
+            }
+        }
+    }
 }
 
 struct UserInfoRow: View {
@@ -171,6 +200,6 @@ struct UserInfoRow: View {
 }
 
 #Preview {
-    ProfileView(userService: UserService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)))
+    ProfileView(userService: UserService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)), gmailService: GmailAuthService())
         .environmentObject(AuthManager.shared)
 }

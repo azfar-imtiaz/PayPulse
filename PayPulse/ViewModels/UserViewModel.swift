@@ -7,6 +7,7 @@
 
 import Foundation
 import OSLog
+import UIKit
 
 class UserViewModel: ObservableObject {
     @Published var username      : String = ""
@@ -16,12 +17,15 @@ class UserViewModel: ObservableObject {
     @Published var successMessage: String?
     
     private let userService: UserService
+    private let gmailService: GmailAuthService
     private static let logger = Logger(subsystem: "PayPulse", category: "UserViewModel")
     
-    init(userService: UserService) {
+    init(userService: UserService, gmailAuthService: GmailAuthService) {
         self.userService = userService
+        self.gmailService = gmailAuthService
     }
     
+    @MainActor
     func getUserInfo() async throws {
         self.errorMessage = nil
         
@@ -59,5 +63,23 @@ class UserViewModel: ObservableObject {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             Self.logger.error("(deleteUser): The following error occurred: \(error.localizedDescription)")
         }
+    }
+    
+    @MainActor
+    func connectToGmail(presentingViewController: UIViewController) async throws -> GmailResponseModel {
+        let gmailRequestModel = try await withCheckedThrowingContinuation { continuation in
+            gmailService.signin(presentingViewController: presentingViewController) { result in
+                switch result {
+                case .success(let model):
+                    continuation.resume(returning: model)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+        
+        let gmailRequest = GmailAuthRequest(authCode: gmailRequestModel.authCode, email: gmailRequestModel.email)
+        let gmailModel = try await userService.connectToGmail(gmailRequest: gmailRequest)
+        return gmailModel
     }
 }

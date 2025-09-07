@@ -28,6 +28,11 @@ struct SignupRequest: Encodable {
     }
 }
 
+struct GmailAuthRequest: Codable {
+    let authCode : String
+    let email    : String
+}
+
 // MARK: - Authentication Response models
 
 struct AuthResponse: Decodable {
@@ -39,5 +44,19 @@ struct AuthResponse: Decodable {
         case username
         case accessToken = "access_token"
         case tokenType = "token_type"
+    }
+}
+
+struct GmailResponseModel: Decodable {
+    let googleEmail: String
+    let scope: String
+    let accountSwitch: String
+    let consistencyMessage: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case googleEmail = "google_email"
+        case scope
+        case accountSwitch = "account_switch"
+        case consistencyMessage = "consistency_message"
     }
 }

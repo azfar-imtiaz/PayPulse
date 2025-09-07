@@ -49,6 +49,8 @@ class AuthService {
                     Self.logger.fault("Networking error! \(error.localizedDescription)")
                 case .unknown(let error):
                     Self.logger.fault("An unknown error occurred: \(error.localizedDescription)")
+                case .gmailError(_):
+                    Self.logger.error("A Gmail error should never appear here.")
                 }
             }
         }
