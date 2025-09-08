@@ -13,6 +13,7 @@ class UserViewModel: ObservableObject {
     @Published var username      : String = ""
     @Published var userEmail     : String = ""
     @Published var userCreatedOn : String = ""
+    @Published var gmailConnectionStatus : Bool = false
     @Published var errorMessage  : String?
     @Published var successMessage: String?
     
@@ -33,11 +34,13 @@ class UserViewModel: ObservableObject {
             if let userModel = try await userService.getUserInfo() {
                 self.username = userModel.name
                 self.userEmail = userModel.email
-                self.userCreatedOn = userModel.createdOn                
+                self.userCreatedOn = userModel.createdOn
+                self.gmailConnectionStatus = userModel.gmailAccountConnected
             } else {
                 self.username = "Unknown"
                 self.userEmail = "Unknown"
                 self.userCreatedOn = "Unknown"
+                self.gmailConnectionStatus = false
             }
         } catch(let error) {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription

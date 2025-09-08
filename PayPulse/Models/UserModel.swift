@@ -11,10 +11,12 @@ struct UserModel: Codable {
     let name      : String
     let email     : String
     let createdOn : String
+    let gmailAccountConnected: Bool
     
     enum CodingKeys: String, CodingKey {
         case name = "name"
         case email = "email"
         case createdOn = "created_on"
+        case gmailAccountConnected = "gmail_account_connected"
     }
 }

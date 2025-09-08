@@ -11,7 +11,7 @@ import GoogleSignInSwift
 struct ProfileView: View {
     let userService : UserService
     let gmailService: GmailAuthService
-    @ObservedObject var viewModel : UserViewModel
+    @StateObject var viewModel : UserViewModel
     
     @State private var showDeleteConfirmation = false
     @State private var showLogoutConfirmation = false
@@ -24,7 +24,7 @@ struct ProfileView: View {
     @EnvironmentObject var authManager: AuthManager
     
     init(userService: UserService, gmailService: GmailAuthService) {
-        _viewModel = ObservedObject(wrappedValue: UserViewModel(userService: userService, gmailAuthService: gmailService))
+        _viewModel = StateObject(wrappedValue: UserViewModel(userService: userService, gmailAuthService: gmailService))
         self.userService = userService
         self.gmailService = gmailService
     }
@@ -44,9 +44,9 @@ struct ProfileView: View {
                             UserInfoRow(label: "Name:", value: viewModel.username)
                             UserInfoRow(label: "Email:", value: viewModel.userEmail)
                             UserInfoRow(label: "Created on:", value: viewModel.userCreatedOn)
+                            UserInfoRow(label: "Gmail connection:", value: viewModel.gmailConnectionStatus ? "✔️" : "❌")
                         }
-                    }
-                    )
+                    })
                     .background(Color.clear)
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
@@ -56,14 +56,17 @@ struct ProfileView: View {
                     
                     Spacer()
                     
-                    // TODO: There needs to be an if condition based on the Gmail connection status from the updated loadUserInfo function. This should also contain a field mentioning gmailConnectionStatus. If the status is true, do not show this button.
-                    GoogleSignInButton {
-                        connectToGmail()
+                    if !viewModel.gmailConnectionStatus {
+                        VStack {
+                            GoogleSignInButton {
+                                connectToGmail()
+                            }
+                            .frame(height: 50)
+                            .padding()
+                            
+                            Spacer()
+                        }
                     }
-                    .frame(height: 50)
-                    .padding()
-                    
-                    Spacer()
                     
                     // Action Buttons
                     VStack(spacing: 16) {
@@ -83,7 +86,8 @@ struct ProfileView: View {
                         )
                     }
                 }
-                .onAppear {
+                // .onAppear {
+                .task {
                     loadUserInfo()
                 }
                 .background(Color.primaryOffWhite)
@@ -154,7 +158,7 @@ struct ProfileView: View {
             }
             
             do {
-                _ = try await viewModel.getUserInfo()
+                try await viewModel.getUserInfo()
             } catch {
                 // show viewModel.errorMessage toast notification here
             }
