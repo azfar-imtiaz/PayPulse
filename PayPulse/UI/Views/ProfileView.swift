@@ -57,15 +57,22 @@ struct ProfileView: View {
                     Spacer()
                     
                     if !viewModel.gmailConnectionStatus {
-                        VStack {
-                            GoogleSignInButton {
+                        SecondaryButton(
+                            buttonView: HStack {
+                                Image("google-logo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                
+                                Text("Continue with Google")
+                            },
+                            action: {
                                 connectToGmail()
                             }
-                            .frame(height: 50)
-                            .padding()
-                            
-                            Spacer()
-                        }
+                        )
+                        
+                        Spacer()
+                    
                     }
                     
                     // Action Buttons
@@ -86,8 +93,7 @@ struct ProfileView: View {
                         )
                     }
                 }
-                // .onAppear {
-                .task {
+                .onAppear {
                     loadUserInfo()
                 }
                 .background(Color.primaryOffWhite)
