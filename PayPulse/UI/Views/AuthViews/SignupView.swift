@@ -65,12 +65,6 @@ struct SignupView: View {
                     isSecure: true
                 )
                 
-                LabeledTextField(
-                    text: $gmailPassword,
-                    placeholderText: "Enter your Gmail app password",
-                    labelText: "Gmail app password (optional)"
-                )
-                
                 PrimaryButton(
                     buttonView: Text("Sign up"),
                     action: {

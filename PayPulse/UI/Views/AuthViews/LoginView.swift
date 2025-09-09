@@ -68,29 +68,7 @@ struct LoginView: View {
                         )
                     }
                     
-                    HStack(spacing: 10) {
-                        HorizontalLine()
-                        
-                        Text("OR")
-                            .font(.bodySmall)
-                        
-                        HorizontalLine()
-                    }
-                    .foregroundStyle(Color.secondaryDarkGray)
-                    .frame(width: 250)
-                    .padding(.horizontal)
                     
-                    SecondaryButton(
-                        buttonView: HStack {
-                            Image("google-logo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 30, height: 30)
-                            
-                            Text("Continue with Google")
-                        },
-                        action: {}
-                    )
                 }
             
             // Spacer()
