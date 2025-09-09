@@ -57,19 +57,9 @@ struct ProfileView: View {
                     Spacer()
                     
                     if !viewModel.gmailConnectionStatus {
-                        SecondaryButton(
-                            buttonView: HStack {
-                                Image("google-logo")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30, height: 30)
-                                
-                                Text("Continue with Google")
-                            },
-                            action: {
-                                connectToGmail()
-                            }
-                        )
+                        GoogleButton {
+                            connectToGmail()
+                        }
                         
                         Spacer()
                     
