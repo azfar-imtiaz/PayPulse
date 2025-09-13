@@ -115,6 +115,11 @@ struct ProfileView: View {
         .alert("Confirm Logout", isPresented: $showLogoutConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Logout", role: .destructive) {
+                let logoutToast = ToastValue(
+                    icon: Icon(name: "circle-check"),
+                    message: "You have been logged out"
+                )
+                authManager.setPendingToast(logoutToast)
                 authManager.logout()
             }
         } message: {
@@ -139,22 +144,19 @@ struct ProfileView: View {
                 showSpinner = false
             }
             
-            // TODO: These toasts need to be shown on AuthView
             do {
                 try await viewModel.deleteUser(authManager: authManager)
-                // show viewModel.successMessage toast
-                let toastValue = ToastValue(
+                let successToast = ToastValue(
                     icon: Icon(name: "circle-check"),
                     message: "User account deleted successfully!"
                 )
-                presentToast(toastValue)
+                authManager.setPendingToast(successToast)
             } catch {
-                // show viewModel.errorMessage toast
-                let toastValue = ToastValue(
+                let errorToast = ToastValue(
                     icon: Icon(name: "circle-x"),
                     message: viewModel.errorMessage ?? "Could not delete user account"
                 )
-                presentToast(toastValue)
+                authManager.setPendingToast(errorToast)
             }
         }
     }

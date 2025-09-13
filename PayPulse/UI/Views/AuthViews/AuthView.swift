@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Toasts
 
 struct AuthView: View {
     let authService: AuthService
@@ -13,6 +14,7 @@ struct AuthView: View {
     @State private var showingLogin : Bool = true
     @State var isLoading            : Bool = false
     @EnvironmentObject var authManager: AuthManager
+    @Environment(\.presentToast) var presentToast
     
     var body: some View {
         ZStack(alignment: .center) {
@@ -94,6 +96,14 @@ struct AuthView: View {
             LoadingDotsView(isLoading: $isLoading, loadingText: showingLogin ? "Logging in..." : "Signing up...")
         }
         .background(Color.primaryOffWhite)
+        .onAppear {
+            if let pendingToast = authManager.pendingToast {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    presentToast(pendingToast)
+                    authManager.clearPendingToast()
+                }
+            }
+        }
     }
 }
 

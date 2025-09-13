@@ -8,15 +8,19 @@
 import Foundation
 import SwiftUI
 import OSLog
+import Toasts
 
 protocol AuthManagerProtocol: ObservableObject {
     var isAuthenticated: Bool { get }
     var username: String? { get }
     var accessToken: String? { get }
     var tokenType: String? { get }
+    var pendingToast: ToastValue? { get }
     
     func saveAuthenticationData(username: String, accessToken: String, tokenType: String)
     func logout()
+    func setPendingToast(_ toast: ToastValue)
+    func clearPendingToast()
     // func handleUnauthorized() async
     
     var apiClient: (any APIClientProtocol)? { get set }
@@ -39,6 +43,8 @@ class AuthManager: AuthManagerProtocol {
             Self.logger.debug("isAuthenticated didSet: \(self.isAuthenticated, privacy: .public)")
         }
     }
+    
+    @Published var pendingToast: ToastValue?
     
     var username: String? {
         get { KeychainHelper.load(key: "username") }
@@ -115,6 +121,20 @@ class AuthManager: AuthManagerProtocol {
             self.tokenType = nil
             self.isAuthenticated = false
             Self.logger.notice("User logged out. All authentication data has been cleared. isAuthenticated: \(self.isAuthenticated, privacy: .public)")
+        }
+    }
+    
+    func setPendingToast(_ toast: ToastValue) {
+        Task { @MainActor in
+            self.pendingToast = toast
+            Self.logger.debug("Pending toast set")
+        }
+    }
+    
+    func clearPendingToast() {
+        Task { @MainActor in
+            self.pendingToast = nil
+            Self.logger.debug("Pending toast cleared")
         }
     }
 }
