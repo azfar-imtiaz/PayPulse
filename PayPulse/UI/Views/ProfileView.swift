@@ -128,6 +128,11 @@ struct ProfileView: View {
         .alert("Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
+                let logoutToast = ToastValue(
+                    icon: Icon(name: "circle-check"),
+                    message: "Sad to see you go!"
+                )
+                authManager.setPendingToast(logoutToast)
                 deleteAccount()
             }
         } message: {
