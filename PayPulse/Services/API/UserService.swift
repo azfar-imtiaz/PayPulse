@@ -16,7 +16,7 @@ class UserService {
     
     func deleteUser() async throws -> Int {
         let response: APISuccessResponse<EmptyData> = try await apiClient.request(
-            path: "/delete/me",
+            path: "/user/me",
             method: .delete
         )
         

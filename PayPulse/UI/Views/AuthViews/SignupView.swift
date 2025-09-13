@@ -14,35 +14,19 @@ struct SignupView: View {
     @State var email    : String = ""
     @State var password : String = ""
     @State var gmailPassword : String = ""
+    @Binding var isLoading: Bool
     
     @ObservedObject var viewModel: AuthViewModel
     
-    init(authService: AuthService, toggleAuthView: @escaping () -> Void) {
+    init(authService: AuthService, toggleAuthView: @escaping () -> Void, isLoading: Binding<Bool>) {
         self.authService = authService
         self.viewModel = AuthViewModel(authService: authService)
         self.toggleAuthView = toggleAuthView
+        self._isLoading = isLoading
     }
     
     var body: some View {
         VStack {
-            /*
-            /// MARK: Auth view header
-            HStack {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Sign up ")
-                    Text("with a new account.")
-                }
-                .foregroundStyle(Color.secondaryDarkGray)
-                .font(.headingLarge)
-                
-                Spacer()
-            }
-            .padding(.leading)
-            .padding(.top, 40)
-            
-            Spacer()
-             */
-            
             /// MARK: Signup form
             
             VStack(alignment: .center, spacing: 20) {
@@ -69,6 +53,10 @@ struct SignupView: View {
                     buttonView: Text("Sign up"),
                     action: {
                         Task {
+                            isLoading = true
+                            defer {
+                                isLoading = false
+                            }
                             await viewModel.signup(
                                 username: name,
                                 email: email,
@@ -95,9 +83,6 @@ struct SignupView: View {
                     )
                 }
             }
-            
-            
-            // Spacer()
         }
     }
 }
@@ -106,5 +91,5 @@ struct SignupView: View {
     let authManager = AuthManager.shared
     let apiClient = PayPulseAPIClient(authManager: authManager)
     let authService = AuthService(apiClient: apiClient, authManager: authManager)
-    SignupView(authService: authService, toggleAuthView: {})
+    SignupView(authService: authService, toggleAuthView: {}, isLoading: .constant(false))
 }

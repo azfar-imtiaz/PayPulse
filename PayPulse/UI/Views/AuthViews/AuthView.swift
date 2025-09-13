@@ -76,7 +76,9 @@ struct AuthView: View {
                                 withAnimation(.spring(response: 0.6, dampingFraction: 0.8, blendDuration: 0.2)) {
                                     showingLogin = true
                                 }
-                            })
+                            },
+                            isLoading: $isLoading
+                        )
                     )
                     // When showingLogin is true (back), rotation is -180, opacity is 0, zIndex is lower
                     // When showingLogin is false (front), rotation is 0, opacity is 1, zIndex is higher

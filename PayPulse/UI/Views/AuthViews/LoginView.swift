@@ -24,54 +24,50 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
-                /// MARK: Login form
-                VStack(alignment: .center, spacing: 20) {
-                    LabeledTextField(
-                        text: $email,
-                        placeholderText: "Enter your email address",
-                        labelText: "Email address"
-                    )
-                    
-                    LabeledTextField(
-                        text: $password,
-                        placeholderText: "Enter your password",
-                        labelText: "Password",
-                        isSecure: true
-                    )
-                    
-                    PrimaryButton(
-                        buttonView: Text("Login"),
-                        action: {
-                            isLoading = true
-                            Task {
-                                defer {
-                                    isLoading = false
-                                }
-                                await viewModel.login(email: email, password: password)
+            /// MARK: Login form
+            VStack(alignment: .center, spacing: 20) {
+                LabeledTextField(
+                    text: $email,
+                    placeholderText: "Enter your email address",
+                    labelText: "Email address"
+                )
+                
+                LabeledTextField(
+                    text: $password,
+                    placeholderText: "Enter your password",
+                    labelText: "Password",
+                    isSecure: true
+                )
+                
+                PrimaryButton(
+                    buttonView: Text("Login"),
+                    action: {
+                        isLoading = true
+                        Task {
+                            defer {
+                                isLoading = false
                             }
+                            await viewModel.login(email: email, password: password)
+                        }
+                    }
+                )
+                .padding(.top)
+                
+                HStack(spacing: 0) {
+                    Text("No account? Let's ")
+                        .font(.bodySmall)
+                        .foregroundStyle(Color.secondaryDarkGray)
+                    
+                    TextButton(
+                        buttonText: "create one!",
+                        textColor: Color.accentColorOrange,
+                        font: .bodySmall,
+                        action: {
+                            toggleAuthView()
                         }
                     )
-                    .padding(.top)
-                    
-                    HStack(spacing: 0) {
-                        Text("No account? Let's ")
-                            .font(.bodySmall)
-                            .foregroundStyle(Color.secondaryDarkGray)
-                        
-                        TextButton(
-                            buttonText: "create one!",
-                            textColor: Color.accentColorOrange,
-                            font: .bodySmall,
-                            action: {
-                                toggleAuthView()
-                            }
-                        )
-                    }
-                    
-                    
                 }
-            
-            // Spacer()
+            }
         }
     }
 }

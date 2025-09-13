@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Toasts
 import GoogleSignInSwift
 
 struct ProfileView: View {
@@ -20,6 +21,7 @@ struct ProfileView: View {
     @State private var loadingText = "Loading user information..."
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.presentToast) var presentToast
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
     
@@ -129,6 +131,7 @@ struct ProfileView: View {
     }
     
     private func deleteAccount() {
+        loadingText = "Deleting user account..."
         showSpinner = true
         
         Task {
@@ -136,16 +139,28 @@ struct ProfileView: View {
                 showSpinner = false
             }
             
+            // TODO: These toasts need to be shown on AuthView
             do {
                 try await viewModel.deleteUser(authManager: authManager)
                 // show viewModel.successMessage toast
+                let toastValue = ToastValue(
+                    icon: Icon(name: "circle-check"),
+                    message: "User account deleted successfully!"
+                )
+                presentToast(toastValue)
             } catch {
                 // show viewModel.errorMessage toast
+                let toastValue = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: viewModel.errorMessage ?? "Could not delete user account"
+                )
+                presentToast(toastValue)
             }
         }
     }
     
     private func loadUserInfo() {
+        loadingText = "Loading user information..."
         showSpinner = true
         
         Task {
@@ -153,15 +168,22 @@ struct ProfileView: View {
                 showSpinner = false
             }
             
+            // TODO: These toasts need to be shown on AuthView
             do {
                 try await viewModel.getUserInfo()
             } catch {
                 // show viewModel.errorMessage toast notification here
+                let toastValue = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: viewModel.errorMessage ?? "Could not ingest invoices"
+                )
+                presentToast(toastValue)
             }
         }
     }
     
     private func connectToGmail() {
+        loadingText = "Connecting to Gmail..."
         showSpinner = true
         
         Task {
@@ -173,7 +195,19 @@ struct ProfileView: View {
                 if let rootVC = UIApplication.shared.windows.first?.rootViewController {
                     let response = try await viewModel.connectToGmail(presentingViewController: rootVC)
                     print(response.googleEmail)
+                    let toastValue = ToastValue(
+                        icon: Icon(name: "circle-check"),
+                        message: "Gmail account connected successfully!"
+                    )
+                    presentToast(toastValue)
+                    loadUserInfo()
                 }
+            } catch {
+                let toastValue = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: viewModel.errorMessage ?? "Connection to Gmail failed"
+                )
+                presentToast(toastValue)
             }
         }
     }
