@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Toasts
 
 struct ContentView: View {
     let invoiceService : InvoiceService
@@ -14,6 +15,7 @@ struct ContentView: View {
     
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.presentToast) var presentToast
     
     var body: some View {
         NavigationStack {
@@ -67,6 +69,19 @@ struct ContentView: View {
                 Spacer()
             }
             .background(Color.primaryOffWhite)
+            .onAppear {
+                // Check for pending welcome toast and login context
+                if let pendingToast = authManager.pendingToast,
+                   let loginContext = authManager.loginContext,
+                   loginContext != .keychain {
+                    // Only show toast for login and signup, not keychain authentication
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        presentToast(pendingToast)
+                        authManager.clearPendingToast()
+                        authManager.clearLoginContext()
+                    }
+                }
+            }
         }
     }
     

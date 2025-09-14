@@ -15,14 +15,16 @@ struct SignupView: View {
     @State var password : String = ""
     @State var gmailPassword : String = ""
     @Binding var isLoading: Bool
-    
-    @ObservedObject var viewModel: AuthViewModel
+    @StateObject private var viewModel: AuthViewModel
+    @EnvironmentObject var authManager: AuthManager
     
     init(authService: AuthService, toggleAuthView: @escaping () -> Void, isLoading: Binding<Bool>) {
         self.authService = authService
-        self.viewModel = AuthViewModel(authService: authService)
         self.toggleAuthView = toggleAuthView
         self._isLoading = isLoading
+        
+        // Initialize AuthViewModel with authService and authManager
+        self._viewModel = StateObject(wrappedValue: AuthViewModel(authService: authService, authManager: AuthManager.shared))
     }
     
     var body: some View {
