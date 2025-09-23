@@ -13,6 +13,7 @@ struct AuthView: View {
     
     @State private var showingLogin : Bool = true
     @State var isLoading            : Bool = false
+    @State var errorMessage         : String = ""
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.presentToast) var presentToast
     
@@ -60,7 +61,8 @@ struct AuthView: View {
                                     showingLogin = false
                                 }
                             },
-                            isLoading: $isLoading
+                            isLoading: $isLoading,
+                            errorMessage: $errorMessage
                         )
                     )
                     // when showingLogin is true (front), rotation is 0, opacity is 1, zIndex is higher
@@ -79,7 +81,8 @@ struct AuthView: View {
                                     showingLogin = true
                                 }
                             },
-                            isLoading: $isLoading
+                            isLoading: $isLoading,
+                            errorMessage: $errorMessage
                         )
                     )
                     // When showingLogin is true (back), rotation is -180, opacity is 0, zIndex is lower
@@ -102,6 +105,17 @@ struct AuthView: View {
                     presentToast(pendingToast)
                     authManager.clearPendingToast()
                 }
+            }
+        }
+        .onChange(of: errorMessage) { _, newValue in
+            if newValue != "" {
+                authManager.clearLoginContext()
+                authManager.clearPendingToast()
+                let errorToast = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: newValue
+                )
+                presentToast(errorToast)
             }
         }
     }

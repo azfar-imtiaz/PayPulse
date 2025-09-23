@@ -104,11 +104,42 @@ class PayPulseAPIClient: APIClientProtocol {
             }
         case .failure(let afError):
             Self.logger.error("(apiClient): Request failed: \(afError.localizedDescription)")
-            if afError.responseCode == 401 {
-                throw APIError.backendError(code: .tokenExpired, message: "Token has expired - log in again!")
+            if let data = response.data {
+                do {
+                    let backendError = try JSONDecoder().decode(APIErrorResponse.self, from: data)
+                    let errorCode = backendError.error.code
+                    let errorMessage = backendError.error.message
+                    Self.logger.error("(apiClient): Request failed: (\(errorCode.rawValue)): \(errorMessage)")
+                    
+                    throw APIError.backendError(code: backendError.error.code, message: backendError.error.message)
+                }
+            } else {
+                // NOTE: Technically, the code should never come here
+                switch statusCode {
+                case 401:
+                    if !attachBearerToken {         // this means it's a login or signup request
+                        throw APIError.backendError(code: .invalidCredentials, message: "")
+                    } else {
+                        if afError.localizedDescription.contains("Gmail account needs to be re-connected") {
+                            throw APIError.backendError(code: .gmailTokenExpired, message: "Please reconnect your Gmail account.")
+                        } else {
+                            throw APIError.backendError(code: .tokenExpired, message: "")
+                        }
+                    }
+                case 403:
+                    throw APIError.backendError(code: .userAlreadyExists, message: "")
+                case 404:
+                    throw APIError.backendError(code: .userNotFound, message: "")
+                case 502:
+                    if afError.localizedDescription.contains("Error retrieving OAuth tokens") {
+                        throw APIError.backendError(code: .gmailTokenExpired, message: "Please reconnect your Gmail account.")
+                    } else {
+                        throw APIError.backendError(code: .unknown, message: "")
+                    }
+                default:
+                    throw APIError.backendError(code: .unknown, message: "")
+                }
             }
-            let customError = APIError.fromAFError(afError, data: response.data)
-            throw customError
         }
     }
 }

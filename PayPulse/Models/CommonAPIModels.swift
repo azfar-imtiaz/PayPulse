@@ -24,6 +24,7 @@ enum PayPulseErrorCode: String, Decodable {
     case invalidCredentials = "INVALID_CREDENTIALS"
     case invalidToken = "INVALID_TOKEN"
     case tokenExpired = "TOKEN_EXPIRED"
+    case gmailTokenExpired = "GMAIL_TOKEN_EXPIRED"
     case userNotFound = "USER_NOT_FOUND"
     case userAlreadyExists = "USER_ALREADY_EXISTS"
     case jwtError = "JWT_ERROR"

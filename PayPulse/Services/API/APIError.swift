@@ -33,6 +33,7 @@ enum APIError: Error, LocalizedError {
             case .invalidCredentials: return "Invalid email or password. Please try again."
             case .tokenExpired: return "Your session has expired. Please log in again."
             case .invalidToken: return "Your session is invalid. Please log in again."
+            case .gmailTokenExpired: return "Your Gmail refresh token has expired. Please connect your Gmail account again."
             case .userNotFound: return "No user with this account found."
             case .userAlreadyExists: return "An account with this email already exists."
             case .invoiceParseError: return "Failed to parse invoice data. Please try again."

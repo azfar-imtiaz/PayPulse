@@ -10,21 +10,23 @@ import SwiftUI
 struct SignupView: View {
     let authService: AuthService
     var toggleAuthView: () -> Void
-    @State var name     : String = ""
-    @State var email    : String = ""
-    @State var password : String = ""
-    @State var gmailPassword : String = ""
-    @Binding var isLoading: Bool
+    @State var username       : String = ""
+    @State var email          : String = ""
+    @State var password       : String = ""
+    @State var disableSignup  : Bool = false
+    @Binding var isLoading    : Bool
+    @Binding var errorMessage : String
     @StateObject private var viewModel: AuthViewModel
     @EnvironmentObject var authManager: AuthManager
     
-    init(authService: AuthService, toggleAuthView: @escaping () -> Void, isLoading: Binding<Bool>) {
+    init(authService: AuthService, toggleAuthView: @escaping () -> Void, isLoading: Binding<Bool>, errorMessage: Binding<String>) {
         self.authService = authService
         self.toggleAuthView = toggleAuthView
         self._isLoading = isLoading
+        self._errorMessage = errorMessage
         
         // Initialize AuthViewModel with authService and authManager
-        self._viewModel = StateObject(wrappedValue: AuthViewModel(authService: authService, authManager: AuthManager.shared))
+        self._viewModel = StateObject(wrappedValue: AuthViewModel(authService: authService, authManager: AuthManager.shared, errorMessage: errorMessage))
     }
     
     var body: some View {
@@ -33,7 +35,7 @@ struct SignupView: View {
             
             VStack(alignment: .center, spacing: 20) {
                 LabeledTextField(
-                    text: $name,
+                    text: $username,
                     placeholderText: "Enter your full name",
                     labelText: "Name"
                 )
@@ -41,7 +43,8 @@ struct SignupView: View {
                 LabeledTextField(
                     text: $email,
                     placeholderText: "Enter your email address",
-                    labelText: "Email address"
+                    labelText: "Email address",
+                    isEmail: true
                 )
                 
                 LabeledTextField(
@@ -54,19 +57,9 @@ struct SignupView: View {
                 PrimaryButton(
                     buttonView: Text("Sign up"),
                     action: {
-                        Task {
-                            isLoading = true
-                            defer {
-                                isLoading = false
-                            }
-                            await viewModel.signup(
-                                username: name,
-                                email: email,
-                                password: password,
-                                gmailAppPassword: gmailPassword
-                            )
-                        }
-                    }
+                        signupUser(username: username, email: email, password: password)
+                    },
+                    isDisabled: disableSignup
                 )
                 .padding(.top)
                 
@@ -87,11 +80,36 @@ struct SignupView: View {
             }
         }
     }
+    
+    func signupUser(username: String, email: String, password: String) {
+        Task {
+            let (status, message) = ValidationService.validateSignupFields(name: username, email: email, password: password)
+            guard status else {
+                disableSignup = true
+                errorMessage = message
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    errorMessage = ""
+                    disableSignup = false
+                }
+                return
+            }
+            
+            isLoading = true
+            defer {
+                isLoading = false
+            }
+            await viewModel.signup(
+                username: username,
+                email: email,
+                password: password
+            )
+        }
+    }
 }
 
 #Preview {
     let authManager = AuthManager.shared
     let apiClient = PayPulseAPIClient(authManager: authManager)
     let authService = AuthService(apiClient: apiClient, authManager: authManager)
-    SignupView(authService: authService, toggleAuthView: {}, isLoading: .constant(false))
+    SignupView(authService: authService, toggleAuthView: {}, isLoading: .constant(false), errorMessage: .constant(""))
 }

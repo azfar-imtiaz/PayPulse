@@ -10,6 +10,7 @@ import SwiftUI
 struct InputTextField: View {
     @Binding var text   : String
     var placeholderText : String
+    var isEmail         : Bool = false
     var isSecure        : Bool = false
     
     var body: some View {
@@ -18,18 +19,28 @@ struct InputTextField: View {
                 .stroke(style: StrokeStyle(lineWidth: 1))
                 .foregroundStyle(Color.secondary)
             
-            Group {
-                if isSecure {
-                    SecureField(placeholderText, text: $text)
-                } else {
-                    TextField(placeholderText, text: $text)
-                }
-            }
+            inputField
                 .foregroundStyle(Color.secondaryDarkGray)
                 .font(.bodyLarge)
                 .padding(.leading, 12)
         }
         .frame(width: 300, height: 50)
+    }
+    
+    @ViewBuilder
+    private var inputField: some View {
+        if isSecure {
+            SecureField(placeholderText, text: $text)
+        } else {
+            if isEmail {
+                TextField(placeholderText, text: $text)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
+            } else {
+                TextField(placeholderText, text: $text)
+            }
+        }
     }
 }
 

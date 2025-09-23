@@ -129,6 +129,11 @@ struct RentalLandingPage: View {
             } catch {
                 // TODO: Handle errors here
                 print("Error!")
+                let errorToast = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: "Failed to load invoices: \(error.localizedDescription)"
+                )
+                presentToast(errorToast)
                 /*
                 await MainActor.run { // Ensure UI updates for error are on main thread
                     viewModel.errorMessage = "Failed to load invoices: \(error.localizedDescription)"
@@ -154,7 +159,7 @@ struct RentalLandingPage: View {
             
             do {
                 loadingText = "Ingesting invoices..."
-                await viewModel.ingestInvoices()
+                try await viewModel.ingestInvoices()
                 
                 loadingText = "Loading invoices..."
                 for _ in 0..<maxAttempts {
@@ -168,10 +173,13 @@ struct RentalLandingPage: View {
                             print("No invoices found yet. Trying again...")
                 }
                 
-                // TODO: Throw error here
                 print("Could not load invoices!")
+                let errorToast = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: "Failed to load invoices."
+                )
+                presentToast(errorToast)
             } catch {
-                // TODO: Handle errors here
                 print("Error!")
                 let toastValue = ToastValue(
                     icon: Icon(name: "circle-x"),
@@ -208,6 +216,11 @@ struct RentalLandingPage: View {
                 }
             } catch {
                 print("Error ingesting invoice!")
+                let errorToast = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: "Failed to ingest latest invoice."
+                )
+                presentToast(errorToast)
             }
         }
     }

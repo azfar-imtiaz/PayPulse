@@ -18,13 +18,11 @@ struct SignupRequest: Encodable {
     let name: String
     let email: String
     let password: String
-    let gmailAppPassword: String
     
     private enum CodingKeys: String, CodingKey {
         case name
         case email
         case password
-        case gmailAppPassword = "gmail_app_password"
     }
 }
 
