@@ -156,12 +156,14 @@ struct ProfileView: View {
                     message: "User account deleted successfully!"
                 )
                 authManager.setPendingToast(successToast)
-            } catch {
-                let errorToast = ToastValue(
-                    icon: Icon(name: "circle-x"),
-                    message: viewModel.errorMessage ?? "Could not delete user account"
-                )
-                authManager.setPendingToast(errorToast)
+            } catch let apiError as APIError {
+                Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
+                    let toastValue = ToastValue(
+                        icon: Icon(name: "circle-x"),
+                        message: viewModel.errorMessage ?? "Error loading user information"
+                    )
+                    presentToast(toastValue)
+                }
             }
         }
     }
@@ -175,16 +177,16 @@ struct ProfileView: View {
                 showSpinner = false
             }
             
-            // TODO: These toasts need to be shown on AuthView
             do {
                 try await viewModel.getUserInfo()
-            } catch {
-                // show viewModel.errorMessage toast notification here
-                let toastValue = ToastValue(
-                    icon: Icon(name: "circle-x"),
-                    message: viewModel.errorMessage ?? "Could not ingest invoices"
-                )
-                presentToast(toastValue)
+            } catch let apiError as APIError {
+                Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
+                    let toastValue = ToastValue(
+                        icon: Icon(name: "circle-x"),
+                        message: viewModel.errorMessage ?? "Error loading user information"
+                    )
+                    presentToast(toastValue)
+                }
             }
         }
     }

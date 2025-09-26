@@ -24,6 +24,7 @@ struct RentalLandingPage: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
     @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject var authManager: AuthManager
     
     init(invoiceService: InvoiceService) {
         _viewModel = StateObject(wrappedValue: InvoicesViewModel(invoiceService: invoiceService))
@@ -126,20 +127,14 @@ struct RentalLandingPage: View {
                     let toastValue = ToastValue(icon: Icon(name: "circle-check"), message: viewModel.successMessage ?? "Latest invoice ingested successfully!")
                     presentToast(toastValue)
                 }
-            } catch {
-                // TODO: Handle errors here
-                print("Error!")
-                let errorToast = ToastValue(
-                    icon: Icon(name: "circle-x"),
-                    message: "Failed to load invoices: \(error.localizedDescription)"
-                )
-                presentToast(errorToast)
-                /*
-                await MainActor.run { // Ensure UI updates for error are on main thread
-                    viewModel.errorMessage = "Failed to load invoices: \(error.localizedDescription)"
-                    viewModel.invoices = [] // Clear any partial data
+            } catch let apiError as APIError {
+                Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
+                    let errorToast = ToastValue(
+                        icon: Icon(name: "circle-x"),
+                        message: "Failed to load invoices: \(viewModel.errorMessage ?? apiError.errorDescription ?? apiError.localizedDescription)"
+                    )
+                    presentToast(errorToast)
                 }
-                 */
             }
         }
     }
@@ -179,13 +174,14 @@ struct RentalLandingPage: View {
                     message: "Failed to load invoices."
                 )
                 presentToast(errorToast)
-            } catch {
-                print("Error!")
-                let toastValue = ToastValue(
-                    icon: Icon(name: "circle-x"),
-                    message: viewModel.errorMessage ?? "Could not ingest invoices"
-                )
-                presentToast(toastValue)
+            } catch let apiError as APIError {
+                Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
+                    let errorToast = ToastValue(
+                        icon: Icon(name: "circle-x"),
+                        message: "Failed to load invoices: \(viewModel.errorMessage ?? apiError.errorDescription ?? apiError.localizedDescription)"
+                    )
+                    presentToast(errorToast)
+                }
             }
         }
     }
@@ -214,13 +210,14 @@ struct RentalLandingPage: View {
                 } else {
                     viewModel.reloadInvoices = true
                 }
-            } catch {
-                print("Error ingesting invoice!")
-                let errorToast = ToastValue(
-                    icon: Icon(name: "circle-x"),
-                    message: "Failed to ingest latest invoice."
-                )
-                presentToast(errorToast)
+            } catch let apiError as APIError {
+                Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
+                    let errorToast = ToastValue(
+                        icon: Icon(name: "circle-x"),
+                        message: "Failure: \(viewModel.errorMessage ?? apiError.errorDescription ?? apiError.localizedDescription)"
+                    )
+                    presentToast(errorToast)
+                }
             }
         }
     }

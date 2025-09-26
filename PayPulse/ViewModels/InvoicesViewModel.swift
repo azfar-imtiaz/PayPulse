@@ -54,6 +54,7 @@ class InvoicesViewModel: ObservableObject {
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to ingest latest invoice: \(self.errorMessage ?? "Unknown error")")
+            throw error
         }
         return (displayToast: true, ingestionStatus: false)
     }
@@ -69,6 +70,7 @@ class InvoicesViewModel: ObservableObject {
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to get invoices: \(self.errorMessage ?? "Unknown error")")
+            throw error
         }
     }
     
