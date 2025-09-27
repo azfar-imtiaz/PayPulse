@@ -8,15 +8,28 @@
 import Foundation
 import SwiftUI
 import OSLog
+import Toasts
+
+enum LoginContext {
+    case login
+    case signup
+    case keychain
+}
 
 protocol AuthManagerProtocol: ObservableObject {
     var isAuthenticated: Bool { get }
     var username: String? { get }
     var accessToken: String? { get }
     var tokenType: String? { get }
+    var pendingToast: ToastValue? { get }
+    var loginContext: LoginContext? { get }
     
     func saveAuthenticationData(username: String, accessToken: String, tokenType: String)
     func logout()
+    func setPendingToast(_ toast: ToastValue)
+    func clearPendingToast()
+    func setLoginContext(_ context: LoginContext)
+    func clearLoginContext()
     // func handleUnauthorized() async
     
     var apiClient: (any APIClientProtocol)? { get set }
@@ -39,6 +52,9 @@ class AuthManager: AuthManagerProtocol {
             Self.logger.debug("isAuthenticated didSet: \(self.isAuthenticated, privacy: .public)")
         }
     }
+    
+    @Published var pendingToast: ToastValue?
+    @Published var loginContext: LoginContext?
     
     var username: String? {
         get { KeychainHelper.load(key: "username") }
@@ -83,7 +99,14 @@ class AuthManager: AuthManagerProtocol {
     
     private init() {
         let initialAccessToken = KeychainHelper.load(key: "accessToken")
-        _isAuthenticated = Published(initialValue: initialAccessToken != nil && !(initialAccessToken?.isEmpty ?? true))
+        let isAuthenticatedFromKeychain = initialAccessToken != nil && !(initialAccessToken?.isEmpty ?? true)
+        _isAuthenticated = Published(initialValue: isAuthenticatedFromKeychain)
+        
+        // Set login context to keychain if user is already authenticated
+        if isAuthenticatedFromKeychain {
+            _loginContext = Published(initialValue: .keychain)
+        }
+        
         // _isAuthenticated = Published(initialValue: false)
         Self.logger.debug("AuthManager initialized. Initial isAuthenticated: \(self.isAuthenticated, privacy: .public)")
     }
@@ -115,6 +138,34 @@ class AuthManager: AuthManagerProtocol {
             self.tokenType = nil
             self.isAuthenticated = false
             Self.logger.notice("User logged out. All authentication data has been cleared. isAuthenticated: \(self.isAuthenticated, privacy: .public)")
+        }
+    }
+    
+    func setPendingToast(_ toast: ToastValue) {
+        Task { @MainActor in
+            self.pendingToast = toast
+            Self.logger.debug("Pending toast set")
+        }
+    }
+    
+    func clearPendingToast() {
+        Task { @MainActor in
+            self.pendingToast = nil
+            Self.logger.debug("Pending toast cleared")
+        }
+    }
+    
+    func setLoginContext(_ context: LoginContext) {
+        Task { @MainActor in
+            self.loginContext = context
+            Self.logger.debug("Login context set: \(String(describing: context))")
+        }
+    }
+    
+    func clearLoginContext() {
+        Task { @MainActor in
+            self.loginContext = nil
+            Self.logger.debug("Login context cleared")
         }
     }
 }

@@ -11,6 +11,7 @@ struct LabeledTextField: View {
     @Binding var text   : String
     var placeholderText : String
     var labelText       : String
+    var isEmail         : Bool = false
     var isSecure        : Bool = false
     
     var body: some View {
@@ -20,7 +21,7 @@ struct LabeledTextField: View {
                 .font(.formLabel)
                 .padding(.leading, 12)
             
-            InputTextField(text: $text, placeholderText: placeholderText, isSecure: isSecure)
+            InputTextField(text: $text, placeholderText: placeholderText, isEmail: isEmail, isSecure: isSecure)
         }
     }
 }

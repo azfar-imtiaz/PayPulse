@@ -12,6 +12,7 @@ enum APIError: Error, LocalizedError {
     case invalidURL
     case networkError(Error)
     case decodingError(Error)
+    case gmailError(message: String?)
     
     case backendError(code: PayPulseErrorCode, message: String)
     
@@ -25,11 +26,14 @@ enum APIError: Error, LocalizedError {
             return "Network connection error: \(error.localizedDescription)"
         case .decodingError(let error):
             return "Failed to process server response. (Details: \(error.localizedDescription)"
+        case .gmailError(let message):
+            return message ?? "There was a problem connecting to the Gmail service"
         case .backendError(let code, let message):
             switch code {
             case .invalidCredentials: return "Invalid email or password. Please try again."
             case .tokenExpired: return "Your session has expired. Please log in again."
             case .invalidToken: return "Your session is invalid. Please log in again."
+            case .gmailTokenExpired: return "Your Gmail refresh token has expired. Please connect your Gmail account again."
             case .userNotFound: return "No user with this account found."
             case .userAlreadyExists: return "An account with this email already exists."
             case .invoiceParseError: return "Failed to parse invoice data. Please try again."

@@ -23,7 +23,7 @@ class InvoicesViewModel: ObservableObject {
         self.invoiceService = invoiceService
     }
     
-    func ingestInvoices() async {
+    func ingestInvoices() async throws {
         errorMessage = nil
         
         do {
@@ -31,6 +31,7 @@ class InvoicesViewModel: ObservableObject {
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to ingest invoices: \(self.errorMessage ?? "Unknown error")")
+            throw error
         }
     }
     
@@ -53,6 +54,7 @@ class InvoicesViewModel: ObservableObject {
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to ingest latest invoice: \(self.errorMessage ?? "Unknown error")")
+            throw error
         }
         return (displayToast: true, ingestionStatus: false)
     }
@@ -68,6 +70,7 @@ class InvoicesViewModel: ObservableObject {
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to get invoices: \(self.errorMessage ?? "Unknown error")")
+            throw error
         }
     }
     

@@ -16,7 +16,7 @@ class UserService {
     
     func deleteUser() async throws -> Int {
         let response: APISuccessResponse<EmptyData> = try await apiClient.request(
-            path: "/delete/me",
+            path: "/user/me",
             method: .delete
         )
         
@@ -34,5 +34,21 @@ class UserService {
         }
         
         return nil
+    }
+    
+    func connectToGmail(gmailRequest: GmailAuthRequest) async throws -> GmailResponseModel {
+        let parameters = try gmailRequest.asDictionary()
+        
+        let response: APISuccessResponse<GmailResponseModel> = try await apiClient.request(
+            path: "/auth/gmail/store-tokens",
+            method: .post,
+            parameters: parameters
+        )
+        
+        guard let data = response.data else {
+            throw APIError.gmailError(message: "The following error occurred from Gmail Service: \(response.code): \(response.message)")
+        }
+        
+        return data
     }
 }

@@ -10,44 +10,32 @@ import SwiftUI
 struct SignupView: View {
     let authService: AuthService
     var toggleAuthView: () -> Void
-    @State var name     : String = ""
-    @State var email    : String = ""
-    @State var password : String = ""
-    @State var gmailPassword : String = ""
+    @State var username       : String = ""
+    @State var email          : String = ""
+    @State var password       : String = ""
+    @State var disableSignup  : Bool = false
+    @Binding var isLoading    : Bool
+    @Binding var errorMessage : String
+    @StateObject private var viewModel: AuthViewModel
+    @EnvironmentObject var authManager: AuthManager
     
-    @ObservedObject var viewModel: AuthViewModel
-    
-    init(authService: AuthService, toggleAuthView: @escaping () -> Void) {
+    init(authService: AuthService, toggleAuthView: @escaping () -> Void, isLoading: Binding<Bool>, errorMessage: Binding<String>) {
         self.authService = authService
-        self.viewModel = AuthViewModel(authService: authService)
         self.toggleAuthView = toggleAuthView
+        self._isLoading = isLoading
+        self._errorMessage = errorMessage
+        
+        // Initialize AuthViewModel with authService and authManager
+        self._viewModel = StateObject(wrappedValue: AuthViewModel(authService: authService, authManager: AuthManager.shared, errorMessage: errorMessage))
     }
     
     var body: some View {
         VStack {
-            /*
-            /// MARK: Auth view header
-            HStack {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Sign up ")
-                    Text("with a new account.")
-                }
-                .foregroundStyle(Color.secondaryDarkGray)
-                .font(.headingLarge)
-                
-                Spacer()
-            }
-            .padding(.leading)
-            .padding(.top, 40)
-            
-            Spacer()
-             */
-            
             /// MARK: Signup form
             
             VStack(alignment: .center, spacing: 20) {
                 LabeledTextField(
-                    text: $name,
+                    text: $username,
                     placeholderText: "Enter your full name",
                     labelText: "Name"
                 )
@@ -55,7 +43,8 @@ struct SignupView: View {
                 LabeledTextField(
                     text: $email,
                     placeholderText: "Enter your email address",
-                    labelText: "Email address"
+                    labelText: "Email address",
+                    isEmail: true
                 )
                 
                 LabeledTextField(
@@ -65,24 +54,12 @@ struct SignupView: View {
                     isSecure: true
                 )
                 
-                LabeledTextField(
-                    text: $gmailPassword,
-                    placeholderText: "Enter your Gmail app password",
-                    labelText: "Gmail app password (optional)"
-                )
-                
                 PrimaryButton(
                     buttonView: Text("Sign up"),
                     action: {
-                        Task {
-                            await viewModel.signup(
-                                username: name,
-                                email: email,
-                                password: password,
-                                gmailAppPassword: gmailPassword
-                            )
-                        }
-                    }
+                        signupUser(username: username, email: email, password: password)
+                    },
+                    isDisabled: disableSignup
                 )
                 .padding(.top)
                 
@@ -101,9 +78,31 @@ struct SignupView: View {
                     )
                 }
             }
+        }
+    }
+    
+    func signupUser(username: String, email: String, password: String) {
+        Task {
+            let (status, message) = ValidationService.validateSignupFields(name: username, email: email, password: password)
+            guard status else {
+                disableSignup = true
+                errorMessage = message
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    errorMessage = ""
+                    disableSignup = false
+                }
+                return
+            }
             
-            
-            // Spacer()
+            isLoading = true
+            defer {
+                isLoading = false
+            }
+            await viewModel.signup(
+                username: username,
+                email: email,
+                password: password
+            )
         }
     }
 }
@@ -112,5 +111,5 @@ struct SignupView: View {
     let authManager = AuthManager.shared
     let apiClient = PayPulseAPIClient(authManager: authManager)
     let authService = AuthService(apiClient: apiClient, authManager: authManager)
-    SignupView(authService: authService, toggleAuthView: {})
+    SignupView(authService: authService, toggleAuthView: {}, isLoading: .constant(false), errorMessage: .constant(""))
 }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Foundation
+import Toasts
 
 enum Utils {
     // Using enum instead of struct to prevent instantiation, since this will consist of static functions only
@@ -54,6 +55,21 @@ enum Utils {
             return Image("\(iconName)-light")
         @unknown default:
             return Image("\(iconName)-light")
+        }
+    }
+    
+    static func handleAPITokenExpiration(_ apiError: APIError, authManager: AuthManager, apiSpecificErrorHandling: () -> Void) {
+        if case .backendError(let code, _) = apiError, code == .tokenExpired {
+            // the access token has expired - log the user out
+            let toastValue = ToastValue(
+                icon: Icon(name: "circle-x"),
+                message: "Token expired - please log in again."
+            )
+            authManager.setPendingToast(toastValue)
+            authManager.logout()
+        } else {
+            // some other error - present error message in toast
+            apiSpecificErrorHandling()
         }
     }
 }

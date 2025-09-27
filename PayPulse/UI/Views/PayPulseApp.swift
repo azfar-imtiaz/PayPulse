@@ -8,10 +8,11 @@
 import SwiftUI
 import UserNotifications
 import Toasts
+import GoogleSignIn
 
 @main
 struct PayPulseApp: App {
-    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject var authManager = AuthManager.shared
     
     private let apiClient: PayPulseAPIClient
@@ -19,6 +20,7 @@ struct PayPulseApp: App {
     private let authService: AuthService
     private let invoiceService: InvoiceService
     private let userService: UserService
+    private let gmailService: GmailAuthService
     
     init() {
         _authManager = StateObject(wrappedValue: AuthManager.shared)
@@ -28,6 +30,7 @@ struct PayPulseApp: App {
         self.authService = AuthService(apiClient: apiClient, authManager: AuthManager.shared)
         self.invoiceService = InvoiceService(apiClient: apiClient)
         self.userService = UserService(apiClient: apiClient)
+        self.gmailService = GmailAuthService()
         
         AuthManager.shared.setServices(
             apiClient: self.apiClient,
@@ -51,12 +54,14 @@ struct PayPulseApp: App {
             if authManager.isAuthenticated {
                 ContentView(
                     invoiceService: invoiceService,
-                    userService: userService
+                    userService: userService,
+                    gmailService: gmailService
                 )
                     .installToast(position: .bottom)
                     .environmentObject(authManager)
             } else {
                 AuthView(authService: authService)
+                    .installToast(position: .bottom)
                     .environmentObject(authManager)
             }
              
@@ -66,6 +71,14 @@ struct PayPulseApp: App {
                 .environmentObject(authManager)
              */
             
+        }
+    }
+    
+    class AppDelegate: NSObject, UIApplicationDelegate {
+        func application(_ app: UIApplication,
+                         open url: URL,
+                         options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+            return GIDSignIn.sharedInstance.handle(url)
         }
     }
     

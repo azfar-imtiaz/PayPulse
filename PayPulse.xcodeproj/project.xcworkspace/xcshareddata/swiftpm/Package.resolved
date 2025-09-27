@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "originHash" : "4d480447fdb59d328d00c39be796e3b5b1bb819c56a49eb81f5c126563f70c18",
+=======
+  "originHash" : "642c658ab1b5b4b9196ae73278c93e36d20dcce06947ffba6020e26ae8dbab31",
+>>>>>>> feature/gmail-oauth
   "pins" : [
     {
       "identity" : "alamofire",

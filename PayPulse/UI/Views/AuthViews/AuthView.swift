@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
+import Toasts
 
 struct AuthView: View {
     let authService: AuthService
     
     @State private var showingLogin : Bool = true
     @State var isLoading            : Bool = false
+    @State var errorMessage         : String = ""
     @EnvironmentObject var authManager: AuthManager
+    @Environment(\.presentToast) var presentToast
     
     var body: some View {
         ZStack(alignment: .center) {
@@ -58,7 +61,8 @@ struct AuthView: View {
                                     showingLogin = false
                                 }
                             },
-                            isLoading: $isLoading
+                            isLoading: $isLoading,
+                            errorMessage: $errorMessage
                         )
                     )
                     // when showingLogin is true (front), rotation is 0, opacity is 1, zIndex is higher
@@ -76,7 +80,10 @@ struct AuthView: View {
                                 withAnimation(.spring(response: 0.6, dampingFraction: 0.8, blendDuration: 0.2)) {
                                     showingLogin = true
                                 }
-                            })
+                            },
+                            isLoading: $isLoading,
+                            errorMessage: $errorMessage
+                        )
                     )
                     // When showingLogin is true (back), rotation is -180, opacity is 0, zIndex is lower
                     // When showingLogin is false (front), rotation is 0, opacity is 1, zIndex is higher
@@ -92,6 +99,25 @@ struct AuthView: View {
             LoadingDotsView(isLoading: $isLoading, loadingText: showingLogin ? "Logging in..." : "Signing up...")
         }
         .background(Color.primaryOffWhite)
+        .onAppear {
+            if let pendingToast = authManager.pendingToast {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    presentToast(pendingToast)
+                    authManager.clearPendingToast()
+                }
+            }
+        }
+        .onChange(of: errorMessage) { _, newValue in
+            if newValue != "" {
+                authManager.clearLoginContext()
+                authManager.clearPendingToast()
+                let errorToast = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: newValue
+                )
+                presentToast(errorToast)
+            }
+        }
     }
 }
 
