@@ -9,7 +9,7 @@ import SwiftUI
 import Toasts
 
 struct RentalDetailsView: View {
-    let invoice: InvoiceModel
+    let invoice: RentalInvoice
     @State private var showOCRToast: Bool = false
     @State private var showTotalAmountToast: Bool = false
     
@@ -116,7 +116,7 @@ struct RentalDetailsView: View {
 
 #Preview {
     RentalDetailsView(
-        invoice: InvoiceModel(
+        invoice: RentalInvoice(
             invoiceID: "ID",
             filename: "Hyresavi_akjdjaskdjsak",
             hyra: 9500,

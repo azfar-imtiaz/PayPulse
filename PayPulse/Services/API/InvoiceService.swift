@@ -7,6 +7,7 @@
 
 import Foundation
 import OrderedCollections
+import Alamofire
 
 class InvoiceService {
     private let apiClient: PayPulseAPIClient
@@ -15,14 +16,16 @@ class InvoiceService {
         self.apiClient = apiClient
     }
     
-    func ingestInvoices(type: String) async throws -> InvoiceCountModel {
+    // MARK: - Generic Ingestion Methods
+    
+    func ingestInvoices(type: InvoiceType, parameters: Parameters? = nil) async throws -> InvoiceCountModel {
         let response: APISuccessResponse<InvoiceCountModel> = try await apiClient.request(
-            path: "invoices/\(type)/ingest",
+            path: "invoices/\(type.apiPath)/ingest",
             method: .post,
-            parameters: nil
+            parameters: parameters,
+            encoding: JSONEncoding.default
         )
         
-        // TODO: Is this needed?
         guard let invoiceCount = response.data else {
             return InvoiceCountModel(invoiceCount: 0)
         }
@@ -30,9 +33,9 @@ class InvoiceService {
         return invoiceCount
     }
     
-    func ingestLatestInvoice(type: String) async throws -> Int {
+    func ingestLatestInvoice(type: InvoiceType) async throws -> Int {
         let response: APISuccessResponse<EmptyData> = try await apiClient.request(
-            path: "invoices/\(type)/ingest/latest",
+            path: "invoices/\(type.apiPath)/ingest/latest",
             method: .post,
             parameters: nil
         )
@@ -40,9 +43,11 @@ class InvoiceService {
         return response.code
     }
     
-    func getRentalInvoices(type: String) async throws -> OrderedDictionary<Int, [InvoiceModel]> {
-        let response: APISuccessResponse<InvoiceResponseModel> = try await apiClient.request(
-            path: "invoices/\(type)",
+    // MARK: - Rental Invoice Methods
+    
+    func getRentalInvoices() async throws -> OrderedDictionary<Int, [RentalInvoice]> {
+        let response: APISuccessResponse<RentalInvoiceResponse> = try await apiClient.request(
+            path: "invoices/\(InvoiceType.rental.apiPath)",
             method: .get
         )
         
@@ -50,11 +55,79 @@ class InvoiceService {
             return [:]
         }
         
-        // sort the invoices by years, in descending order
-        let modifiedInvoices: OrderedDictionary<Int, [InvoiceModel]> = OrderedDictionary(
+        // Sort the invoices by years, in descending order
+        let modifiedInvoices: OrderedDictionary<Int, [RentalInvoice]> = OrderedDictionary(
             uniqueKeysWithValues: responseData.invoices.sorted(by: { $0.key > $1.key })
         )
         
         return modifiedInvoices
     }
+    
+    // MARK: - Retail Invoice Methods
+    
+    /// Fetches all retail invoices (all sub-types)
+    func getRetailInvoices() async throws -> [RetailInvoiceSubType: [RetailInvoiceBase]] {
+        let response: APISuccessResponse<RetailInvoiceResponse> = try await apiClient.request(
+            path: "invoices/\(InvoiceType.retail.apiPath)",
+            method: .get
+        )
+        
+        guard let responseData = response.data else {
+            return [:]
+        }
+        
+        return responseData.getInvoicesBySubType()
+    }
+    
+    /// Fetches retail invoices for a specific sub-type
+    func getRetailInvoices(subType: RetailInvoiceSubType) async throws -> [RetailInvoiceBase] {
+        let response: APISuccessResponse<RetailInvoiceResponse> = try await apiClient.request(
+            path: "invoices/\(InvoiceType.retail.apiPath)",
+            method: .get,
+            parameters: ["subtype": subType.apiPath],
+            encoding: URLEncoding.queryString
+        )
+        
+        guard let responseData = response.data else {
+            return []
+        }
+        
+        // Return invoices for the requested sub-type
+        return responseData.invoices[subType.apiPath] ?? []
+    }
+    
+    // MARK: - Retail Invoice Detail Methods
+    
+    /// Fetches and decodes food delivery invoice details
+    func getFoodDeliveryDetail(invoiceID: String) async throws -> FoodDeliveryDetail {
+        // Create a custom response structure for this specific detail type
+        struct FoodDeliveryDetailWrapper: Codable {
+            let invoiceDetails: FoodDeliveryDetail
+        }
+        
+        let response: APISuccessResponse<FoodDeliveryDetailWrapper> = try await apiClient.request(
+            path: "invoices/\(InvoiceType.retail.apiPath)",
+            method: .get,
+            parameters: [
+                "subtype": RetailInvoiceSubType.foodDelivery.apiPath,
+                "invoice-id": invoiceID
+            ],
+            encoding: URLEncoding.queryString
+        )
+        
+        guard let responseData = response.data else {
+            throw APIError.decodingError(NSError(
+                domain: "InvoiceService",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "No food delivery detail data returned"]
+            ))
+        }
+        
+        return responseData.invoiceDetails
+    }
+    
+    // TODO: Add methods for other retail sub-type details as they are implemented
+    // func getClothingDetail(invoiceID: String) async throws -> ClothingDetail { ... }
+    // func getTechnologyDetail(invoiceID: String) async throws -> TechnologyDetail { ... }
+    // etc.
 }

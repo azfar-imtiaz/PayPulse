@@ -11,7 +11,7 @@ import OrderedCollections
 struct InvoiceListContainer: View {
     @Binding var selectedYear : Int
     let vendor                : String
-    let yearlyInvoices        : OrderedDictionary<Int, [InvoiceModel]>
+    let yearlyInvoices        : OrderedDictionary<Int, [RentalInvoice]>
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -44,7 +44,7 @@ struct InvoiceListContainer: View {
         yearlyInvoices: OrderedDictionary(
             uniqueKeysWithValues: [
                 2025: [
-                    InvoiceModel(
+                    RentalInvoice(
                         invoiceID: "invoice_1",
                         filename: "filename",
                         hyra: 7800,
@@ -58,7 +58,7 @@ struct InvoiceListContainer: View {
                         moms: 123,
                         ocr: "123456789"
                     ),
-                    InvoiceModel(
+                    RentalInvoice(
                         invoiceID: "invoice_2",
                         filename: "filename",
                         hyra: 7800,
@@ -74,7 +74,7 @@ struct InvoiceListContainer: View {
                     )
                 ],
                 2024: [
-                    InvoiceModel(
+                    RentalInvoice(
                         invoiceID: "invoice_ID",
                         filename: "filename",
                         hyra: 7800,

@@ -1,13 +1,15 @@
 //
-//  InvoiceModel.swift
+//  RentalInvoiceModels.swift
 //  PayPulse
 //
-//  Created by Azfar Imtiaz on 2025-06-29.
+//  Created by Azfar Imtiaz on 2025-02-05.
 //
 
 import Foundation
 
-struct InvoiceModel: Codable, Identifiable, Hashable {
+// MARK: - Rental Invoice Model
+
+struct RentalInvoice: Codable, Identifiable, Hashable {
     let invoiceID: String
     let filename: String
     let hyra: Int
@@ -78,6 +80,15 @@ struct InvoiceModel: Codable, Identifiable, Hashable {
         }
     }
 }
+
+// MARK: - Rental Invoice Response Model
+
+struct RentalInvoiceResponse: Codable {
+    let invoiceCount: Int
+    let invoices: [Int: [RentalInvoice]]
+}
+
+// MARK: - Invoice Count Model (Generic)
 
 struct InvoiceCountModel: Codable {
     let invoiceCount: Int

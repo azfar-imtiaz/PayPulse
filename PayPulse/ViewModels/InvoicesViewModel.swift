@@ -11,7 +11,7 @@ import OrderedCollections
 @MainActor
 class InvoicesViewModel: ObservableObject {
     @Published var invoiceIngestionCount : InvoiceCountModel = InvoiceCountModel(invoiceCount: 0)
-    @Published var invoices              : OrderedDictionary<Int, [InvoiceModel]> = [:]
+    @Published var invoices              : OrderedDictionary<Int, [RentalInvoice]> = [:]
     @Published var errorMessage          : String?
     @Published var successMessage        : String?
     @Published var reloadInvoices        : Bool = false
@@ -27,7 +27,7 @@ class InvoicesViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            self.invoiceIngestionCount = try await invoiceService.ingestInvoices(type: "rental")
+            self.invoiceIngestionCount = try await invoiceService.ingestInvoices(type: .rental)
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to ingest invoices: \(self.errorMessage ?? "Unknown error")")
@@ -40,7 +40,7 @@ class InvoicesViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            let responseCode = try await invoiceService.ingestLatestInvoice(type: "rental")
+            let responseCode = try await invoiceService.ingestLatestInvoice(type: .rental)
             if responseCode == 200 {
                 self.successMessage = "This month's invoice already exists."
                 return (displayToast: true, ingestionStatus: true)
@@ -63,7 +63,7 @@ class InvoicesViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            let data = try await invoiceService.getRentalInvoices(type: "rental")
+            let data = try await invoiceService.getRentalInvoices()
             await MainActor.run {
                 self.invoices = data
             }
@@ -74,7 +74,7 @@ class InvoicesViewModel: ObservableObject {
         }
     }
     
-    func getLatestInvoice(invoices: OrderedDictionary<Int, [InvoiceModel]>) -> InvoiceModel? {
+    func getLatestInvoice(invoices: OrderedDictionary<Int, [RentalInvoice]>) -> RentalInvoice? {
         if let latestYear = invoices.keys.max() {
             return invoices[latestYear]?.first
         }
@@ -128,7 +128,7 @@ class InvoicesViewModel: ObservableObject {
         }
     }
     
-    private func getQuarterlyAggregatedData(for parameter: ParameterType, invoices: [InvoiceModel]) -> [(String, Int)] {
+    private func getQuarterlyAggregatedData(for parameter: ParameterType, invoices: [RentalInvoice]) -> [(String, Int)] {
         var quarterlyData: [String: [Int]] = [:]
         var quarterOrder: [String] = []
         
@@ -188,7 +188,7 @@ class InvoicesViewModel: ObservableObject {
         return result
     }
     
-    private func getYearlyAggregatedData(for parameter: ParameterType, invoices: [InvoiceModel]) -> [(String, Int)] {
+    private func getYearlyAggregatedData(for parameter: ParameterType, invoices: [RentalInvoice]) -> [(String, Int)] {
         var yearlyData: [String: [Int]] = [:]
         
         for invoice in invoices {
@@ -215,7 +215,7 @@ class InvoicesViewModel: ObservableObject {
         return result
     }
     
-    private func getQuarterFromInvoice(_ invoice: InvoiceModel) -> String {
+    private func getQuarterFromInvoice(_ invoice: RentalInvoice) -> String {
         // Extract month from invoice and determine quarter
         let monthName = invoice.getDueMonthName()
         let monthNumber = getMonthNumber(from: monthName)
@@ -251,7 +251,7 @@ class InvoicesViewModel: ObservableObject {
         return months[monthName] ?? 1
     }
     
-    private func getValue(for parameter: ParameterType, from invoice: InvoiceModel) -> Int {
+    private func getValue(for parameter: ParameterType, from invoice: RentalInvoice) -> Int {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         switch parameter {
