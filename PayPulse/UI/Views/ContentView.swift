@@ -19,8 +19,8 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                
+            VStack(spacing: 0) {
+
                 HStack {
                     Text("PayPulse")
                         .font(.headingLarge)
@@ -35,38 +35,41 @@ struct ContentView: View {
                 }
                 .padding(.leading)
                 .padding(.top, 20)
-                
+
                 HStack {
                     Text("All your invoices, one place.")
                         // .font(.headingMedium)
                         .font(.headingStandard)
                         .foregroundStyle(.gray)
-                    
+
                     Spacer()
                 }
                 .padding([.leading, .bottom])
-                
-                HStack {
-                    NavigationLink {
-                        RentalLandingPage(invoiceService: invoiceService)
-                    } label: {
-                        VStack(alignment: .center) {
-                            RectangleRoundedCorners(strokeWidth: 2)
-                                .frame(width: 130, height: 130)
-                                .overlay {
-                                    Icon(name: "file-spreadsheet", size: 50)
-                                }
-                            
-                            Text("Rental invoices")
-                                .font(.uiLabel)
-                                .foregroundStyle(Color.secondaryDarkGray)
-                        }
+
+                ScrollView {
+                    LazyVGrid(columns: [
+                        GridItem(.flexible(), spacing: 16),
+                        GridItem(.flexible(), spacing: 16)
+                    ], spacing: 20) {
+                        InvoiceCategoryCard(
+                            iconName: "house",
+                            iconTitle: "Rental Invoices",
+                            destination: RentalLandingPage(
+                                invoiceService: invoiceService
+                            )
+                        )
+
+                        InvoiceCategoryCard(
+                            iconName: "file-spreadsheet",
+                            iconTitle: "Retail Invoices",
+                            destination: RetailLandingPage(
+                                invoiceService: invoiceService
+                            )
+                        )
                     }
-                    Spacer()
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
                 }
-                .padding()
-                
-                Spacer()
             }
             .background(Color.primaryOffWhite)
             .onAppear {

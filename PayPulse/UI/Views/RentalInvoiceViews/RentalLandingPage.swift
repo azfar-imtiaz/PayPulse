@@ -15,7 +15,7 @@ enum TabTitles: String {
 
 struct RentalLandingPage: View {
     let invoiceService             : InvoiceService
-    @StateObject var viewModel     : InvoicesViewModel
+    @StateObject var viewModel     : RentalInvoicesViewModel
     @State private var selectedTab : TabTitles = .invoices
     @State var selectedYear        : Int = Utils.getCurrentYear()
     @State var showSpinner         : Bool = false
@@ -27,7 +27,7 @@ struct RentalLandingPage: View {
     @EnvironmentObject var authManager: AuthManager
     
     init(invoiceService: InvoiceService) {
-        _viewModel = StateObject(wrappedValue: InvoicesViewModel(invoiceService: invoiceService))
+        _viewModel = StateObject(wrappedValue: RentalInvoicesViewModel(invoiceService: invoiceService))
         self.invoiceService = invoiceService
     }
     

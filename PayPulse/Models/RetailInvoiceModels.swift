@@ -44,21 +44,29 @@ enum RetailInvoiceSubType: String, Codable, CaseIterable {
     var iconName: String {
         switch self {
         case .foodDelivery:
-            return "fork.knife"
+            // return "fork.knife"
+            return "file-spreadsheet"
         case .clothing:
-            return "tshirt.fill"
+            // return "tshirt.fill"
+            return "file-spreadsheet"
         case .technology:
-            return "laptopcomputer"
+            // return "laptopcomputer"
+            return "file-spreadsheet"
         case .subscriptions:
-            return "arrow.clockwise.circle"
+            // return "arrow.clockwise.circle"
+            return "file-spreadsheet"
         case .grocery:
-            return "cart.fill"
+            // return "cart.fill"
+            return "file-spreadsheet"
         case .utility:
-            return "lightbulb.fill"
+            // return "lightbulb.fill"
+            return "file-spreadsheet"
         case .miscellaneous:
-            return "ellipsis.circle"
+            // return "ellipsis.circle"
+            return "file-spreadsheet"
         case .travel:
-            return "airplane"
+            // return "airplane"
+            return "file-spreadsheet"
         }
     }
     
@@ -174,6 +182,49 @@ struct RetailInvoiceDetailResponse: Codable {
     
     enum CodingKeys: String, CodingKey {
         case invoiceDetails
+    }
+}
+
+// MARK: - Retail Invoice Counts Response Model
+
+struct RetailInvoiceCountsResponse: Codable {
+    private let foodDelivery: Int
+    private let clothing: Int
+    private let technology: Int
+    private let subscriptions: Int
+    private let grocery: Int
+    private let utility: Int
+    private let miscellaneous: Int
+    private let travel: Int
+
+    enum CodingKeys: String, CodingKey {
+        case foodDelivery = "food-delivery"
+        case clothing = "clothing"
+        case technology = "technology"
+        case subscriptions = "subscriptions"
+        case grocery = "grocery"
+        case utility = "utility"
+        case miscellaneous = "miscellaneous"
+        case travel = "travel"
+    }
+
+    /// Returns counts grouped by sub-type enum
+    func getCountsBySubType() -> [RetailInvoiceSubType: Int] {
+        return [
+            .foodDelivery: foodDelivery,
+            .clothing: clothing,
+            .technology: technology,
+            .subscriptions: subscriptions,
+            .grocery: grocery,
+            .utility: utility,
+            .miscellaneous: miscellaneous,
+            .travel: travel
+        ]
+    }
+
+    /// Returns the total count across all sub-types
+    func getTotalCount() -> Int {
+        return foodDelivery + clothing + technology + subscriptions + grocery + utility + miscellaneous + travel
     }
 }
 

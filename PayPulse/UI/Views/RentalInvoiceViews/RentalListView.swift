@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RentalListView: View {
-    @StateObject var viewModel    : InvoicesViewModel
+    @StateObject var viewModel    : RentalInvoicesViewModel
     @Binding var selectedYear     : Int
     @Binding var showSpinner      : Bool
     var loadInvoicesAction        : () async throws -> Void
@@ -40,7 +40,7 @@ struct RentalListView: View {
 
 #Preview {
     RentalListView(
-        viewModel: InvoicesViewModel(
+        viewModel: RentalInvoicesViewModel(
             invoiceService: InvoiceService(
                 apiClient: PayPulseAPIClient(
                     authManager: AuthManager.shared

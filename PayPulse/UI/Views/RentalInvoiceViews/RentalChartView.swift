@@ -10,7 +10,7 @@ import SwiftUI
 struct RentalChartView: View {
     @State private var selectedYear: Int? = nil
     @State private var selectedParam: ParameterType = .totalRent
-    @ObservedObject var viewModel: InvoicesViewModel
+    @ObservedObject var viewModel: RentalInvoicesViewModel
     
     var filteredData: [(String, Int)] {
         viewModel.getFilteredData(for: selectedParam, selectedYear: selectedYear)
@@ -58,5 +58,5 @@ struct RentalChartView: View {
 }
 
 #Preview {
-    // ChartView(viewModel: InvoicesViewModel())
+    // ChartView(viewModel: RentalInvoicesViewModel())
 }

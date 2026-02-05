@@ -1,5 +1,5 @@
 //
-//  InvoicesViewModel.swift
+//  RentalInvoicesViewModel.swift
 //  PayPulse
 //
 //  Created by Azfar Imtiaz on 2025-06-29.
@@ -9,7 +9,7 @@ import Foundation
 import OrderedCollections
 
 @MainActor
-class InvoicesViewModel: ObservableObject {
+class RentalInvoicesViewModel: ObservableObject {
     @Published var invoiceIngestionCount : InvoiceCountModel = InvoiceCountModel(invoiceCount: 0)
     @Published var invoices              : OrderedDictionary<Int, [RentalInvoice]> = [:]
     @Published var errorMessage          : String?

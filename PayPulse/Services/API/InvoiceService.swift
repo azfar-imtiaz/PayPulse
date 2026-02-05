@@ -95,7 +95,23 @@ class InvoiceService {
         // Return invoices for the requested sub-type
         return responseData.invoices[subType.apiPath] ?? []
     }
-    
+
+    /// Fetches retail invoice counts for all sub-types
+    func getRetailInvoiceCounts() async throws -> [RetailInvoiceSubType: Int] {
+        let response: APISuccessResponse<RetailInvoiceCountsResponse> = try await apiClient.request(
+            path: "invoices/\(InvoiceType.retail.apiPath)",
+            method: .get,
+            parameters: ["counts": "true"],
+            encoding: URLEncoding.queryString
+        )
+
+        guard let responseData = response.data else {
+            return [:]
+        }
+
+        return responseData.getCountsBySubType()
+    }
+
     // MARK: - Retail Invoice Detail Methods
     
     /// Fetches and decodes food delivery invoice details
