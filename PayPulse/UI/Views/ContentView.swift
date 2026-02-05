@@ -68,7 +68,7 @@ struct ContentView: View {
                         )
                     }
                     .padding(.horizontal)
-                    .padding(.bottom, 20)
+                    .padding(.vertical, 20)
                 }
             }
             .background(Color.primaryOffWhite)

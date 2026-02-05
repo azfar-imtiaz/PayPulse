@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // MARK: - Retail Invoice Sub-Type Enum
 
@@ -44,32 +45,45 @@ enum RetailInvoiceSubType: String, Codable, CaseIterable {
     var iconName: String {
         switch self {
         case .foodDelivery:
-            // return "fork.knife"
-            return "file-spreadsheet"
+            return "food-delivery"
         case .clothing:
-            // return "tshirt.fill"
-            return "file-spreadsheet"
+            return "clothing"
         case .technology:
-            // return "laptopcomputer"
-            return "file-spreadsheet"
+            return "tech"
         case .subscriptions:
-            // return "arrow.clockwise.circle"
-            return "file-spreadsheet"
+            return "subscriptions"
         case .grocery:
-            // return "cart.fill"
-            return "file-spreadsheet"
+            return "grocery"
         case .utility:
-            // return "lightbulb.fill"
-            return "file-spreadsheet"
+            return "utility"
         case .miscellaneous:
-            // return "ellipsis.circle"
-            return "file-spreadsheet"
+            return "miscellaneous"
         case .travel:
-            // return "airplane"
-            return "file-spreadsheet"
+            return "travel"
         }
     }
     
+    var color: Color {
+        switch self {
+        case .foodDelivery:
+            return Color(red: 1.0, green: 0.42, blue: 0.21) // #FF6B35
+        case .clothing:
+            return Color(red: 0.56, green: 0.27, blue: 0.68) // #8E44AD
+        case .technology:
+            return Color(red: 0.20, green: 0.60, blue: 0.86) // #3498DB
+        case .subscriptions:
+            return Color(red: 0.18, green: 0.80, blue: 0.44) // #2ECC71
+        case .grocery:
+            return Color(red: 0.15, green: 0.68, blue: 0.38) // #27AE60
+        case .utility:
+            return Color(red: 0.95, green: 0.61, blue: 0.07) // #F39C12
+        case .miscellaneous:
+            return Color(red: 0.58, green: 0.65, blue: 0.65) // #95A5A6
+        case .travel:
+            return Color(red: 0.91, green: 0.30, blue: 0.24) // #E74C3C
+        }
+    }
+
     var apiPath: String {
         return self.rawValue
     }
