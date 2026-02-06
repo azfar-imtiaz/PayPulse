@@ -65,35 +65,20 @@ class InvoiceService {
     
     // MARK: - Retail Invoice Methods
     
-    /// Fetches all retail invoices (all sub-types)
-    func getRetailInvoices() async throws -> [RetailInvoiceSubType: [RetailInvoiceBase]] {
-        let response: APISuccessResponse<RetailInvoiceResponse> = try await apiClient.request(
-            path: "invoices/\(InvoiceType.retail.apiPath)",
-            method: .get
-        )
-        
-        guard let responseData = response.data else {
-            return [:]
-        }
-        
-        return responseData.getInvoicesBySubType()
-    }
-    
-    /// Fetches retail invoices for a specific sub-type
-    func getRetailInvoices(subType: RetailInvoiceSubType) async throws -> [RetailInvoiceBase] {
-        let response: APISuccessResponse<RetailInvoiceResponse> = try await apiClient.request(
+    /// Fetches retail invoices for a specific sub-type grouped by year
+    func getRetailInvoices(subType: RetailInvoiceSubType) async throws -> OrderedDictionary<Int, [RetailInvoiceBase]> {
+        let response: APISuccessResponse<RetailInvoiceByYearResponse> = try await apiClient.request(
             path: "invoices/\(InvoiceType.retail.apiPath)",
             method: .get,
             parameters: ["subtype": subType.apiPath],
             encoding: URLEncoding.queryString
         )
-        
+
         guard let responseData = response.data else {
-            return []
+            return [:]
         }
-        
-        // Return invoices for the requested sub-type
-        return responseData.invoices[subType.apiPath] ?? []
+
+        return responseData.getInvoicesByYear()
     }
 
     /// Fetches retail invoice counts for all sub-types

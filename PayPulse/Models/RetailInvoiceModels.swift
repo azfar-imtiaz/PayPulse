@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import OrderedCollections
 
 // MARK: - Retail Invoice Sub-Type Enum
 
@@ -95,19 +96,22 @@ struct RetailInvoiceBase: Codable, Identifiable, Hashable {
     let invoiceID: String
     let invoiceDate: String
     let totalAmount: Double
-    let currency: String
+    let currency: String?
     let vendorName: String
-    let subType: RetailInvoiceSubType
-    
+
     var id: String { invoiceID }
-    
+
     enum CodingKeys: String, CodingKey {
         case invoiceID = "InvoiceID"
         case invoiceDate = "invoice_date"
         case totalAmount = "total_amount"
         case currency
         case vendorName = "vendor_name"
-        case subType = "sub_type"
+    }
+
+    /// Returns the currency or SEK as default if null
+    var displayCurrency: String {
+        return currency ?? "SEK"
     }
     
     /// Returns a formatted date string for display
@@ -136,16 +140,29 @@ struct RetailInvoiceBase: Codable, Identifiable, Hashable {
         return "Unknown"
     }
     
+    /// Returns the month number from the invoice date (1-12)
+    func getMonthNumber() -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        if let date = dateFormatter.date(from: invoiceDate) {
+            let calendar = Calendar.current
+            return calendar.component(.month, from: date)
+        }
+
+        return 0
+    }
+
     /// Returns the year from the invoice date
     func getYear() -> Int {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        
+
         if let date = dateFormatter.date(from: invoiceDate) {
             let calendar = Calendar.current
             return calendar.component(.year, from: date)
         }
-        
+
         return 0
     }
     
@@ -154,11 +171,11 @@ struct RetailInvoiceBase: Codable, Identifiable, Hashable {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency
         numberFormatter.currencyCode = currency
-        
+
         if let formattedAmount = numberFormatter.string(from: NSNumber(value: totalAmount)) {
             return formattedAmount
         }
-        
+
         return "\(currency) \(totalAmount)"
     }
 }
@@ -174,18 +191,53 @@ protocol RetailInvoiceDetail: Codable {
 struct RetailInvoiceResponse: Codable {
     let invoiceCount: Int
     let invoices: [String: [RetailInvoiceBase]]
-    
+
     /// Returns invoices grouped by sub-type
     func getInvoicesBySubType() -> [RetailInvoiceSubType: [RetailInvoiceBase]] {
         var result: [RetailInvoiceSubType: [RetailInvoiceBase]] = [:]
-        
+
         for (key, value) in invoices {
             if let subType = RetailInvoiceSubType(rawValue: key) {
                 result[subType] = value
             }
         }
-        
+
         return result
+    }
+}
+
+// MARK: - Retail Invoice By Year Response Model
+
+struct RetailInvoiceByYearResponse: Codable {
+    let invoiceCount: Int
+    let invoices: [String: [RetailInvoiceBase]]
+
+    /// Converts string year keys to integer keys and returns ordered dictionary
+    func getInvoicesByYear() -> OrderedDictionary<Int, [RetailInvoiceBase]> {
+        var result: [Int: [RetailInvoiceBase]] = [:]
+
+        for (yearString, invoicesList) in invoices {
+            if let year = Int(yearString) {
+                // Sort invoices by date (latest first) and then by month
+                let sortedInvoices = invoicesList.sorted { first, second in
+                    // First sort by month (latest first)
+                    let firstMonth = first.getMonthNumber()
+                    let secondMonth = second.getMonthNumber()
+
+                    if firstMonth != secondMonth {
+                        return firstMonth > secondMonth
+                    }
+
+                    // Then by date within the month
+                    return first.invoiceDate > second.invoiceDate
+                }
+
+                result[year] = sortedInvoices
+            }
+        }
+
+        // Sort years in descending order (latest first)
+        return OrderedDictionary(uniqueKeysWithValues: result.sorted { $0.key > $1.key })
     }
 }
 

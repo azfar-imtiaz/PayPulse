@@ -46,7 +46,8 @@ struct RetailLandingPage: View {
                                     InvoiceCategoryCard(
                                         iconName: subType.iconName,
                                         iconTitle: subType.displayName,
-                                        destination: RentalLandingPage(
+                                        destination: RetailInvoicesListView(
+                                            subType: subType,
                                             invoiceService: invoiceService
                                         ),
                                         invoiceCount: count
