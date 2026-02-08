@@ -36,7 +36,7 @@ struct InvoiceSummary: View {
             }
 
             HStack {
-                Text("\(Utils.formatNumber(totalAmount)) \(currency)")
+                Text(" \(currency) \(Utils.formatNumber(totalAmount))")
                 Spacer()
                 Text(dueDate)
             }

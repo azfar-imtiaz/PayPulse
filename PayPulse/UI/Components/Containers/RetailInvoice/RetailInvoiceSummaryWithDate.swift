@@ -25,9 +25,7 @@ struct RetailInvoiceSummaryWithDate: View {
             }
 
             NavigationLink {
-                // Future: RetailInvoiceDetailView(invoice: invoice)
-                Text("Detail View Coming Soon")
-                    .navigationTitle("Invoice Details")
+                RetailInvoiceDetailView(invoice: invoice, subType: subType)
             } label: {
                 InvoiceDetailsContainer {
                     InvoiceSummary(

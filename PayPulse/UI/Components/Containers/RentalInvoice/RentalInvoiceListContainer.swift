@@ -8,7 +8,7 @@
 import SwiftUI
 import OrderedCollections
 
-struct InvoiceListContainer: View {
+struct RentalInvoiceListContainer: View {
     @Binding var selectedYear : Int
     let vendor                : String
     let yearlyInvoices        : OrderedDictionary<Int, [RentalInvoice]>
@@ -23,7 +23,7 @@ struct InvoiceListContainer: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     if let invoices = yearlyInvoices[selectedYear] {
                         ForEach(invoices) { invoice in
-                            InvoiceSummaryWithDate(
+                            RentalInvoiceSummaryWithDate(
                                 invoice: invoice,
                                 vendor: vendor
                             )
@@ -38,7 +38,7 @@ struct InvoiceListContainer: View {
 }
 
 #Preview {
-    InvoiceListContainer(
+    RentalInvoiceListContainer(
         selectedYear: .constant(2025),
         vendor: "Wallenstam",
         yearlyInvoices: OrderedDictionary(

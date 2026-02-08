@@ -23,7 +23,7 @@ struct RentalListView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 20)
                 
-                InvoiceListContainer(
+                RentalInvoiceListContainer(
                     selectedYear: $selectedYear,
                     vendor: "Wallenstam",
                     yearlyInvoices: viewModel.invoices

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InvoiceSummaryWithDate: View {
+struct RentalInvoiceSummaryWithDate: View {
     let invoice : RentalInvoice
     let vendor  : String
     
@@ -34,7 +34,7 @@ struct InvoiceSummaryWithDate: View {
 }
 
 #Preview {
-    InvoiceSummaryWithDate(
+    RentalInvoiceSummaryWithDate(
         invoice: RentalInvoice(
             invoiceID: "invoice_ID",
             filename: "filename",
