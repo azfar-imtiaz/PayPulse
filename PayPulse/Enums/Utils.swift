@@ -72,4 +72,72 @@ enum Utils {
             apiSpecificErrorHandling()
         }
     }
+
+    // MARK: - Currency Utilities
+
+    /// Maps currency symbols or codes to proper ISO currency codes
+    static func mapCurrencyToCode(_ currencyInput: String) -> String {
+        switch currencyInput.uppercased() {
+        case "$", "USD":
+            return "USD"
+        case "€", "EUR":
+            return "EUR"
+        case "£", "GBP":
+            return "GBP"
+        case "¥", "JPY":
+            return "JPY"
+        case "SEK", "KR":
+            return "SEK"
+        case "NOK":
+            return "NOK"
+        case "DKK":
+            return "DKK"
+        default:
+            // Default to SEK if currency is unrecognized
+            return "SEK"
+        }
+    }
+
+    /// Returns the appropriate locale for currency formatting
+    static func getLocaleForCurrency(_ currencyCode: String) -> Locale {
+        switch currencyCode {
+        case "USD":
+            return Locale(identifier: "en_US")
+        case "EUR":
+            return Locale(identifier: "de_DE") // German formatting for EUR (6,51 €)
+        case "GBP":
+            return Locale(identifier: "en_GB")
+        case "JPY":
+            return Locale(identifier: "ja_JP")
+        case "SEK":
+            return Locale(identifier: "sv_SE")
+        case "NOK":
+            return Locale(identifier: "nb_NO")
+        case "DKK":
+            return Locale(identifier: "da_DK")
+        default:
+            // Default to Swedish locale for unknown currencies
+            return Locale(identifier: "sv_SE")
+        }
+    }
+
+    /// Formats a currency amount using proper currency formatting with locale awareness
+    static func formatCurrency(_ amount: Double, currency: String) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+
+        // Map currency symbols/codes to proper ISO currency codes and locales
+        let currencyCode = mapCurrencyToCode(currency)
+        let locale = getLocaleForCurrency(currencyCode)
+
+        numberFormatter.currencyCode = currencyCode
+        numberFormatter.locale = locale
+
+        if let formattedAmount = numberFormatter.string(from: NSNumber(value: amount)) {
+            return formattedAmount
+        }
+
+        // If NumberFormatter fails, use a consistent fallback
+        return "\(currency) \(String(format: "%.2f", amount))"
+    }
 }
