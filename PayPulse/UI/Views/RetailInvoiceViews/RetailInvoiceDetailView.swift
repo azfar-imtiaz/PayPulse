@@ -68,7 +68,8 @@ struct RetailInvoiceDetailView: View {
 
                     RetailDetailedInvoiceItemsView(
                         detailInvoice: detailInvoice,
-                        subType: subType
+                        subType: subType,
+                        baseCurrency: invoice.displayCurrency
                     )
                     .padding(.horizontal)
 
@@ -79,7 +80,8 @@ struct RetailInvoiceDetailView: View {
 
                     RetailDetailedInvoiceSummaryView(
                         detailInvoice: detailInvoice,
-                        subType: subType
+                        subType: subType,
+                        baseCurrency: invoice.displayCurrency
                     )
                     .padding(.horizontal)
                 } else if isLoading {
@@ -89,7 +91,8 @@ struct RetailInvoiceDetailView: View {
                 } else if let errorMessage = errorMessage {
                     // Error state for detailed fields
                     Text("Could not load additional details: \(errorMessage)")
-                        .foregroundColor(.red)
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
                         .padding()
                 }
 
@@ -130,14 +133,20 @@ struct RetailInvoiceDetailView: View {
 
         Task {
             do {
-                // For now, only food delivery detail is implemented
-                if subType == .foodDelivery {
+                switch subType {
+                case .foodDelivery:
                     let detail = try await invoiceService.getFoodDeliveryDetail(invoiceID: invoice.invoiceID)
                     await MainActor.run {
                         self.detailInvoice = detail
                         self.isLoading = false
                     }
-                } else {
+                case .miscellaneous:
+                    let detail = try await invoiceService.getMiscellaneousDetail(invoiceID: invoice.invoiceID)
+                    await MainActor.run {
+                        self.detailInvoice = detail
+                        self.isLoading = false
+                    }
+                default:
                     // For other sub-types, we don't have detail implementations yet
                     await MainActor.run {
                         self.detailInvoice = nil

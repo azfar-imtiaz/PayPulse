@@ -44,13 +44,6 @@ struct RetailBaseInvoiceDetailsView: View {
                     copyTextToClipboard(text: invoice.getFormattedAmount())
                 }
             )
-
-            Divider()
-
-            KeyStringValueRow(
-                key: "Currency",
-                value: invoice.displayCurrency
-            )
         }
     }
 

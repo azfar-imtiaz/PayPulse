@@ -170,13 +170,66 @@ struct RetailInvoiceBase: Codable, Identifiable, Hashable {
     func getFormattedAmount() -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency
-        numberFormatter.currencyCode = currency
+
+        // Map common currency symbols/codes to proper ISO currency codes and locales
+        let currencyCode = mapCurrencyToCode(displayCurrency)
+        let locale = getLocaleForCurrency(currencyCode)
+
+        numberFormatter.currencyCode = currencyCode
+        numberFormatter.locale = locale
 
         if let formattedAmount = numberFormatter.string(from: NSNumber(value: totalAmount)) {
             return formattedAmount
         }
 
-        return "\(currency) \(totalAmount)"
+        // If NumberFormatter fails, use a consistent fallback with the display currency
+        return "\(displayCurrency) \(String(format: "%.2f", totalAmount))"
+    }
+
+    /// Maps currency symbols or codes to proper ISO currency codes
+    private func mapCurrencyToCode(_ currencyInput: String) -> String {
+        switch currencyInput.uppercased() {
+        case "$", "USD":
+            return "USD"
+        case "€", "EUR":
+            return "EUR"
+        case "£", "GBP":
+            return "GBP"
+        case "¥", "JPY":
+            return "JPY"
+        case "SEK", "KR":
+            return "SEK"
+        case "NOK":
+            return "NOK"
+        case "DKK":
+            return "DKK"
+        default:
+            // Default to SEK if currency is unrecognized
+            return "SEK"
+        }
+    }
+
+    /// Returns the appropriate locale for currency formatting
+    private func getLocaleForCurrency(_ currencyCode: String) -> Locale {
+        switch currencyCode {
+        case "USD":
+            return Locale(identifier: "en_US")
+        case "EUR":
+            return Locale(identifier: "de_DE") // German formatting for EUR (6,51 €)
+        case "GBP":
+            return Locale(identifier: "en_GB")
+        case "JPY":
+            return Locale(identifier: "ja_JP")
+        case "SEK":
+            return Locale(identifier: "sv_SE")
+        case "NOK":
+            return Locale(identifier: "nb_NO")
+        case "DKK":
+            return Locale(identifier: "da_DK")
+        default:
+            // Default to Swedish locale for unknown currencies
+            return Locale(identifier: "sv_SE")
+        }
     }
 }
 

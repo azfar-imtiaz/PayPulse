@@ -44,7 +44,7 @@ struct RetailInvoiceListContainer: View {
                                 .multilineTextAlignment(.center)
 
                             Text("Select a different year or check back later")
-                                .font(.body)
+                                .font(.bodyStandard)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
 

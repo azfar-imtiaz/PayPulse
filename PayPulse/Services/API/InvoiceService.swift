@@ -127,6 +127,34 @@ class InvoiceService {
         return responseData.invoiceDetails
     }
     
+    /// Fetches and decodes miscellaneous invoice details
+    func getMiscellaneousDetail(invoiceID: String) async throws -> MiscellaneousDetail {
+        // Create a custom response structure for this specific detail type
+        struct MiscellaneousDetailWrapper: Codable {
+            let invoiceDetails: MiscellaneousDetail
+        }
+
+        let response: APISuccessResponse<MiscellaneousDetailWrapper> = try await apiClient.request(
+            path: "invoices/\(InvoiceType.retail.apiPath)",
+            method: .get,
+            parameters: [
+                "subtype": RetailInvoiceSubType.miscellaneous.apiPath,
+                "invoice-id": invoiceID
+            ],
+            encoding: URLEncoding.queryString
+        )
+
+        guard let responseData = response.data else {
+            throw APIError.decodingError(NSError(
+                domain: "InvoiceService",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "No miscellaneous detail data returned"]
+            ))
+        }
+
+        return responseData.invoiceDetails
+    }
+
     // TODO: Add methods for other retail sub-type details as they are implemented
     // func getClothingDetail(invoiceID: String) async throws -> ClothingDetail { ... }
     // func getTechnologyDetail(invoiceID: String) async throws -> TechnologyDetail { ... }
