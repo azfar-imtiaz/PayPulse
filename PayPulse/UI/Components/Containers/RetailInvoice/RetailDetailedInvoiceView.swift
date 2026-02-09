@@ -68,6 +68,14 @@ struct RetailDetailedInvoiceSummaryView: View {
                         .font(.bodyStandard)
                         .foregroundStyle(Color.accentDeepRed)
                 }
+            case .subscriptions:
+                if let subscriptionDetail = detailInvoice as? SubscriptionDetail {
+                    SubscriptionItemsView(detail: subscriptionDetail)
+                } else {
+                    Text("Error: Could not display subscription details")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
             default:
                 // For other sub-types, no summary available
                 EmptyView()
@@ -235,6 +243,47 @@ private struct MiscellaneousItemsView: View {
                             )
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Subscription Items View
+
+private struct SubscriptionItemsView: View {
+    let detail: SubscriptionDetail
+
+    var body: some View {
+        InvoiceDetailsContainer {
+            VStack(alignment: .leading, spacing: 8) {
+                KeyStringValueRow(
+                    key: "Payment Method",
+                    value: detail.getFormattedPaymentMethod()
+                )
+
+                if detail.duration != nil {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Duration",
+                        value: detail.getFormattedDuration()
+                    )
+                }
+
+                if detail.invoiceNumber != nil {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Invoice Number",
+                        value: detail.getFormattedInvoiceNumber()
+                    )
+                }
+
+                if detail.receiptNumber != nil {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Receipt Number",
+                        value: detail.getFormattedReceiptNumber()
+                    )
                 }
             }
         }

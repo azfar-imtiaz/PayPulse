@@ -59,19 +59,21 @@ struct RetailInvoiceDetailView: View {
                 )
                 .padding(.horizontal)
 
-                // Detailed Invoice Fields section (only show if data is loaded)
                 if let detailInvoice = detailInvoice {
-                    Text("Order Items")
-                        .font(.bodyLarge)
-                        .foregroundStyle(Color.secondaryDarkGray)
-                        .padding(.horizontal)
+                    // Only show Order Items section for non-subscription invoices
+                    if subType != .subscriptions {
+                        Text("Order Items")
+                            .font(.bodyLarge)
+                            .foregroundStyle(Color.secondaryDarkGray)
+                            .padding(.horizontal)
 
-                    RetailDetailedInvoiceItemsView(
-                        detailInvoice: detailInvoice,
-                        subType: subType,
-                        baseCurrency: invoice.displayCurrency
-                    )
-                    .padding(.horizontal)
+                        RetailDetailedInvoiceItemsView(
+                            detailInvoice: detailInvoice,
+                            subType: subType,
+                            baseCurrency: invoice.displayCurrency
+                        )
+                        .padding(.horizontal)
+                    }
 
                     Text("Payment Details")
                         .font(.bodyLarge)
@@ -142,6 +144,12 @@ struct RetailInvoiceDetailView: View {
                     }
                 case .miscellaneous:
                     let detail = try await invoiceService.getMiscellaneousDetail(invoiceID: invoice.invoiceID)
+                    await MainActor.run {
+                        self.detailInvoice = detail
+                        self.isLoading = false
+                    }
+                case .subscriptions:
+                    let detail = try await invoiceService.getSubscriptionDetail(invoiceID: invoice.invoiceID)
                     await MainActor.run {
                         self.detailInvoice = detail
                         self.isLoading = false
