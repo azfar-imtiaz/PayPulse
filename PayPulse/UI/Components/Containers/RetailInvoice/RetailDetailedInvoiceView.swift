@@ -31,6 +31,14 @@ struct RetailDetailedInvoiceItemsView: View {
                         .font(.bodyStandard)
                         .foregroundStyle(Color.accentDeepRed)
                 }
+            case .clothing:
+                if let clothingDetail = detailInvoice as? ClothingDetail {
+                    ClothingItemsView(detail: clothingDetail, baseCurrency: baseCurrency)
+                } else {
+                    Text("Error: Could not display clothing details")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
             default:
                 // For other sub-types that don't have detail implementations yet
                 InvoiceDetailsContainer {
@@ -73,6 +81,14 @@ struct RetailDetailedInvoiceSummaryView: View {
                     SubscriptionItemsView(detail: subscriptionDetail)
                 } else {
                     Text("Error: Could not display subscription details")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
+            case .clothing:
+                if let clothingDetail = detailInvoice as? ClothingDetail {
+                    ClothingSummaryView(detail: clothingDetail, baseCurrency: baseCurrency)
+                } else {
+                    Text("Error: Could not display clothing summary")
                         .font(.bodyStandard)
                         .foregroundStyle(Color.accentDeepRed)
                 }
@@ -244,6 +260,99 @@ private struct MiscellaneousItemsView: View {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+// MARK: - Clothing Items View
+
+private struct ClothingItemsView: View {
+    let detail: ClothingDetail
+    let baseCurrency: String
+
+    var body: some View {
+        InvoiceDetailsContainer {
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(detail.items.indices, id: \.self) { index in
+                    let item = detail.items[index]
+
+                    if index > 0 {
+                        Divider()
+                    }
+
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(item.name)
+                                .font(.bodyStandard)
+                                .foregroundColor(.primary)
+
+                            Text(item.brand)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text(item.getFormattedPrice())
+                                .font(.bodyStandard)
+                                .foregroundColor(.primary)
+
+                            Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Clothing Summary View
+
+private struct ClothingSummaryView: View {
+    let detail: ClothingDetail
+    let baseCurrency: String
+
+    var body: some View {
+        InvoiceDetailsContainer {
+            VStack(spacing: 8) {
+                KeyStringValueRow(
+                    key: "Subtotal",
+                    value: Utils.formatCurrency(detail.getSubtotal(), currency: baseCurrency)
+                )
+
+                if detail.deliveryFee > 0 {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Delivery Fee",
+                        value: Utils.formatCurrency(detail.deliveryFee, currency: baseCurrency)
+                    )
+                }
+
+                if detail.tax > 0 {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Tax",
+                        value: Utils.formatCurrency(detail.tax, currency: baseCurrency)
+                    )
+                }
+
+                if detail.paymentMethod != nil {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Payment Method",
+                        value: detail.getFormattedPaymentMethod()
+                    )
+                }
+
+                Divider()
+                KeyStringValueRow(
+                    key: "Calculated Total",
+                    value: Utils.formatCurrency(detail.getTotal(), currency: baseCurrency)
+                )
             }
         }
     }

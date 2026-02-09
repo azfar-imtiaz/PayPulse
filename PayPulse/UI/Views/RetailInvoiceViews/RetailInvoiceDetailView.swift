@@ -154,6 +154,12 @@ struct RetailInvoiceDetailView: View {
                         self.detailInvoice = detail
                         self.isLoading = false
                     }
+                case .clothing:
+                    let detail = try await invoiceService.getClothingDetail(invoiceID: invoice.invoiceID)
+                    await MainActor.run {
+                        self.detailInvoice = detail
+                        self.isLoading = false
+                    }
                 default:
                     // For other sub-types, we don't have detail implementations yet
                     await MainActor.run {
