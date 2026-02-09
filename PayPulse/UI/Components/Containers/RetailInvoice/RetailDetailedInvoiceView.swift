@@ -39,6 +39,14 @@ struct RetailDetailedInvoiceItemsView: View {
                         .font(.bodyStandard)
                         .foregroundStyle(Color.accentDeepRed)
                 }
+            case .travel:
+                if let travelDetail = detailInvoice as? TravelDetail {
+                    TravelItemsView(detail: travelDetail)
+                } else {
+                    Text("Error: Could not display travel details")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
             default:
                 // For other sub-types that don't have detail implementations yet
                 InvoiceDetailsContainer {
@@ -89,6 +97,14 @@ struct RetailDetailedInvoiceSummaryView: View {
                     ClothingSummaryView(detail: clothingDetail, baseCurrency: baseCurrency)
                 } else {
                     Text("Error: Could not display clothing summary")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
+            case .travel:
+                if let travelDetail = detailInvoice as? TravelDetail {
+                    TravelSummaryView(detail: travelDetail)
+                } else {
+                    Text("Error: Could not display travel summary")
                         .font(.bodyStandard)
                         .foregroundStyle(Color.accentDeepRed)
                 }
@@ -260,6 +276,175 @@ private struct MiscellaneousItemsView: View {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+// MARK: - Retail Detailed Invoice Passenger View
+
+struct RetailDetailedInvoicePassengerView: View {
+    let detailInvoice: any RetailInvoiceDetail
+    let subType: RetailInvoiceSubType
+
+    var body: some View {
+        Group {
+            switch subType {
+            case .travel:
+                if let travelDetail = detailInvoice as? TravelDetail {
+                    TravelPassengerView(detail: travelDetail)
+                } else {
+                    Text("Error: Could not display travel passenger information")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
+            default:
+                // Other invoice types don't have passenger sections
+                EmptyView()
+            }
+        }
+    }
+}
+
+// MARK: - Travel Items View
+
+private struct TravelItemsView: View {
+    let detail: TravelDetail
+
+    var body: some View {
+        InvoiceDetailsContainer {
+            VStack(alignment: .leading, spacing: 12) {
+                ForEach(detail.travelDetails.indices, id: \.self) { index in
+                    let segment = detail.travelDetails[index]
+
+                    if index > 0 {
+                        Divider()
+                    }
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Leg \(index + 1)")
+                                .font(.bodyStandard)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                            Spacer()
+                        }
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text("From:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text(segment.departureLocation)
+                                    .font(.bodyStandard)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                            }
+
+                            HStack {
+                                Text("To:")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text(segment.arrivalLocation)
+                                    .font(.bodyStandard)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                            }
+
+                            if segment.departureDate != nil {
+                                HStack {
+                                    Text("Departure:")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(segment.getFormattedDepartureDate())
+                                        .font(.caption)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                }
+                            }
+
+                            if segment.arrivalDate != nil {
+                                HStack {
+                                    Text("Arrival:")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text(segment.getFormattedArrivalDate())
+                                        .font(.caption)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Travel Passenger View
+
+private struct TravelPassengerView: View {
+    let detail: TravelDetail
+
+    var body: some View {
+        InvoiceDetailsContainer {
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(detail.passengers.indices, id: \.self) { index in
+                    let passenger = detail.passengers[index]
+
+                    if index > 0 {
+                        Divider()
+                    }
+
+                    HStack {
+                        Text(passenger.name)
+                            .font(.bodyStandard)
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Travel Summary View
+
+private struct TravelSummaryView: View {
+    let detail: TravelDetail
+
+    var body: some View {
+        InvoiceDetailsContainer {
+            VStack(spacing: 8) {
+                KeyStringValueRow(
+                    key: "Transport Type",
+                    value: detail.getFormattedTransportType()
+                )
+
+                Divider()
+                KeyStringValueRow(
+                    key: "Company",
+                    value: detail.getFormattedTransportCompany()
+                )
+
+                Divider()
+                KeyStringValueRow(
+                    key: "Booking Reference",
+                    value: detail.bookingReference
+                )
+
+                Divider()
+                KeyStringValueRow(
+                    key: "Travel Legs",
+                    value: "\(detail.getSegmentCount())"
+                )
+
+                Divider()
+                KeyStringValueRow(
+                    key: "Passengers",
+                    value: "\(detail.getPassengerCount())"
+                )
             }
         }
     }

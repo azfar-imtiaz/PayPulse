@@ -60,9 +60,9 @@ struct RetailInvoiceDetailView: View {
                 .padding(.horizontal)
 
                 if let detailInvoice = detailInvoice {
-                    // Only show Order Items section for non-subscription invoices
+                    // Only show first section for non-subscription invoices
                     if subType != .subscriptions {
-                        Text("Order Items")
+                        Text(getFirstSectionTitle(for: subType))
                             .font(.bodyLarge)
                             .foregroundStyle(Color.secondaryDarkGray)
                             .padding(.horizontal)
@@ -75,7 +75,21 @@ struct RetailInvoiceDetailView: View {
                         .padding(.horizontal)
                     }
 
-                    Text("Payment Details")
+                    // Show passenger information section for travel invoices
+                    if subType == .travel {
+                        Text("Passenger Information")
+                            .font(.bodyLarge)
+                            .foregroundStyle(Color.secondaryDarkGray)
+                            .padding(.horizontal)
+
+                        RetailDetailedInvoicePassengerView(
+                            detailInvoice: detailInvoice,
+                            subType: subType
+                        )
+                        .padding(.horizontal)
+                    }
+
+                    Text(getSecondSectionTitle(for: subType))
                         .font(.bodyLarge)
                         .foregroundStyle(Color.secondaryDarkGray)
                         .padding(.horizontal)
@@ -160,6 +174,12 @@ struct RetailInvoiceDetailView: View {
                         self.detailInvoice = detail
                         self.isLoading = false
                     }
+                case .travel:
+                    let detail = try await invoiceService.getTravelDetail(invoiceID: invoice.invoiceID)
+                    await MainActor.run {
+                        self.detailInvoice = detail
+                        self.isLoading = false
+                    }
                 default:
                     // For other sub-types, we don't have detail implementations yet
                     await MainActor.run {
@@ -182,6 +202,26 @@ struct RetailInvoiceDetailView: View {
             return "\(iconName)-light"
         } else {
             return "\(iconName)-dark"
+        }
+    }
+
+    /// Returns the title for the first detail section based on invoice sub-type
+    private func getFirstSectionTitle(for subType: RetailInvoiceSubType) -> String {
+        switch subType {
+        case .travel:
+            return "Travel Details"
+        default:
+            return "Order Items"
+        }
+    }
+
+    /// Returns the title for the second detail section based on invoice sub-type
+    private func getSecondSectionTitle(for subType: RetailInvoiceSubType) -> String {
+        switch subType {
+        case .travel:
+            return "Additional Details"
+        default:
+            return "Payment Details"
         }
     }
 }
