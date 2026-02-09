@@ -48,10 +48,6 @@ struct ClothingDetail: RetailInvoiceDetail, Hashable {
         return items.reduce(0.0) { $0 + $1.getTotalPrice() }
     }
 
-    /// Returns total after applying tax and delivery fee
-    func getTotal() -> Double {
-        return getSubtotal() + tax + deliveryFee
-    }
 
     /// Returns formatted payment method or "Not specified" if nil
     func getFormattedPaymentMethod() -> String {

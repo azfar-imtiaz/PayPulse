@@ -55,10 +55,6 @@ struct FoodDeliveryDetail: RetailInvoiceDetail, Hashable {
         return items.reduce(0.0) { $0 + $1.getTotalPrice() }
     }
     
-    /// Returns total after applying delivery fee and discount
-    func getTotal() -> Double {
-        return getSubtotal() + deliveryFee - discount
-    }
     
     /// Returns formatted delivery fee
     func getFormattedDeliveryFee() -> String {

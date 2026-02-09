@@ -60,10 +60,6 @@ struct MiscellaneousDetail: RetailInvoiceDetail, Hashable {
         return items.reduce(0.0) { $0 + $1.getTotalPrice() }
     }
 
-    /// Returns total after applying delivery fee and tax
-    func getTotal() -> Double {
-        return getSubtotal() + (deliveryFee ?? 0.0) + tax
-    }
 
     /// Returns formatted delivery fee
     func getFormattedDeliveryFee() -> String {
@@ -75,13 +71,5 @@ struct MiscellaneousDetail: RetailInvoiceDetail, Hashable {
         return String(format: "%.2f", tax)
     }
 
-    /// Returns formatted subtotal
-    func getFormattedSubtotal() -> String {
-        return String(format: "%.2f", getSubtotal())
-    }
 
-    /// Returns formatted total
-    func getFormattedTotal() -> String {
-        return String(format: "%.2f", getTotal())
-    }
 }
