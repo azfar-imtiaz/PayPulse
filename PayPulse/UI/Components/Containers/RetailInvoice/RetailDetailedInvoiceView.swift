@@ -72,13 +72,14 @@ struct RetailDetailedInvoiceSummaryView: View {
     let detailInvoice: any RetailInvoiceDetail
     let subType: RetailInvoiceSubType
     let baseCurrency: String
+    let actualTotal: Double
 
     var body: some View {
         Group {
             switch subType {
             case .foodDelivery:
                 if let foodDeliveryDetail = detailInvoice as? FoodDeliveryDetail {
-                    FoodDeliverySummaryView(detail: foodDeliveryDetail, baseCurrency: baseCurrency)
+                    FoodDeliverySummaryView(detail: foodDeliveryDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
                     Text("Error: Could not display food delivery summary")
                         .font(.bodyStandard)
@@ -86,7 +87,7 @@ struct RetailDetailedInvoiceSummaryView: View {
                 }
             case .miscellaneous:
                 if let miscellaneousDetail = detailInvoice as? MiscellaneousDetail {
-                    MiscellaneousSummaryView(detail: miscellaneousDetail, baseCurrency: baseCurrency)
+                    MiscellaneousSummaryView(detail: miscellaneousDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
                     Text("Error: Could not display miscellaneous summary")
                         .font(.bodyStandard)
@@ -102,7 +103,7 @@ struct RetailDetailedInvoiceSummaryView: View {
                 }
             case .clothing:
                 if let clothingDetail = detailInvoice as? ClothingDetail {
-                    ClothingSummaryView(detail: clothingDetail, baseCurrency: baseCurrency)
+                    ClothingSummaryView(detail: clothingDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
                     Text("Error: Could not display clothing summary")
                         .font(.bodyStandard)
@@ -118,7 +119,7 @@ struct RetailDetailedInvoiceSummaryView: View {
                 }
             case .technology:
                 if let technologyDetail = detailInvoice as? TechnologyDetail {
-                    TechnologySummaryView(detail: technologyDetail, baseCurrency: baseCurrency)
+                    TechnologySummaryView(detail: technologyDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
                     Text("Error: Could not display technology summary")
                         .font(.bodyStandard)
@@ -184,6 +185,7 @@ private struct FoodDeliveryItemsView: View {
 private struct FoodDeliverySummaryView: View {
     let detail: FoodDeliveryDetail
     let baseCurrency: String
+    let actualTotal: Double
 
     var body: some View {
         InvoiceDetailsContainer {
@@ -211,8 +213,8 @@ private struct FoodDeliverySummaryView: View {
 
                 Divider()
                 KeyStringValueRow(
-                    key: "Calculated Total",
-                    value: Utils.formatCurrency(detail.getTotal(), currency: baseCurrency)
+                    key: "Total",
+                    value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )
             }
         }
@@ -385,6 +387,7 @@ private struct TechnologyItemsView: View {
 private struct TechnologySummaryView: View {
     let detail: TechnologyDetail
     let baseCurrency: String
+    let actualTotal: Double
 
     var body: some View {
         InvoiceDetailsContainer {
@@ -420,8 +423,8 @@ private struct TechnologySummaryView: View {
 
                 Divider()
                 KeyStringValueRow(
-                    key: "Calculated Total",
-                    value: Utils.formatCurrency(detail.getTotal(), currency: baseCurrency)
+                    key: "Total",
+                    value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )
             }
         }
@@ -622,6 +625,7 @@ private struct ClothingItemsView: View {
 private struct ClothingSummaryView: View {
     let detail: ClothingDetail
     let baseCurrency: String
+    let actualTotal: Double
 
     var body: some View {
         InvoiceDetailsContainer {
@@ -657,8 +661,8 @@ private struct ClothingSummaryView: View {
 
                 Divider()
                 KeyStringValueRow(
-                    key: "Calculated Total",
-                    value: Utils.formatCurrency(detail.getTotal(), currency: baseCurrency)
+                    key: "Total",
+                    value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )
             }
         }
@@ -711,6 +715,7 @@ private struct SubscriptionItemsView: View {
 private struct MiscellaneousSummaryView: View {
     let detail: MiscellaneousDetail
     let baseCurrency: String
+    let actualTotal: Double
 
     var body: some View {
         InvoiceDetailsContainer {
@@ -720,11 +725,11 @@ private struct MiscellaneousSummaryView: View {
                     value: Utils.formatCurrency(detail.getSubtotal(), currency: baseCurrency)
                 )
 
-                if detail.deliveryFee > 0 {
+                if let deliveryFee = detail.deliveryFee, deliveryFee > 0 {
                     Divider()
                     KeyStringValueRow(
                         key: "Delivery Fee",
-                        value: Utils.formatCurrency(detail.deliveryFee, currency: baseCurrency)
+                        value: Utils.formatCurrency(deliveryFee, currency: baseCurrency)
                     )
                 }
 
@@ -738,8 +743,8 @@ private struct MiscellaneousSummaryView: View {
 
                 Divider()
                 KeyStringValueRow(
-                    key: "Calculated Total",
-                    value: Utils.formatCurrency(detail.getTotal(), currency: baseCurrency)
+                    key: "Total",
+                    value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )
             }
         }
@@ -797,7 +802,8 @@ private struct MiscellaneousSummaryView: View {
                 discount: 10.0
             ),
             subType: .foodDelivery,
-            baseCurrency: "SEK"
+            baseCurrency: "SEK",
+            actualTotal: 652
         )
     }
     .padding()

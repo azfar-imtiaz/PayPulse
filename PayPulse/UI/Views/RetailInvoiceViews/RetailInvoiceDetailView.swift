@@ -97,7 +97,8 @@ struct RetailInvoiceDetailView: View {
                     RetailDetailedInvoiceSummaryView(
                         detailInvoice: detailInvoice,
                         subType: subType,
-                        baseCurrency: invoice.displayCurrency
+                        baseCurrency: invoice.displayCurrency,
+                        actualTotal: invoice.totalAmount
                     )
                     .padding(.horizontal)
                 } else if isLoading {

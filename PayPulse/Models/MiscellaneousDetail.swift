@@ -14,7 +14,7 @@ import Foundation
 /// Note: Base fields (vendor_name, total_amount, etc.) are NOT included in this response
 struct MiscellaneousDetail: RetailInvoiceDetail, Hashable {
     let invoiceID: String
-    let deliveryFee: Double
+    let deliveryFee: Double?
     let notes: String?
     let tax: Double
     let category: String?
@@ -62,12 +62,12 @@ struct MiscellaneousDetail: RetailInvoiceDetail, Hashable {
 
     /// Returns total after applying delivery fee and tax
     func getTotal() -> Double {
-        return getSubtotal() + deliveryFee + tax
+        return getSubtotal() + (deliveryFee ?? 0.0) + tax
     }
 
     /// Returns formatted delivery fee
     func getFormattedDeliveryFee() -> String {
-        return String(format: "%.2f", deliveryFee)
+        return String(format: "%.2f", deliveryFee ?? 0.0)
     }
 
     /// Returns formatted tax
