@@ -180,6 +180,12 @@ struct RetailInvoiceDetailView: View {
                         self.detailInvoice = detail
                         self.isLoading = false
                     }
+                case .technology:
+                    let detail = try await invoiceService.getTechnologyDetail(invoiceID: invoice.invoiceID)
+                    await MainActor.run {
+                        self.detailInvoice = detail
+                        self.isLoading = false
+                    }
                 default:
                     // For other sub-types, we don't have detail implementations yet
                     await MainActor.run {

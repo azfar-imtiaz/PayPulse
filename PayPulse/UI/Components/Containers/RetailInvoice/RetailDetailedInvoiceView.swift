@@ -47,6 +47,14 @@ struct RetailDetailedInvoiceItemsView: View {
                         .font(.bodyStandard)
                         .foregroundStyle(Color.accentDeepRed)
                 }
+            case .technology:
+                if let technologyDetail = detailInvoice as? TechnologyDetail {
+                    TechnologyItemsView(detail: technologyDetail, baseCurrency: baseCurrency)
+                } else {
+                    Text("Error: Could not display technology details")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
             default:
                 // For other sub-types that don't have detail implementations yet
                 InvoiceDetailsContainer {
@@ -105,6 +113,14 @@ struct RetailDetailedInvoiceSummaryView: View {
                     TravelSummaryView(detail: travelDetail)
                 } else {
                     Text("Error: Could not display travel summary")
+                        .font(.bodyStandard)
+                        .foregroundStyle(Color.accentDeepRed)
+                }
+            case .technology:
+                if let technologyDetail = detailInvoice as? TechnologyDetail {
+                    TechnologySummaryView(detail: technologyDetail, baseCurrency: baseCurrency)
+                } else {
+                    Text("Error: Could not display technology summary")
                         .font(.bodyStandard)
                         .foregroundStyle(Color.accentDeepRed)
                 }
@@ -301,6 +317,112 @@ struct RetailDetailedInvoicePassengerView: View {
             default:
                 // Other invoice types don't have passenger sections
                 EmptyView()
+            }
+        }
+    }
+}
+
+// MARK: - Technology Items View
+
+private struct TechnologyItemsView: View {
+    let detail: TechnologyDetail
+    let baseCurrency: String
+
+    var body: some View {
+        VStack(spacing: 16) {
+            // Items section
+            InvoiceDetailsContainer {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(detail.items.indices, id: \.self) { index in
+                        let item = detail.items[index]
+
+                        if index > 0 {
+                            Divider()
+                        }
+
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.name)
+                                    .font(.bodyStandard)
+                                    .foregroundColor(.primary)
+                            }
+
+                            Spacer()
+
+                            VStack(alignment: .trailing, spacing: 2) {
+                                Text(item.getFormattedPrice())
+                                    .font(.bodyStandard)
+                                    .foregroundColor(.primary)
+
+                                Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Additional info section (if notes are present)
+            if detail.description != nil || detail.notes != nil {
+                InvoiceDetailsContainer {
+                    VStack(alignment: .leading, spacing: 8) {
+                        if let notes = detail.notes, !notes.isEmpty {
+                            KeyStringValueRow(
+                                key: "Notes",
+                                value: notes
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Technology Summary View
+
+private struct TechnologySummaryView: View {
+    let detail: TechnologyDetail
+    let baseCurrency: String
+
+    var body: some View {
+        InvoiceDetailsContainer {
+            VStack(spacing: 8) {
+                KeyStringValueRow(
+                    key: "Subtotal",
+                    value: Utils.formatCurrency(detail.getSubtotal(), currency: baseCurrency)
+                )
+
+                if detail.deliveryFee > 0 {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Delivery Fee",
+                        value: Utils.formatCurrency(detail.deliveryFee, currency: baseCurrency)
+                    )
+                }
+
+                if detail.tax > 0 {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Tax",
+                        value: Utils.formatCurrency(detail.tax, currency: baseCurrency)
+                    )
+                }
+
+                if detail.paymentMethod != nil {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Payment Method",
+                        value: detail.getFormattedPaymentMethod()
+                    )
+                }
+
+                Divider()
+                KeyStringValueRow(
+                    key: "Calculated Total",
+                    value: Utils.formatCurrency(detail.getTotal(), currency: baseCurrency)
+                )
             }
         }
     }
