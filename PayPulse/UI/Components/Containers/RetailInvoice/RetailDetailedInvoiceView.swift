@@ -520,7 +520,7 @@ private struct TravelPassengerView: View {
                     }
 
                     HStack {
-                        Text(passenger.name)
+                        Text(passenger.name.capitalized)
                             .font(.bodyStandard)
                             .foregroundColor(.primary)
                         Spacer()
