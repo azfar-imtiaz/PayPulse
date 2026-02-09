@@ -23,15 +23,17 @@ protocol AuthManagerProtocol: ObservableObject {
     var tokenType: String? { get }
     var pendingToast: ToastValue? { get }
     var loginContext: LoginContext? { get }
-    
+    var showTokenExpiredAlert: Bool { get }
+
     func saveAuthenticationData(username: String, accessToken: String, tokenType: String)
     func logout()
     func setPendingToast(_ toast: ToastValue)
     func clearPendingToast()
     func setLoginContext(_ context: LoginContext)
     func clearLoginContext()
-    // func handleUnauthorized() async
-    
+    func handleTokenExpiration()
+    func dismissTokenExpiredAlert()
+
     var apiClient: (any APIClientProtocol)? { get set }
     var authService: AuthService? { get set }
     var invoiceService: InvoiceService? { get set }
@@ -55,6 +57,7 @@ class AuthManager: AuthManagerProtocol {
     
     @Published var pendingToast: ToastValue?
     @Published var loginContext: LoginContext?
+    @Published var showTokenExpiredAlert: Bool = false
     
     var username: String? {
         get { KeychainHelper.load(key: "username") }
@@ -166,6 +169,21 @@ class AuthManager: AuthManagerProtocol {
         Task { @MainActor in
             self.loginContext = nil
             Self.logger.debug("Login context cleared")
+        }
+    }
+
+    func handleTokenExpiration() {
+        Task { @MainActor in
+            Self.logger.warning("Token expired - showing alert to user")
+            self.showTokenExpiredAlert = true
+        }
+    }
+
+    func dismissTokenExpiredAlert() {
+        Task { @MainActor in
+            self.showTokenExpiredAlert = false
+            Self.logger.info("Token expired alert dismissed - logging user out")
+            self.logout()
         }
     }
 }

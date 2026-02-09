@@ -60,13 +60,8 @@ enum Utils {
     
     static func handleAPITokenExpiration(_ apiError: APIError, authManager: AuthManager, apiSpecificErrorHandling: () -> Void) {
         if case .backendError(let code, _) = apiError, code == .tokenExpired {
-            // the access token has expired - log the user out
-            let toastValue = ToastValue(
-                icon: Icon(name: "circle-x"),
-                message: "Token expired - please log in again."
-            )
-            authManager.setPendingToast(toastValue)
-            authManager.logout()
+            // the access token has expired - show alert to user
+            authManager.handleTokenExpiration()
         } else {
             // some other error - present error message in toast
             apiSpecificErrorHandling()

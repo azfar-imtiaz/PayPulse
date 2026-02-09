@@ -59,6 +59,16 @@ struct PayPulseApp: App {
                 )
                     .installToast(position: .bottom)
                     .environmentObject(authManager)
+                    .alert("Session Expired", isPresented: Binding(
+                        get: { authManager.showTokenExpiredAlert },
+                        set: { _ in }
+                    )) {
+                        Button("Log In Again") {
+                            authManager.dismissTokenExpiredAlert()
+                        }
+                    } message: {
+                        Text("Your session has expired. Please log in again to continue using the app.")
+                    }
             } else {
                 AuthView(authService: authService)
                     .installToast(position: .bottom)

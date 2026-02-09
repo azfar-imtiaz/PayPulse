@@ -16,13 +16,15 @@ struct FoodDeliveryDetail: RetailInvoiceDetail, Hashable {
     let invoiceID: String
     let deliveryFee: Double
     let items: [FoodItem]
-    let discount: Double
-    
+    let discount: Double?
+    let promoCode: String?
+
     enum CodingKeys: String, CodingKey {
         case invoiceID = "InvoiceID"
         case deliveryFee = "delivery_fee"
         case items
         case discount
+        case promoCode = "promo_code"
     }
     
     // MARK: - Food Item
@@ -63,6 +65,11 @@ struct FoodDeliveryDetail: RetailInvoiceDetail, Hashable {
     
     /// Returns formatted discount
     func getFormattedDiscount() -> String {
-        return String(format: "%.2f", discount)
+        return String(format: "%.2f", discount ?? 0.0)
+    }
+
+    /// Returns formatted promo code or "No promo code" if nil
+    func getFormattedPromoCode() -> String {
+        return promoCode ?? "No promo code"
     }
 }

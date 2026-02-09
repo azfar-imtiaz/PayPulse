@@ -203,11 +203,19 @@ private struct FoodDeliverySummaryView: View {
                     )
                 }
 
-                if detail.discount > 0 {
+                if let discount = detail.discount, discount > 0 {
                     Divider()
                     KeyStringValueRow(
                         key: "Discount",
-                        value: Utils.formatCurrency(-detail.discount, currency: baseCurrency)
+                        value: Utils.formatCurrency(-discount, currency: baseCurrency)
+                    )
+                }
+
+                if detail.promoCode != nil {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Promo Code",
+                        value: detail.getFormattedPromoCode()
                     )
                 }
 
@@ -775,7 +783,8 @@ private struct MiscellaneousSummaryView: View {
                         quantity: 2.0
                     )
                 ],
-                discount: 10.0
+                discount: 10.0,
+                promoCode: nil
             ),
             subType: .foodDelivery,
             baseCurrency: "SEK"
@@ -799,7 +808,8 @@ private struct MiscellaneousSummaryView: View {
                         quantity: 2.0
                     )
                 ],
-                discount: 10.0
+                discount: 10.0,
+                promoCode: nil
             ),
             subType: .foodDelivery,
             baseCurrency: "SEK",

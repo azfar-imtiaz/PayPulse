@@ -48,7 +48,7 @@ struct RetailInvoicesListView: View {
                     .background(Color.secondaryDarkGray)
                 } else if viewModel.invoicesHaveLoadedForSubType {
                     NoInvoicesFoundView(showSpinner: $showSpinner) {
-                        try await loadInvoices()
+                        loadInvoices()
                     }
                 }
 

@@ -110,7 +110,13 @@ class PayPulseAPIClient: APIClientProtocol {
                     let errorCode = backendError.error.code
                     let errorMessage = backendError.error.message
                     Self.logger.error("(apiClient): Request failed: (\(errorCode.rawValue)): \(errorMessage)")
-                    
+
+                    // Handle token expiration from backend error response
+                    if errorCode == .tokenExpired {
+                        Self.logger.warning("Token expired from backend error response")
+                        authManager.handleTokenExpiration()
+                    }
+
                     throw APIError.backendError(code: backendError.error.code, message: backendError.error.message)
                 }
             } else {
@@ -123,6 +129,9 @@ class PayPulseAPIClient: APIClientProtocol {
                         if afError.localizedDescription.contains("Gmail account needs to be re-connected") {
                             throw APIError.backendError(code: .gmailTokenExpired, message: "Please reconnect your Gmail account.")
                         } else {
+                            // Handle token expiration immediately to prevent crashes
+                            Self.logger.warning("401 Unauthorized - Token expired")
+                            authManager.handleTokenExpiration()
                             throw APIError.backendError(code: .tokenExpired, message: "")
                         }
                     }
