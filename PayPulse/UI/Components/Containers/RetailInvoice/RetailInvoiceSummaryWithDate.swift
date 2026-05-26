@@ -11,6 +11,7 @@ struct RetailInvoiceSummaryWithDate: View {
     let invoice: RetailInvoiceBase
     let showMonth: Bool
     let subType: RetailInvoiceSubType
+    let viewModel: RetailInvoicesViewModel
 
     var body: some View {
         HStack(alignment: .lastTextBaseline, spacing: 15) {
@@ -25,7 +26,7 @@ struct RetailInvoiceSummaryWithDate: View {
             }
 
             NavigationLink {
-                RetailInvoiceDetailView(invoice: invoice, subType: subType)
+                RetailInvoiceDetailView(invoice: invoice, subType: subType, retailViewModel: viewModel)
             } label: {
                 InvoiceDetailsContainer {
                     InvoiceSummary(
@@ -51,6 +52,11 @@ struct RetailInvoiceSummaryWithDate: View {
             vendorName: "Test Vendor"
         ),
         showMonth: true,
-        subType: .technology
+        subType: .technology,
+        viewModel: RetailInvoicesViewModel(
+            invoiceService: InvoiceService(
+                apiClient: PayPulseAPIClient(authManager: AuthManager.shared)
+            )
+        )
     )
 }

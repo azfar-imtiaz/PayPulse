@@ -17,6 +17,7 @@ class RetailInvoicesViewModel: ObservableObject {
     @Published var successMessage: String?
     @Published var countsHaveLoaded: Bool = false
     @Published var invoicesHaveLoadedForSubType: Bool = false
+    @Published var isDeletingInvoice: Bool = false
 
     private let invoiceService: InvoiceService
 
@@ -69,6 +70,37 @@ class RetailInvoicesViewModel: ObservableObject {
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             print("Failed to get retail invoices for \(subType.displayName): \(self.errorMessage ?? "Unknown error")")
+            throw error
+        }
+    }
+
+    /// Deletes a retail invoice and updates local state on success
+    func deleteRetailInvoice(invoiceID: String, subType: RetailInvoiceSubType) async throws {
+        errorMessage = nil
+        isDeletingInvoice = true
+        defer { isDeletingInvoice = false }
+
+        do {
+            let success = try await invoiceService.deleteRetailInvoice(invoiceID: invoiceID)
+            if success {
+                // Remove the invoice from the in-memory list
+                for year in retailInvoicesByYear.keys {
+                    retailInvoicesByYear[year]?.removeAll { $0.invoiceID == invoiceID }
+                    if retailInvoicesByYear[year]?.isEmpty == true {
+                        retailInvoicesByYear.removeValue(forKey: year)
+                    }
+                }
+                // Decrement the count badge for this sub-type
+                if let currentCount = invoiceCounts[subType], currentCount > 0 {
+                    invoiceCounts[subType] = currentCount - 1
+                }
+                successMessage = "Invoice deleted successfully."
+            } else {
+                errorMessage = "Failed to delete invoice. Please try again."
+            }
+        } catch {
+            errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
+            print("Failed to delete retail invoice \(invoiceID): \(errorMessage ?? "Unknown error")")
             throw error
         }
     }

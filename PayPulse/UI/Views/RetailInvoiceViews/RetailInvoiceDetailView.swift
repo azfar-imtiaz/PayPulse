@@ -17,11 +17,13 @@ struct RetailInvoiceDetailView: View {
     @State private var errorMessage: String?
     @State private var showToast = false
     @State private var toastMessage = ""
+    @State private var showDeleteConfirmation = false
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
+    @ObservedObject var retailViewModel: RetailInvoicesViewModel
 
     private var invoiceService: InvoiceService {
         InvoiceService(apiClient: PayPulseAPIClient(authManager: authManager))
@@ -138,6 +140,44 @@ struct RetailInvoiceDetailView: View {
                     Icon(name: getIconNameColored(iconName: "circle-arrow-left"))
                 }
             }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showDeleteConfirmation = true
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundStyle(Color.accentDeepRed)
+                }
+                .disabled(retailViewModel.isDeletingInvoice)
+            }
+        }
+        .alert("Delete Invoice", isPresented: $showDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                Task {
+                    do {
+                        try await retailViewModel.deleteRetailInvoice(
+                            invoiceID: invoice.invoiceID,
+                            subType: subType
+                        )
+                        let toast = ToastValue(
+                            icon: Image(systemName: "checkmark.circle.fill"),
+                            message: "Invoice deleted successfully"
+                        )
+                        presentToast(toast)
+                        try? await Task.sleep(nanoseconds: 800_000_000)
+                        dismiss()
+                    } catch {
+                        let toast = ToastValue(
+                            icon: Icon(name: "circle-x"),
+                            message: retailViewModel.errorMessage ?? "Failed to delete invoice"
+                        )
+                        presentToast(toast)
+                    }
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently delete the invoice from \(invoice.vendorName). This action cannot be undone.")
         }
         .onAppear {
             loadDetailedInvoice()
@@ -243,7 +283,12 @@ struct RetailInvoiceDetailView: View {
                 currency: "SEK",
                 vendorName: "Test Vendor"
             ),
-            subType: .technology
+            subType: .technology,
+            retailViewModel: RetailInvoicesViewModel(
+                invoiceService: InvoiceService(
+                    apiClient: PayPulseAPIClient(authManager: AuthManager.shared)
+                )
+            )
         )
     }
     .environmentObject(AuthManager.shared)

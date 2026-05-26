@@ -30,7 +30,8 @@ struct RetailInvoiceListContainer: View {
                             RetailInvoiceSummaryWithDate(
                                 invoice: invoice,
                                 showMonth: showMonth,
-                                subType: subType
+                                subType: subType,
+                                viewModel: viewModel
                             )
                             .padding([.horizontal, .top])
                         }

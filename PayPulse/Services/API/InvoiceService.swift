@@ -97,6 +97,15 @@ class InvoiceService {
         return responseData.getCountsBySubType()
     }
 
+    /// Deletes a retail invoice by its invoice ID
+    func deleteRetailInvoice(invoiceID: String) async throws -> Bool {
+        let response: APISuccessResponse<EmptyData> = try await apiClient.request(
+            path: "invoices/retail/\(invoiceID)",
+            method: .delete
+        )
+        return response.code == 200
+    }
+
     // MARK: - Retail Invoice Detail Methods
     
     /// Fetches and decodes food delivery invoice details
