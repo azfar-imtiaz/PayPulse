@@ -27,7 +27,7 @@ struct RetailLandingPage: View {
             ZStack(alignment: .center) {
                 VStack(spacing: 0) {
                     HStack {
-                        Text("Your retail invoices, categorized.")
+                        Text("Your retail invoices,\ncategorized.")
                         // .font(.headingMedium)
                             .font(.headingStandard)
                             .foregroundStyle(.gray)
@@ -38,19 +38,16 @@ struct RetailLandingPage: View {
 
                     if viewModel.countsHaveLoaded {
                         ScrollView {
-                            LazyVGrid(columns: [
-                                GridItem(.flexible(), spacing: 16),
-                                GridItem(.flexible(), spacing: 16)
-                            ], spacing: 20) {
+                            VStack(spacing: 12) {
+                                summaryCard
                                 ForEach(getSortedSubTypes(), id: \.0) { subType, count in
-                                    InvoiceCategoryCard(
-                                        iconName: subType.iconName,
-                                        iconTitle: subType.displayName,
+                                    RetailCategoryRow(
+                                        subType: subType,
+                                        invoiceCount: count,
                                         destination: RetailInvoicesListView(
                                             subType: subType,
                                             invoiceService: invoiceService
-                                        ),
-                                        invoiceCount: count
+                                        )
                                     )
                                 }
                             }
@@ -71,6 +68,27 @@ struct RetailLandingPage: View {
                 LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
             }
         }
+    }
+
+    private var summaryCard: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("\(viewModel.getTotalCount())")
+                .font(.headingMedium)
+                .foregroundStyle(Color.accentDeepOrange)
+            Text("invoices across \(RetailInvoiceSubType.allCases.count) categories")
+                .font(.bodyStandard)
+                .foregroundStyle(.gray)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.primaryOffWhite)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
+                )
+        )
     }
 
     private func getSortedSubTypes() -> [(RetailInvoiceSubType, Int)] {

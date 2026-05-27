@@ -85,6 +85,19 @@ enum RetailInvoiceSubType: String, Codable, CaseIterable {
         }
     }
 
+    var sfSymbolName: String {
+        switch self {
+        case .foodDelivery:   return "fork.knife"
+        case .clothing:       return "tshirt.fill"
+        case .technology:     return "laptopcomputer"
+        case .subscriptions:  return "arrow.triangle.2.circlepath"
+        case .grocery:        return "cart.fill"
+        case .utility:        return "bolt.fill"
+        case .miscellaneous:  return "square.grid.2x2"
+        case .travel:         return "airplane"
+        }
+    }
+
     var apiPath: String {
         return self.rawValue
     }
