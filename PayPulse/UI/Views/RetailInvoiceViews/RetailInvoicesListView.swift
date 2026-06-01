@@ -72,8 +72,7 @@ struct RetailInvoicesListView: View {
 
             ToolbarItem(placement: .principal) {
                 Text(subType.displayName)
-                    .font(.headline)
-                    .fontWeight(.semibold)
+                    .font(.tableHeader)
                     .foregroundStyle(computeToolbarTextColor())
             }
         }

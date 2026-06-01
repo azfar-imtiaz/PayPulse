@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+private struct PressScaleButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
+    }
+}
+
 struct InvoiceCategoryCard<Destination: View>: View {
     let iconName: String
     let iconTitle: String
@@ -25,7 +33,13 @@ struct InvoiceCategoryCard<Destination: View>: View {
             destination
         } label: {
             VStack(alignment: .center, spacing: 8) {
-                RectangleRoundedCorners(strokeWidth: 2)
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.secondaryDarkGray.opacity(0.06))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
+                    )
+                    .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
                     .frame(width: 130, height: 130)
                     .overlay {
                         Icon(name: iconName, size: 50)
@@ -43,6 +57,7 @@ struct InvoiceCategoryCard<Destination: View>: View {
                 }
             }
         }
+        .buttonStyle(PressScaleButtonStyle())
     }
 }
 

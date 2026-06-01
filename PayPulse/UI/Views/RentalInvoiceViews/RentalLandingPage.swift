@@ -15,20 +15,20 @@ enum TabTitles: String {
 
 struct RentalLandingPage: View {
     let invoiceService             : InvoiceService
-    @StateObject var viewModel     : RentalInvoicesViewModel
+    @ObservedObject var viewModel  : RentalInvoicesViewModel
     @State private var selectedTab : TabTitles = .invoices
     @State var selectedYear        : Int = Utils.getCurrentYear()
     @State var showSpinner         : Bool = false
     @State var loadingText         : String = ""
-    
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
-    
-    init(invoiceService: InvoiceService) {
-        _viewModel = StateObject(wrappedValue: RentalInvoicesViewModel(invoiceService: invoiceService))
+
+    init(invoiceService: InvoiceService, viewModel: RentalInvoicesViewModel) {
         self.invoiceService = invoiceService
+        self.viewModel = viewModel
     }
     
     var body: some View {
@@ -61,7 +61,9 @@ struct RentalLandingPage: View {
                 }
                 .onAppear {
                     loadingText = "Loading invoices..."
-                    loadInvoices(isReload: false)
+                    if !viewModel.invoicesHaveLoaded {
+                        loadInvoices(isReload: false)
+                    }
                 }
                 
                 LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
@@ -262,5 +264,9 @@ struct RentalLandingPage: View {
 }
 
 #Preview {
-    RentalLandingPage(invoiceService: InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)))
+    let invoiceService = InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared))
+    RentalLandingPage(
+        invoiceService: invoiceService,
+        viewModel: RentalInvoicesViewModel(invoiceService: invoiceService)
+    )
 }

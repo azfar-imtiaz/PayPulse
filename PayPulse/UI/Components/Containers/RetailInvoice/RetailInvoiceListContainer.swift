@@ -19,7 +19,13 @@ struct RetailInvoiceListContainer: View {
                 .fill(Color.primaryOffWhite)
                 .ignoresSafeArea(edges: .bottom)
 
-            VStack {
+            VStack(spacing: 0) {
+                RoundedRectangle(cornerRadius: 2.5)
+                    .fill(Color.secondary.opacity(0.3))
+                    .frame(width: 36, height: 4)
+                    .padding(.top, 10)
+                    .padding(.bottom, 8)
+
                 ScrollView(.vertical, showsIndicators: false) {
                     let invoicesWithMonthDisplay = viewModel.getInvoicesWithMonthDisplay(for: selectedYear)
 
@@ -54,8 +60,9 @@ struct RetailInvoiceListContainer: View {
                         .padding()
                     }
                 }
+                .id(selectedYear)
+                .transition(.opacity)
             }
-            .padding(.top)
         }
     }
 }

@@ -10,16 +10,16 @@ import Toasts
 
 struct RetailLandingPage: View {
     let invoiceService: InvoiceService
-    @StateObject var viewModel: RetailInvoicesViewModel
+    @ObservedObject var viewModel: RetailInvoicesViewModel
     @State var showSpinner: Bool = false
     @State var loadingText: String = ""
 
     @Environment(\.presentToast) var presentToast
     @EnvironmentObject var authManager: AuthManager
 
-    init(invoiceService: InvoiceService) {
+    init(invoiceService: InvoiceService, viewModel: RetailInvoicesViewModel) {
         self.invoiceService = invoiceService
-        _viewModel = StateObject(wrappedValue: RetailInvoicesViewModel(invoiceService: invoiceService))
+        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -62,7 +62,9 @@ struct RetailLandingPage: View {
                 .background(Color.primaryOffWhite)
                 .onAppear {
                     loadingText = "Loading invoice counts..."
-                    loadInvoiceCounts()
+                    if !viewModel.countsHaveLoaded {
+                        loadInvoiceCounts()
+                    }
                 }
 
                 LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
@@ -133,5 +135,9 @@ struct RetailLandingPage: View {
 }
 
 #Preview {
-    RetailLandingPage(invoiceService: InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)))
+    let invoiceService = InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared))
+    RetailLandingPage(
+        invoiceService: invoiceService,
+        viewModel: RetailInvoicesViewModel(invoiceService: invoiceService)
+    )
 }

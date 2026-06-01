@@ -30,9 +30,19 @@ struct InvoiceSummary: View {
                     .foregroundStyle(Color.secondaryDarkGray)
                 Spacer()
 
-                Circle()
-                    .fill(getCircleColor())
-                    .frame(width: 8, height: 8)
+                if circleColor == nil {
+                    let hasPassed = Utils.hasDueDateExpired(dueDate)
+                    Text(hasPassed ? "PAID" : "DUE")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
+                        .background(Capsule().fill(hasPassed ? Color.green : Color.accentDeepOrange))
+                } else {
+                    Circle()
+                        .fill(getCircleColor())
+                        .frame(width: 8, height: 8)
+                }
             }
 
             HStack {

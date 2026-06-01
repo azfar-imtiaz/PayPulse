@@ -19,7 +19,13 @@ struct RentalInvoiceListContainer: View {
                 .fill(Color.primaryOffWhite)
                 .ignoresSafeArea(edges: .bottom)
             
-            VStack {
+            VStack(spacing: 0) {
+                RoundedRectangle(cornerRadius: 2.5)
+                    .fill(Color.secondary.opacity(0.3))
+                    .frame(width: 36, height: 4)
+                    .padding(.top, 10)
+                    .padding(.bottom, 8)
+
                 ScrollView(.vertical, showsIndicators: false) {
                     if let invoices = yearlyInvoices[selectedYear] {
                         ForEach(invoices) { invoice in
@@ -31,8 +37,9 @@ struct RentalInvoiceListContainer: View {
                         }
                     }
                 }
+                .id(selectedYear)
+                .transition(.opacity)
             }
-            .padding(.top)
         }
     }
 }

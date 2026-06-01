@@ -12,11 +12,22 @@ struct ContentView: View {
     let invoiceService : InvoiceService
     let userService    : UserService
     let gmailService   : GmailAuthService
-    
+
+    @StateObject private var rentalViewModel : RentalInvoicesViewModel
+    @StateObject private var retailViewModel : RetailInvoicesViewModel
+
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentToast) var presentToast
-    
+
+    init(invoiceService: InvoiceService, userService: UserService, gmailService: GmailAuthService) {
+        self.invoiceService = invoiceService
+        self.userService = userService
+        self.gmailService = gmailService
+        _rentalViewModel = StateObject(wrappedValue: RentalInvoicesViewModel(invoiceService: invoiceService))
+        _retailViewModel = StateObject(wrappedValue: RetailInvoicesViewModel(invoiceService: invoiceService))
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -55,16 +66,24 @@ struct ContentView: View {
                             iconName: "house",
                             iconTitle: "Rental Invoices",
                             destination: RentalLandingPage(
-                                invoiceService: invoiceService
-                            )
+                                invoiceService: invoiceService,
+                                viewModel: rentalViewModel
+                            ),
+                            invoiceCount: rentalViewModel.invoicesHaveLoaded
+                                ? rentalViewModel.invoices.values.flatMap { $0 }.count
+                                : nil
                         )
 
                         InvoiceCategoryCard(
                             iconName: "file-spreadsheet",
                             iconTitle: "Retail Invoices",
                             destination: RetailLandingPage(
-                                invoiceService: invoiceService
-                            )
+                                invoiceService: invoiceService,
+                                viewModel: retailViewModel
+                            ),
+                            invoiceCount: retailViewModel.countsHaveLoaded
+                                ? retailViewModel.getTotalCount()
+                                : nil
                         )
                     }
                     .padding(.horizontal)
@@ -84,10 +103,25 @@ struct ContentView: View {
                         authManager.clearLoginContext()
                     }
                 }
+                fetchInvoiceCounts()
             }
         }
     }
-    
+
+    private func fetchInvoiceCounts() {
+        if !rentalViewModel.invoicesHaveLoaded {
+            Task {
+                try? await rentalViewModel.getInvoices()
+                rentalViewModel.invoicesHaveLoaded = true
+            }
+        }
+        if !retailViewModel.countsHaveLoaded {
+            Task {
+                try? await retailViewModel.getInvoiceCounts()
+            }
+        }
+    }
+
     private func getIconNameColored(iconName: String) -> String {
         if colorScheme == .dark {
             return "\(iconName)-light"
