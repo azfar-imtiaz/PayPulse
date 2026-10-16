@@ -12,7 +12,7 @@ struct TravelDetail: RetailInvoiceDetail, Hashable {
     let travelDetails: [TravelSegment]
     let transportType: String
     let transportCompany: String?
-    let bookingReference: String
+    let bookingReference: String?
     let passengers: [Passenger]
 
     enum CodingKeys: String, CodingKey {
@@ -27,9 +27,9 @@ struct TravelDetail: RetailInvoiceDetail, Hashable {
     // MARK: - Travel Segment
 
     struct TravelSegment: Codable, Hashable {
-        let arrivalLocation: String
+        let arrivalLocation: String?
         let arrivalDate: String?
-        let departureLocation: String
+        let departureLocation: String?
         let departureDate: String?
 
         enum CodingKeys: String, CodingKey {

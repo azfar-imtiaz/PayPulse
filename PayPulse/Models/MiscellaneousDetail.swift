@@ -16,7 +16,7 @@ struct MiscellaneousDetail: RetailInvoiceDetail, Hashable {
     let invoiceID: String
     let deliveryFee: Double?
     let notes: String?
-    let tax: Double
+    let tax: Double?
     let category: String?
     let description: String?
     let items: [MiscellaneousItem]
@@ -68,7 +68,8 @@ struct MiscellaneousDetail: RetailInvoiceDetail, Hashable {
 
     /// Returns formatted tax
     func getFormattedTax() -> String {
-        return String(format: "%.2f", tax)
+        if tax == nil { return "" }
+        return String(format: "%.2f", tax!)
     }
 
 

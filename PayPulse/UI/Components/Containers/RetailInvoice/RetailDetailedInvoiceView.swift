@@ -307,7 +307,7 @@ private struct MiscellaneousItemsView: View {
     }
 }
 
-// MARK: - Retail Detailed Invoice Passenger View
+// MARK: - Travel Detailed Invoice Passenger View
 
 struct RetailDetailedInvoicePassengerView: View {
     let detailInvoice: any RetailInvoiceDetail
@@ -318,7 +318,9 @@ struct RetailDetailedInvoicePassengerView: View {
             switch subType {
             case .travel:
                 if let travelDetail = detailInvoice as? TravelDetail {
-                    TravelPassengerView(detail: travelDetail)
+                    if travelDetail.getPassengerCount() > 0 {
+                        TravelPassengerView(detail: travelDetail)
+                    }
                 } else {
                     Text("Error: Could not display travel passenger information")
                         .font(.bodyStandard)
@@ -445,72 +447,94 @@ private struct TravelItemsView: View {
     let detail: TravelDetail
 
     var body: some View {
-        InvoiceDetailsContainer {
-            VStack(alignment: .leading, spacing: 12) {
-                ForEach(detail.travelDetails.indices, id: \.self) { index in
-                    let segment = detail.travelDetails[index]
-
-                    if index > 0 {
-                        Divider()
-                    }
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Text("Leg \(index + 1)")
-                                .font(.bodyStandard)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.primary)
-                            Spacer()
+        let segmentCount = detail.travelDetails.count
+        if segmentCount > 0 {
+            InvoiceDetailsContainer {
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(detail.travelDetails.indices, id: \.self) { index in
+                        
+                        let segment = detail.travelDetails[index]
+                        
+                        if index > 0 {
+                            Divider()
                         }
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text("From:")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text(segment.departureLocation)
-                                    .font(.bodyStandard)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                            }
-
-                            HStack {
-                                Text("To:")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text(segment.arrivalLocation)
-                                    .font(.bodyStandard)
-                                    .foregroundColor(.primary)
-                                Spacer()
-                            }
-
-                            if segment.departureDate != nil {
+                        
+                        if segment.departureLocation != nil && segment.arrivalLocation != nil {
+                            
+                            let segmentTitle = (segmentCount > 1) ? "Leg \(index + 1)" : "Journey"
+                            VStack(alignment: .leading, spacing: 8) {
                                 HStack {
-                                    Text("Departure:")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    Text(segment.getFormattedDepartureDate())
-                                        .font(.caption)
+                                    Text(segmentTitle)
+                                        .font(.bodyStandard)
+                                        .fontWeight(.semibold)
                                         .foregroundColor(.primary)
                                     Spacer()
                                 }
-                            }
-
-                            if segment.arrivalDate != nil {
-                                HStack {
-                                    Text("Arrival:")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    Text(segment.getFormattedArrivalDate())
-                                        .font(.caption)
-                                        .foregroundColor(.primary)
-                                    Spacer()
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    if segmentCount > 1 {
+                                        HStack {
+                                            Text("From:")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            Text(segment.departureLocation!)
+                                                .font(.bodyStandard)
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                        }
+                                        
+                                        HStack {
+                                            Text("To:")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            Text(segment.arrivalLocation!)
+                                                .font(.bodyStandard)
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                        }
+                                    } else {
+                                        HStack {
+                                            Text("Location:")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            Text(segment.departureLocation!)
+                                                .font(.bodyStandard)
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                        }
+                                    }
+                                    
+                                    if segment.departureDate != nil {
+                                        HStack {
+                                            Text("Departure:")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            Text(segment.getFormattedDepartureDate())
+                                                .font(.caption)
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                        }
+                                    }
+                                    
+                                    if segment.arrivalDate != nil {
+                                        HStack {
+                                            Text("Arrival:")
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                            Text(segment.getFormattedArrivalDate())
+                                                .font(.caption)
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+        } else {
+            EmptyView()
         }
     }
 }
@@ -561,23 +585,29 @@ private struct TravelSummaryView: View {
                     value: detail.getFormattedTransportCompany()
                 )
 
-                Divider()
-                KeyStringValueRow(
-                    key: "Booking Reference",
-                    value: detail.bookingReference
-                )
+                if detail.bookingReference != nil {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Booking Reference",
+                        value: detail.bookingReference!
+                    )
+                }
 
-                Divider()
-                KeyStringValueRow(
-                    key: "Travel Legs",
-                    value: "\(detail.getSegmentCount())"
-                )
+                if detail.getSegmentCount() > 0 {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Travel Legs",
+                        value: "\(detail.getSegmentCount())"
+                    )
+                }
 
-                Divider()
-                KeyStringValueRow(
-                    key: "Passengers",
-                    value: "\(detail.getPassengerCount())"
-                )
+                if detail.passengers.count > 0 {
+                    Divider()
+                    KeyStringValueRow(
+                        key: "Passengers",
+                        value: "\(detail.getPassengerCount())"
+                    )
+                }
             }
         }
     }
@@ -741,12 +771,14 @@ private struct MiscellaneousSummaryView: View {
                     )
                 }
 
-                if detail.tax > 0 {
-                    Divider()
-                    KeyStringValueRow(
-                        key: "Tax",
-                        value: Utils.formatCurrency(detail.tax, currency: baseCurrency)
-                    )
+                if detail.tax != nil {
+                    if detail.tax! > 0 {
+                        Divider()
+                        KeyStringValueRow(
+                            key: "Tax",
+                            value: Utils.formatCurrency(detail.tax!, currency: baseCurrency)
+                        )
+                    }
                 }
 
                 Divider()

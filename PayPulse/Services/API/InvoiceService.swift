@@ -70,7 +70,7 @@ class InvoiceService {
         let response: APISuccessResponse<RetailInvoiceByYearResponse> = try await apiClient.request(
             path: "invoices/\(InvoiceType.retail.apiPath)",
             method: .get,
-            parameters: ["subtype": subType.apiPath],
+            parameters: ["subtype": subType.apiPath, "exclude": "legacy-vendor-pipeline"],
             encoding: URLEncoding.queryString
         )
 
@@ -86,7 +86,7 @@ class InvoiceService {
         let response: APISuccessResponse<RetailInvoiceCountsResponse> = try await apiClient.request(
             path: "invoices/\(InvoiceType.retail.apiPath)",
             method: .get,
-            parameters: ["counts": "true"],
+            parameters: ["counts": "true", "exclude": "legacy-vendor-pipeline"],
             encoding: URLEncoding.queryString
         )
 
