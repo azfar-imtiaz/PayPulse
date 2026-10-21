@@ -63,32 +63,26 @@ struct RetailInvoiceDetailView: View {
 
                 if let detailInvoice = detailInvoice {
                     // Only show first section for non-subscription invoices
-                    if subType != .subscriptions {
-                        Text(getFirstSectionTitle(for: subType))
-                            .font(.bodyLarge)
-                            .foregroundStyle(Color.secondaryDarkGray)
-                            .padding(.horizontal)
-
+                    InvoiceDetailSection(
+                        title: getFirstSectionTitle(for: subType),
+                        isVisible: subType != .subscriptions && detailInvoice.hasItems()
+                    ) {
                         RetailDetailedInvoiceItemsView(
                             detailInvoice: detailInvoice,
                             subType: subType,
                             baseCurrency: invoice.displayCurrency
                         )
-                        .padding(.horizontal)
                     }
 
                     // Show passenger information section for travel invoices
-                    if subType == .travel {
-                        Text("Passenger Information")
-                            .font(.bodyLarge)
-                            .foregroundStyle(Color.secondaryDarkGray)
-                            .padding(.horizontal)
-
+                    InvoiceDetailSection(
+                        title: "Passenger Information",
+                        isVisible: detailInvoice.hasPassengers()
+                    ) {
                         RetailDetailedInvoicePassengerView(
                             detailInvoice: detailInvoice,
                             subType: subType
                         )
-                        .padding(.horizontal)
                     }
 
                     Text(getSecondSectionTitle(for: subType))

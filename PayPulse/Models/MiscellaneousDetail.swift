@@ -72,5 +72,9 @@ struct MiscellaneousDetail: RetailInvoiceDetail, Hashable {
         return String(format: "%.2f", tax!)
     }
 
+    // MARK: - RetailInvoiceDetail
 
+    func hasItems() -> Bool {
+        !items.isEmpty
+    }
 }

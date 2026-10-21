@@ -72,4 +72,10 @@ struct FoodDeliveryDetail: RetailInvoiceDetail, Hashable {
     func getFormattedPromoCode() -> String {
         return promoCode ?? "No promo code"
     }
+
+    // MARK: - RetailInvoiceDetail
+
+    func hasItems() -> Bool {
+        !items.isEmpty
+    }
 }

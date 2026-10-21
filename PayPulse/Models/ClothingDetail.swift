@@ -53,4 +53,10 @@ struct ClothingDetail: RetailInvoiceDetail, Hashable {
     func getFormattedPaymentMethod() -> String {
         return paymentMethod ?? "Not specified"
     }
+
+    // MARK: - RetailInvoiceDetail
+
+    func hasItems() -> Bool {
+        !items.isEmpty
+    }
 }

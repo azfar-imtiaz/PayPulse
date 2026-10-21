@@ -190,6 +190,20 @@ struct RetailInvoiceBase: Codable, Identifiable, Hashable {
 
 protocol RetailInvoiceDetail: Codable {
     var invoiceID: String { get }
+
+    /// Whether this detail has items to show in its "Order Items" / "Travel Details" section
+    func hasItems() -> Bool
+
+    /// Whether this detail has passengers to show in its "Passenger Information" section
+    func hasPassengers() -> Bool
+}
+
+extension RetailInvoiceDetail {
+    /// Whether this detail has items to show in its "Order Items" / "Travel Details" section
+    func hasItems() -> Bool { true }
+
+    /// Whether this detail has passengers to show in its "Passenger Information" section
+    func hasPassengers() -> Bool { false }
 }
 
 // MARK: - Retail Invoice Response Model

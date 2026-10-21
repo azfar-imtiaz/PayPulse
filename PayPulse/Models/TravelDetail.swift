@@ -120,4 +120,14 @@ struct TravelDetail: RetailInvoiceDetail, Hashable {
     func getFormattedTransportCompany() -> String {
         return transportCompany ?? "Not specified"
     }
+
+    // MARK: - RetailInvoiceDetail
+
+    func hasItems() -> Bool {
+        travelDetails.contains { $0.departureLocation != nil && $0.arrivalLocation != nil }
+    }
+
+    func hasPassengers() -> Bool {
+        getPassengerCount() > 0
+    }
 }

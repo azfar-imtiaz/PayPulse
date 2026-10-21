@@ -66,4 +66,10 @@ struct TechnologyDetail: RetailInvoiceDetail, Hashable {
     func getFormattedNotes() -> String {
         return notes ?? "No notes"
     }
+
+    // MARK: - RetailInvoiceDetail
+
+    func hasItems() -> Bool {
+        !items.isEmpty
+    }
 }
