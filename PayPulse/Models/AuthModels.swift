@@ -52,6 +52,16 @@ struct GmailAuthRequest: Codable {
      */
 }
 
+struct OutlookAuthRequest: Codable {
+    let code: String
+    let codeVerifier: String
+
+    private enum CodingKeys: String, CodingKey {
+        case code
+        case codeVerifier = "code_verifier"
+    }
+}
+
 // MARK: - Authentication Response models
 
 struct AuthResponse: Decodable {
@@ -71,9 +81,23 @@ struct GmailResponseModel: Decodable {
     let scope: String
     let accountSwitch: Bool
     let consistencyMessage: String
-    
+
     private enum CodingKeys: String, CodingKey {
         case googleEmail = "google_email"
+        case scope
+        case accountSwitch = "account_switch"
+        case consistencyMessage = "message"
+    }
+}
+
+struct OutlookResponseModel: Decodable {
+    let outlookEmail: String
+    let scope: String
+    let accountSwitch: Bool
+    let consistencyMessage: String
+
+    private enum CodingKeys: String, CodingKey {
+        case outlookEmail = "outlook_email"
         case scope
         case accountSwitch = "account_switch"
         case consistencyMessage = "message"

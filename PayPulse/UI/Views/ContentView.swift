@@ -12,6 +12,7 @@ struct ContentView: View {
     let invoiceService : InvoiceService
     let userService    : UserService
     let gmailService   : GmailAuthService
+    let outlookService : OutlookAuthService
 
     @StateObject private var rentalViewModel : RentalInvoicesViewModel
     @StateObject private var retailViewModel : RetailInvoicesViewModel
@@ -20,10 +21,11 @@ struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentToast) var presentToast
 
-    init(invoiceService: InvoiceService, userService: UserService, gmailService: GmailAuthService) {
+    init(invoiceService: InvoiceService, userService: UserService, gmailService: GmailAuthService, outlookService: OutlookAuthService) {
         self.invoiceService = invoiceService
         self.userService = userService
         self.gmailService = gmailService
+        self.outlookService = outlookService
         _rentalViewModel = StateObject(wrappedValue: RentalInvoicesViewModel(invoiceService: invoiceService))
         _retailViewModel = StateObject(wrappedValue: RetailInvoicesViewModel(invoiceService: invoiceService))
     }
@@ -38,7 +40,7 @@ struct ContentView: View {
                         .foregroundStyle(Color.secondaryDarkGray)
                     Spacer()
                     NavigationLink {
-                        ProfileView(userService: userService, gmailService: gmailService)
+                        ProfileView(userService: userService, gmailService: gmailService, outlookService: outlookService)
                     } label: {
                         Utils.getIconColored(colorScheme: colorScheme, iconName: "user")
                     }

@@ -21,17 +21,19 @@ struct PayPulseApp: App {
     private let invoiceService: InvoiceService
     private let userService: UserService
     private let gmailService: GmailAuthService
-    
+    private let outlookService: OutlookAuthService
+
     init() {
         _authManager = StateObject(wrappedValue: AuthManager.shared)
-        
+
         self.apiClient = PayPulseAPIClient(authManager: AuthManager.shared)
-        
+
         self.authService = AuthService(apiClient: apiClient, authManager: AuthManager.shared)
         self.invoiceService = InvoiceService(apiClient: apiClient)
         self.userService = UserService(apiClient: apiClient)
         self.gmailService = GmailAuthService()
-        
+        self.outlookService = OutlookAuthService()
+
         AuthManager.shared.setServices(
             apiClient: self.apiClient,
             authService: self.authService,
@@ -55,7 +57,8 @@ struct PayPulseApp: App {
                 ContentView(
                     invoiceService: invoiceService,
                     userService: userService,
-                    gmailService: gmailService
+                    gmailService: gmailService,
+                    outlookService: outlookService
                 )
                     .installToast(position: .bottom)
                     .environmentObject(authManager)

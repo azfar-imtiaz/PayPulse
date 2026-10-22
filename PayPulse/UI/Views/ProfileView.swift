@@ -12,23 +12,25 @@ import GoogleSignInSwift
 struct ProfileView: View {
     let userService : UserService
     let gmailService: GmailAuthService
+    let outlookService: OutlookAuthService
     @StateObject var viewModel : UserViewModel
-    
+
     @State private var showDeleteConfirmation = false
     @State private var showLogoutConfirmation = false
     @State private var isDeleting = false
     @State private var showSpinner = false
     @State private var loadingText = "Loading user information..."
-    
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
-    
-    init(userService: UserService, gmailService: GmailAuthService) {
-        _viewModel = StateObject(wrappedValue: UserViewModel(userService: userService, gmailAuthService: gmailService))
+
+    init(userService: UserService, gmailService: GmailAuthService, outlookService: OutlookAuthService) {
+        _viewModel = StateObject(wrappedValue: UserViewModel(userService: userService, gmailAuthService: gmailService, outlookAuthService: outlookService))
         self.userService = userService
         self.gmailService = gmailService
+        self.outlookService = outlookService
     }
     
     var body: some View {
@@ -47,6 +49,7 @@ struct ProfileView: View {
                             UserInfoRow(label: "Email:", value: viewModel.userEmail)
                             UserInfoRow(label: "Created on:", value: viewModel.userCreatedOn)
                             UserInfoRow(label: "Gmail connection:", value: viewModel.gmailConnectionStatus ? "✔️" : "❌")
+                            UserInfoRow(label: "Outlook connection:", value: viewModel.outlookConnectionStatus ? "✔️" : "❌")
                         }
                     })
                     .background(Color.clear)
@@ -55,16 +58,27 @@ struct ProfileView: View {
                             .stroke(Color.secondaryDarkGray, lineWidth: 1)
                     )
                     .padding()
-                    
+
                     Spacer()
-                    
+
                     if !viewModel.gmailConnectionStatus {
                         GoogleButton {
                             connectToGmail()
                         }
-                        
+
                         Spacer()
-                    
+
+                    }
+
+                    if !viewModel.outlookConnectionStatus {
+                        SecondaryButton(
+                            buttonView: Text("Connect Outlook"),
+                            action: {
+                                connectToOutlook()
+                            }
+                        )
+
+                        Spacer()
                     }
                     
                     // Action Buttons
@@ -218,6 +232,36 @@ struct ProfileView: View {
             }
         }
     }
+
+    private func connectToOutlook() {
+        loadingText = "Connecting to Outlook..."
+        showSpinner = true
+
+        Task {
+            defer {
+                showSpinner = false
+            }
+
+            do {
+                if let rootVC = UIApplication.shared.windows.first?.rootViewController {
+                    let response = try await viewModel.connectToOutlook(presentingViewController: rootVC)
+                    print(response.outlookEmail)
+                    let toastValue = ToastValue(
+                        icon: Icon(name: "circle-check"),
+                        message: "Outlook account connected successfully!"
+                    )
+                    presentToast(toastValue)
+                    loadUserInfo()
+                }
+            } catch {
+                let toastValue = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: viewModel.errorMessage ?? "Connection to Outlook failed"
+                )
+                presentToast(toastValue)
+            }
+        }
+    }
 }
 
 struct UserInfoRow: View {
@@ -241,6 +285,6 @@ struct UserInfoRow: View {
 }
 
 #Preview {
-    ProfileView(userService: UserService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)), gmailService: GmailAuthService())
+    ProfileView(userService: UserService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared)), gmailService: GmailAuthService(), outlookService: OutlookAuthService())
         .environmentObject(AuthManager.shared)
 }

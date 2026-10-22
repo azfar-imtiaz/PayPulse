@@ -14,16 +14,19 @@ class UserViewModel: ObservableObject {
     @Published var userEmail     : String = ""
     @Published var userCreatedOn : String = ""
     @Published var gmailConnectionStatus : Bool = false
+    @Published var outlookConnectionStatus : Bool = false
     @Published var errorMessage  : String?
     @Published var successMessage: String?
-    
+
     private let userService: UserService
     private let gmailService: GmailAuthService
+    private let outlookService: OutlookAuthService
     private static let logger = Logger(subsystem: "PayPulse", category: "UserViewModel")
-    
-    init(userService: UserService, gmailAuthService: GmailAuthService) {
+
+    init(userService: UserService, gmailAuthService: GmailAuthService, outlookAuthService: OutlookAuthService) {
         self.userService = userService
         self.gmailService = gmailAuthService
+        self.outlookService = outlookAuthService
     }
     
     @MainActor
@@ -36,11 +39,13 @@ class UserViewModel: ObservableObject {
                 self.userEmail = userModel.email
                 self.userCreatedOn = userModel.createdOn
                 self.gmailConnectionStatus = userModel.gmailAccountConnected
+                self.outlookConnectionStatus = userModel.outlookAccountConnected
             } else {
                 self.username = "Unknown"
                 self.userEmail = "Unknown"
                 self.userCreatedOn = "Unknown"
                 self.gmailConnectionStatus = false
+                self.outlookConnectionStatus = false
             }
         } catch(let error) {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
@@ -83,5 +88,22 @@ class UserViewModel: ObservableObject {
         
         let gmailModel = try await userService.connectToGmail(gmailRequest: gmailRequestModel)
         return gmailModel
+    }
+
+    @MainActor
+    func connectToOutlook(presentingViewController: UIViewController) async throws -> OutlookResponseModel {
+        let outlookRequestModel = try await withCheckedThrowingContinuation { continuation in
+            outlookService.signInForOutlookAccess(presentingViewController: presentingViewController) { result in
+                switch result {
+                case .success(let model):
+                    continuation.resume(returning: model)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+
+        let outlookModel = try await userService.connectToOutlook(outlookRequest: outlookRequestModel)
+        return outlookModel
     }
 }

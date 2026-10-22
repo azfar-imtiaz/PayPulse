@@ -48,7 +48,23 @@ class UserService {
         guard let data = response.data else {
             throw APIError.gmailError(message: "The following error occurred from Gmail Service: \(response.code): \(response.message)")
         }
-        
+
+        return data
+    }
+
+    func connectToOutlook(outlookRequest: OutlookAuthRequest) async throws -> OutlookResponseModel {
+        let parameters = try outlookRequest.asDictionary()
+
+        let response: APISuccessResponse<OutlookResponseModel> = try await apiClient.request(
+            path: "/auth/outlook/store-tokens",
+            method: .post,
+            parameters: parameters
+        )
+
+        guard let data = response.data else {
+            throw APIError.outlookError(message: "The following error occurred from Outlook Service: \(response.code): \(response.message)")
+        }
+
         return data
     }
 }

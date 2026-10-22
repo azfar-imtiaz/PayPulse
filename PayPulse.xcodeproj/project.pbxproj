@@ -12,6 +12,7 @@
 		264339312E65E34D00407542 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 264339302E65E34D00407542 /* GoogleSignIn */; };
 		264339332E65E34D00407542 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 264339322E65E34D00407542 /* GoogleSignInSwift */; };
 		267EC8882F33F8C600220154 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 267EC8872F33F8C600220154 /* Alamofire */; };
+		26BD35E0308A881900954192 /* MSAL in Frameworks */ = {isa = PBXBuildFile; productRef = 26BD35DF308A881900954192 /* MSAL */; };
 		26E029062D22FB1C00A35820 /* Toasts in Frameworks */ = {isa = PBXBuildFile; productRef = 26E029052D22FB1C00A35820 /* Toasts */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 				264339332E65E34D00407542 /* GoogleSignInSwift in Frameworks */,
 				267EC8882F33F8C600220154 /* Alamofire in Frameworks */,
 				261CAA542E1342C400F5D3DE /* OrderedCollections in Frameworks */,
+				26BD35E0308A881900954192 /* MSAL in Frameworks */,
 				261CAD002E48CF8900F5D3DE /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,6 +109,7 @@
 				264339302E65E34D00407542 /* GoogleSignIn */,
 				264339322E65E34D00407542 /* GoogleSignInSwift */,
 				267EC8872F33F8C600220154 /* Alamofire */,
+				26BD35DF308A881900954192 /* MSAL */,
 			);
 			productName = PayPulse;
 			productReference = 26AE7EF92CE790B400288749 /* PayPulse.app */;
@@ -142,6 +145,7 @@
 				261CACFE2E48CF8900F5D3DE /* XCRemoteSwiftPackageReference "lottie-spm" */,
 				2643392F2E65E34D00407542 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				26C271532F33F59D00EC73CD /* XCRemoteSwiftPackageReference "Alamofire" */,
+				26BD35DE308A881900954192 /* XCRemoteSwiftPackageReference "microsoft-authentication-library-for-objc" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 26AE7EFA2CE790B400288749 /* Products */;
@@ -411,6 +415,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		26BD35DE308A881900954192 /* XCRemoteSwiftPackageReference "microsoft-authentication-library-for-objc" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AzureAD/microsoft-authentication-library-for-objc";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.16.0;
+			};
+		};
 		26C271532F33F59D00EC73CD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -454,6 +466,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 26C271532F33F59D00EC73CD /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		26BD35DF308A881900954192 /* MSAL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26BD35DE308A881900954192 /* XCRemoteSwiftPackageReference "microsoft-authentication-library-for-objc" */;
+			productName = MSAL;
 		};
 		26E029052D22FB1C00A35820 /* Toasts */ = {
 			isa = XCSwiftPackageProductDependency;

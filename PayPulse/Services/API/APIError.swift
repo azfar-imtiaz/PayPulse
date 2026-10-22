@@ -13,7 +13,8 @@ enum APIError: Error, LocalizedError {
     case networkError(Error)
     case decodingError(Error)
     case gmailError(message: String?)
-    
+    case outlookError(message: String?)
+
     case backendError(code: PayPulseErrorCode, message: String)
     
     case unknown(Error)
@@ -28,6 +29,8 @@ enum APIError: Error, LocalizedError {
             return "Failed to process server response. (Details: \(error.localizedDescription)"
         case .gmailError(let message):
             return message ?? "There was a problem connecting to the Gmail service"
+        case .outlookError(let message):
+            return message ?? "There was a problem connecting to the Outlook service"
         case .backendError(let code, let message):
             switch code {
             case .invalidCredentials: return "Invalid email or password. Please try again."

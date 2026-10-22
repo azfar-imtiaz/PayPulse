@@ -12,6 +12,14 @@
 				<string>com.googleusercontent.apps.623709424238-bggrm8506j6fqc845ee862cv9jiqi60a</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Outlook</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>msauth.com.azfarimtiaz.paypulse</string>
+			</array>
+		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>623709424238-bggrm8506j6fqc845ee862cv9jiqi60a.apps.googleusercontent.com</string>

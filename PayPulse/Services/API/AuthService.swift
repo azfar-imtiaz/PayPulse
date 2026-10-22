@@ -48,6 +48,8 @@ class AuthService {
                     Self.logger.fault("An unknown error occurred: \(error.localizedDescription)")
                 case .gmailError(_):
                     Self.logger.error("A Gmail error should never appear here.")
+                case .outlookError(_):
+                    Self.logger.error("An Outlook error should never appear here.")
                 }
             }
             throw error
@@ -101,6 +103,8 @@ class AuthService {
                     Self.logger.fault("An unknown error occurred: \(error.localizedDescription)")
                 case .gmailError(_):
                     Self.logger.error("A Gmail error should never appear here.")
+                case .outlookError(_):
+                    Self.logger.error("An Outlook error should never appear here.")
                 }
             }
             throw error
