@@ -114,22 +114,24 @@ class RetailInvoicesViewModel: ObservableObject {
         return processInvoicesForMonthDisplay(invoices: invoices)
     }
 
-    /// Determines which invoices should show month names (last invoice in each month)
+    /// Determines which invoices should show month names (first invoice in each month)
     private func processInvoicesForMonthDisplay(invoices: [RetailInvoiceBase]) -> [(RetailInvoiceBase, Bool)] {
         var result: [(RetailInvoiceBase, Bool)] = []
-        var lastInvoiceByMonth: [Int: Int] = [:]  // month -> index of last invoice
+        var firstInvoiceByMonth: [Int: Int] = [:]  // month -> index of first invoice
 
-        // Group invoices by month and find the last invoice index for each month
+        // Group invoices by month and find the first invoice index for each month
         for (index, invoice) in invoices.enumerated() {
             let month = invoice.getMonthNumber()
-            lastInvoiceByMonth[month] = index
+            if !firstInvoiceByMonth.keys.contains(month) {
+                firstInvoiceByMonth[month] = index
+            }
         }
 
         // Mark invoices that should show month names
         for (index, invoice) in invoices.enumerated() {
             let month = invoice.getMonthNumber()
-            let isLastInMonth = lastInvoiceByMonth[month] == index
-            result.append((invoice, isLastInMonth))
+            let isFirstInMonth = firstInvoiceByMonth[month] == index
+            result.append((invoice, isFirstInMonth))
         }
 
         return result

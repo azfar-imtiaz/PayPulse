@@ -12,7 +12,7 @@ struct RentalInvoiceSummaryWithDate: View {
     let vendor  : String
     
     var body: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 15) {
+        HStack(alignment: .center, spacing: 15) {
             Text(invoice.getDueMonthName())
                 .font(.headingMedium)
                 .foregroundStyle(Color.accentDeepOrange)

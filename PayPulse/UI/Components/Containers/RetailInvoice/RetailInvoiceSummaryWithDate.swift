@@ -14,7 +14,7 @@ struct RetailInvoiceSummaryWithDate: View {
     let viewModel: RetailInvoicesViewModel
 
     var body: some View {
-        HStack(alignment: .lastTextBaseline, spacing: 15) {
+        HStack(alignment: .firstTextBaseline, spacing: 15) {
             if showMonth {
                 Text(invoice.getMonthName())
                     .font(.headingMedium)
