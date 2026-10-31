@@ -37,24 +37,16 @@ struct KeyIntValueRow: View {
     
     @ViewBuilder
     func displayIntValue(value: Int, isBold: Bool = false, showCurrency: Bool = false) -> some View {
-        let formattedValue = Utils.formatNumber(value)
+        let formattedValue = showCurrency
+            ? Utils.formatCurrency(Double(value), currency: "SEK")
+            : Utils.formatNumber(value)
         Group {
             switch isBold {
             case true:
-                Group {
-                    if showCurrency {
-                        Text("\(formattedValue) SEK")
-                    } else {
-                        Text("\(formattedValue)")
-                    }
-                }
-                .bold()
+                Text("\(formattedValue)")
+                    .bold()
             default:
-                if showCurrency {
-                    Text("\(formattedValue) SEK")
-                } else {
-                    Text("\(formattedValue)")
-                }
+                Text("\(formattedValue)")
             }
         }
         .font(.tableValue)

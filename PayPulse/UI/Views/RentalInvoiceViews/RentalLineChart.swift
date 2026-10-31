@@ -172,7 +172,7 @@ struct RentalLineChart: View {
     
     func showAmountToast(value: Int) {
         let toast = ToastValue(
-            message: "\(Utils.formatNumber(value)) SEK",
+            message: Utils.formatCurrency(Double(value), currency: "SEK"),
             duration: 2
         )
         presentToast(toast)

@@ -58,7 +58,9 @@ struct RetailInvoicesListView: View {
         .navigationBarBackButtonHidden()
         .onAppear {
             loadingText = "Loading \(subType.displayName.lowercased()) invoices..."
-            loadInvoices()
+            if !viewModel.invoicesHaveLoadedForSubType {
+                loadInvoices()
+            }
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

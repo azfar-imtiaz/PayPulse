@@ -28,6 +28,7 @@ struct InvoiceSummary: View {
                 Text(vendor)
                     .font(.buttonStandard)
                     .foregroundStyle(Color.secondaryDarkGray)
+                    .multilineTextAlignment(.leading)
                 Spacer()
 
                 if circleColor == nil {
@@ -46,7 +47,7 @@ struct InvoiceSummary: View {
             }
 
             HStack {
-                Text(" \(currency) \(Utils.formatNumber(totalAmount))")
+                Text(Utils.formatCurrency(Double(totalAmount), currency: currency))
                 Spacer()
                 Text(dueDate)
             }

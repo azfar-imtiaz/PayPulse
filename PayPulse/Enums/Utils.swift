@@ -128,6 +128,10 @@ enum Utils {
         numberFormatter.currencyCode = currencyCode
         numberFormatter.locale = locale
 
+        let isWholeNumber = amount.truncatingRemainder(dividingBy: 1) == 0
+        numberFormatter.minimumFractionDigits = isWholeNumber ? 0 : 2
+        numberFormatter.maximumFractionDigits = isWholeNumber ? 0 : 2
+
         if let formattedAmount = numberFormatter.string(from: NSNumber(value: amount)) {
             return formattedAmount
         }
