@@ -50,6 +50,8 @@ struct RetailInvoiceListContainer: View {
                                 RetailInvoiceDetailView(invoice: invoice, subType: subType, retailViewModel: viewModel)
                             }
                             .padding([.horizontal, .top])
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            .animation(.easeOut.delay(Double(index) * 0.03), value: selectedYear)
                         }
                     } else {
                         NoInvoicesForYearView(year: selectedYear)
