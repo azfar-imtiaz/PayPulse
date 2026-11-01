@@ -67,21 +67,21 @@ enum RetailInvoiceSubType: String, Codable, CaseIterable {
     var color: Color {
         switch self {
         case .foodDelivery:
-            return Color(red: 1.0, green: 0.42, blue: 0.21) // #FF6B35
+            return Color("CategoryFoodDelivery")
         case .clothing:
-            return Color(red: 0.56, green: 0.27, blue: 0.68) // #8E44AD
+            return Color("CategoryClothing")
         case .technology:
-            return Color(red: 0.20, green: 0.60, blue: 0.86) // #3498DB
+            return Color("CategoryTechnology")
         case .subscriptions:
-            return Color(red: 0.18, green: 0.80, blue: 0.44) // #2ECC71
+            return Color("CategorySubscriptions")
         case .grocery:
-            return Color(red: 0.15, green: 0.68, blue: 0.38) // #27AE60
+            return Color("CategoryGrocery")
         case .utility:
-            return Color(red: 0.95, green: 0.61, blue: 0.07) // #F39C12
+            return Color("CategoryUtility")
         case .miscellaneous:
-            return Color(red: 0.58, green: 0.65, blue: 0.65) // #95A5A6
+            return Color("CategoryMiscellaneous")
         case .travel:
-            return Color(red: 0.91, green: 0.30, blue: 0.24) // #E74C3C
+            return Color("CategoryTravel")
         }
     }
 
