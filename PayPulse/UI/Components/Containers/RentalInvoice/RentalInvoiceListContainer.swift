@@ -29,10 +29,18 @@ struct RentalInvoiceListContainer: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     if let invoices = yearlyInvoices[selectedYear] {
                         ForEach(invoices) { invoice in
-                            RentalInvoiceSummaryWithDate(
-                                invoice: invoice,
-                                vendor: vendor
-                            )
+                            InvoiceListRow(
+                                monthLabel: invoice.getDueMonthName(),
+                                monthColor: .accentDeepOrange,
+                                alignment: .center,
+                                vendor: vendor,
+                                dueDate: invoice.dueDate,
+                                totalAmount: invoice.totalAmount,
+                                currency: "SEK",
+                                trailingIndicator: .statusBadge
+                            ) {
+                                RentalDetailsView(invoice: invoice)
+                            }
                             .padding([.horizontal, .top])
                         }
                     }

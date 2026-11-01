@@ -7,19 +7,24 @@
 
 import SwiftUI
 
+enum InvoiceTrailingIndicator {
+    case statusBadge
+    case dot(Color)
+}
+
 struct InvoiceSummary: View {
     let vendor: String
     let dueDate: String
     let totalAmount: Int
     let currency: String
-    let circleColor: Color?
+    let trailingIndicator: InvoiceTrailingIndicator
 
-    init(vendor: String, dueDate: String, totalAmount: Int, currency: String = "SEK", circleColor: Color? = nil) {
+    init(vendor: String, dueDate: String, totalAmount: Int, currency: String = "SEK", trailingIndicator: InvoiceTrailingIndicator = .statusBadge) {
         self.vendor = vendor
         self.dueDate = dueDate
         self.totalAmount = totalAmount
         self.currency = currency
-        self.circleColor = circleColor
+        self.trailingIndicator = trailingIndicator
     }
 
     var body: some View {
@@ -31,7 +36,8 @@ struct InvoiceSummary: View {
                     .multilineTextAlignment(.leading)
                 Spacer()
 
-                if circleColor == nil {
+                switch trailingIndicator {
+                case .statusBadge:
                     let hasPassed = Utils.hasDueDateExpired(dueDate)
                     Text(hasPassed ? "PAID" : "DUE")
                         .font(.badgeSmall)
@@ -39,9 +45,9 @@ struct InvoiceSummary: View {
                         .padding(.horizontal, Spacing.sm)
                         .padding(.vertical, Spacing.xs)
                         .background(Capsule().fill(hasPassed ? Color.green : Color.accentDeepOrange))
-                } else {
+                case .dot(let color):
                     Circle()
-                        .fill(getCircleColor())
+                        .fill(color)
                         .frame(width: 8, height: 8)
                 }
             }
@@ -54,16 +60,6 @@ struct InvoiceSummary: View {
             .font(.bodyStandard)
             .foregroundStyle(Color.secondaryDarkGray)
         }
-    }
-
-    private func getCircleColor() -> Color {
-        if let fixedColor = circleColor {
-            return fixedColor
-        }
-
-        // Default behavior for rental invoices: green if due date passed, orange if not
-        let hasDueDatePassed = Utils.hasDueDateExpired(dueDate)
-        return hasDueDatePassed ? .green : .accentDeepOrange
     }
 }
 
