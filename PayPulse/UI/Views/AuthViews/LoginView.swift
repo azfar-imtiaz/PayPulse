@@ -62,7 +62,7 @@ struct LoginView: View {
                         .foregroundStyle(Color.secondaryDarkGray)
                     
                     TextButton(
-                        buttonText: "create one!",
+                        buttonText: "Create one!",
                         textColor: Color.accentDeepOrange,
                         font: .bodySmall,
                         action: {

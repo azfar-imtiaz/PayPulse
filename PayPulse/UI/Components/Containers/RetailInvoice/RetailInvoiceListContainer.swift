@@ -48,22 +48,7 @@ struct RetailInvoiceListContainer: View {
                             .padding([.horizontal, .top])
                         }
                     } else {
-                        VStack(spacing: 20) {
-                            Spacer(minLength: 100)
-
-                            Text("No invoices found for \(selectedYear.description)")
-                                .font(.headingStandard)
-                                .foregroundStyle(Color.secondaryDarkGray)
-                                .multilineTextAlignment(.center)
-
-                            Text("Select a different year or check back later")
-                                .font(.bodyStandard)
-                                .foregroundStyle(Color.secondaryDarkGray)
-                                .multilineTextAlignment(.center)
-
-                            Spacer()
-                        }
-                        .padding()
+                        NoInvoicesForYearView(year: selectedYear)
                     }
                 }
                 .id(selectedYear)

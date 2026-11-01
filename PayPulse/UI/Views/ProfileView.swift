@@ -46,8 +46,24 @@ struct ProfileView: View {
                             KeyValueRow(key: "Name:", value: viewModel.username, keyWidth: 100)
                             KeyValueRow(key: "Email:", value: viewModel.userEmail, keyWidth: 100)
                             KeyValueRow(key: "Created on:", value: viewModel.userCreatedOn, keyWidth: 100)
-                            KeyValueRow(key: "Gmail connection:", value: viewModel.gmailConnectionStatus ? "✔️" : "❌", keyWidth: 100)
-                            KeyValueRow(key: "Outlook connection:", value: viewModel.outlookConnectionStatus ? "✔️" : "❌", keyWidth: 100)
+                            HStack(spacing: 5) {
+                                Text("Gmail connection:")
+                                    .font(.tableKey)
+                                    .foregroundStyle(Color.secondaryDarkGray)
+                                    .frame(width: 100, alignment: .leading)
+                                Image(systemName: viewModel.gmailConnectionStatus ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                    .foregroundStyle(viewModel.gmailConnectionStatus ? Color.green : Color.secondaryDarkGray)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
+                            HStack(spacing: 5) {
+                                Text("Outlook connection:")
+                                    .font(.tableKey)
+                                    .foregroundStyle(Color.secondaryDarkGray)
+                                    .frame(width: 100, alignment: .leading)
+                                Image(systemName: viewModel.outlookConnectionStatus ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                    .foregroundStyle(viewModel.outlookConnectionStatus ? Color.green : Color.secondaryDarkGray)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
                         }
                     })
                     .background(Color.clear)
@@ -129,7 +145,7 @@ struct ProfileView: View {
         } message: {
             Text("Are you sure you want to logout?")
         }
-        .alert("Delete Account", isPresented: $showDeleteConfirmation) {
+        .alert("Confirm Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
                 let logoutToast = ToastValue(

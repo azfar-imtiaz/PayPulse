@@ -55,7 +55,7 @@ struct SignupView: View {
                 )
                 
                 PrimaryButton(
-                    buttonView: Text("Sign up"),
+                    buttonView: Text("Sign Up"),
                     action: {
                         signupUser(username: username, email: email, password: password)
                     },

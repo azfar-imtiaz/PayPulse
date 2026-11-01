@@ -18,15 +18,15 @@ struct DestructiveButton<Content: View>: View {
                 action()
             }
         } label: {
-            ZStack(alignment: .center) {
-                RoundedRectangle(cornerRadius: Radius.md)
-                    .foregroundStyle(isDisabled ? Color.disabledGray : Color.accentDeepRed)
-                
-                buttonView
-                    .font(.buttonLarge)
-                    .foregroundStyle(Color.white)
-            }
-            .frame(width: 300, height: 50)
+            buttonView
+                .font(.buttonLarge)
+                .foregroundStyle(Color.white)
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(
+                    RoundedRectangle(cornerRadius: Radius.md)
+                        .foregroundStyle(isDisabled ? Color.disabledGray : Color.accentDeepRed)
+                )
+                .padding(.horizontal, Spacing.xxl)
         }
     }
 }

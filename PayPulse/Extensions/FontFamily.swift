@@ -14,91 +14,91 @@ extension Font {
     
     /// Large headings - Main app titles, page headers
     /// Used for: App title "PayPulse", main screen titles
-    static let headingLarge = Font.custom(Typography.FontName.bold, size: Typography.Size.largeTitle)
-    
+    static let headingLarge = Font.custom(Typography.FontName.bold, size: Typography.Size.largeTitle, relativeTo: .largeTitle)
+
     /// Medium headings - Section headers, large summaries
     /// Used for: Invoice summaries, important section titles
-    static let headingMedium = Font.custom(Typography.FontName.semiBold, size: Typography.Size.display)
-    
+    static let headingMedium = Font.custom(Typography.FontName.semiBold, size: Typography.Size.display, relativeTo: .title)
+
     /// Standard headings - Subsection headers
     /// Used for: "All your invoices, one place", section headers
-    static let headingStandard = Font.custom(Typography.FontName.bold, size: Typography.Size.title)
-    
+    static let headingStandard = Font.custom(Typography.FontName.bold, size: Typography.Size.title, relativeTo: .title2)
+
     /// Small headings - Minor section titles
     /// Used for: "Invoice ID", "Payment Details", "Rent Breakdown"
-    static let headingSmall = Font.custom(Typography.FontName.medium, size: Typography.Size.headline)
-    
+    static let headingSmall = Font.custom(Typography.FontName.medium, size: Typography.Size.headline, relativeTo: .headline)
+
     // MARK: - Body Text
-    
+
     /// Large body text - Main content, input fields
     /// Used for: Form inputs, important content text
-    static let bodyLarge = Font.custom(Typography.FontName.regular, size: Typography.Size.callout)
-    
+    static let bodyLarge = Font.custom(Typography.FontName.regular, size: Typography.Size.callout, relativeTo: .callout)
+
     /// Standard body text - Secondary content, descriptions
     /// Used for: General content, list items, descriptions
-    static let bodyStandard = Font.custom(Typography.FontName.regular, size: Typography.Size.body)
-    
+    static let bodyStandard = Font.custom(Typography.FontName.regular, size: Typography.Size.body, relativeTo: .body)
+
     /// Small body text - Captions, metadata
     /// Used for: Chart labels, small text, help text
-    static let bodySmall = Font.custom(Typography.FontName.light, size: Typography.Size.caption)
-    
+    static let bodySmall = Font.custom(Typography.FontName.light, size: Typography.Size.caption, relativeTo: .caption)
+
     // MARK: - Interactive Elements
-    
+
     /// Large buttons - Primary action buttons
     /// Used for: Login, Signup, Delete Account buttons
-    static let buttonLarge = Font.custom(Typography.FontName.bold, size: Typography.Size.headline)
-    
+    static let buttonLarge = Font.custom(Typography.FontName.bold, size: Typography.Size.headline, relativeTo: .headline)
+
     /// Standard buttons - Secondary action buttons
     /// Used for: Secondary buttons, form labels
-    static let buttonStandard = Font.custom(Typography.FontName.semiBold, size: Typography.Size.callout)
-    
+    static let buttonStandard = Font.custom(Typography.FontName.semiBold, size: Typography.Size.callout, relativeTo: .callout)
+
     /// Small buttons - Picker buttons, small interactive elements
     /// Used for: Picker buttons, small controls
-    static let buttonSmall = Font.custom(Typography.FontName.semiBold, size: Typography.Size.body)
-    
+    static let buttonSmall = Font.custom(Typography.FontName.semiBold, size: Typography.Size.body, relativeTo: .body)
+
     // MARK: - Table & Data Elements
-    
+
     /// Table headers - Bold table headings
     /// Used for: Table headers, data labels
-    static let tableHeader = Font.custom(Typography.FontName.bold, size: Typography.Size.callout)
-    
+    static let tableHeader = Font.custom(Typography.FontName.bold, size: Typography.Size.callout, relativeTo: .callout)
+
     /// Table content - Medium weight for keys in key-value pairs
-    /// Used for: Table row keys, form field labels  
-    static let tableKey = Font.custom(Typography.FontName.medium, size: Typography.Size.body)
-    
+    /// Used for: Table row keys, form field labels
+    static let tableKey = Font.custom(Typography.FontName.medium, size: Typography.Size.body, relativeTo: .body)
+
     /// Table values - Regular weight for values in key-value pairs
     /// Used for: Table row values, data display
-    static let tableValue = Font.custom(Typography.FontName.regular, size: Typography.Size.body)
-    
+    static let tableValue = Font.custom(Typography.FontName.regular, size: Typography.Size.body, relativeTo: .body)
+
     // MARK: - Special Use Cases
-    
+
     /// Navigation elements - Extra bold for navigation bars
     /// Used for: UINavigationBar titles (UIKit)
-    static let navigationLarge = Font.custom(Typography.FontName.extraBold, size: Typography.Size.navigation)
-    
+    static let navigationLarge = Font.custom(Typography.FontName.extraBold, size: Typography.Size.navigation, relativeTo: .largeTitle)
+
     /// Navigation standard - Medium weight for navigation
     /// Used for: UINavigationBar standard titles
-    static let navigationStandard = Font.custom(Typography.FontName.medium, size: Typography.Size.headline)
-    
+    static let navigationStandard = Font.custom(Typography.FontName.medium, size: Typography.Size.headline, relativeTo: .headline)
+
     /// Form labels - Special case for form field labels
     /// Used for: Labeled text fields, form elements
-    static let formLabel = Font.custom(Typography.FontName.semiBold, size: Typography.Size.callout)
-    
+    static let formLabel = Font.custom(Typography.FontName.semiBold, size: Typography.Size.callout, relativeTo: .callout)
+
     /// UI labels - Navigation items, list labels
     /// Used for: "Rental invoices" navigation text
-    static let uiLabel = Font.custom(Typography.FontName.regular, size: 15)
+    static let uiLabel = Font.custom(Typography.FontName.regular, size: 15, relativeTo: .footnote)
 
     /// Badge text - Smallest text in the app
     /// Used for: PAID/DUE status badge
-    static let badgeSmall = Font.custom(Typography.FontName.bold, size: Typography.Size.badge)
+    static let badgeSmall = Font.custom(Typography.FontName.bold, size: Typography.Size.badge, relativeTo: .caption2)
 
     /// Compact buttons - Semi-bold at body size
     /// Used for: Picker buttons
-    static let buttonCompact = Font.custom(Typography.FontName.semiBold, size: Typography.Size.body)
+    static let buttonCompact = Font.custom(Typography.FontName.semiBold, size: Typography.Size.body, relativeTo: .body)
 
     /// Compact headings - Medium weight at title size
     /// Used for: Retail category row titles
-    static let headingCompact = Font.custom(Typography.FontName.medium, size: Typography.Size.title)
+    static let headingCompact = Font.custom(Typography.FontName.medium, size: Typography.Size.title, relativeTo: .title2)
 }
 
 // MARK: - Typography Helper

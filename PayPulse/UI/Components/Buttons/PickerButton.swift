@@ -13,29 +13,28 @@ struct PickerButtonContent: View {
     let isShowingDropdown: Bool
     
     var body: some View {
-        ZStack {
+        HStack {
+            Text(displayText)
+                .font(.buttonSmall)
+                .foregroundStyle(Color.secondaryDarkGray)
+                .lineLimit(1)
+                .truncationMode(.tail)
+
+            Spacer()
+
+            Image(systemName: "chevron.down")
+                .font(.buttonCompact)
+                .foregroundStyle(Color.secondaryDarkGray)
+                .rotationEffect(.degrees(isShowingDropdown ? 180 : 0))
+                .animation(.easeInOut(duration: 0.2), value: isShowingDropdown)
+        }
+        .padding(.horizontal, Spacing.lg)
+        .frame(minHeight: 50)
+        .background(
             RoundedRectangle(cornerRadius: Radius.md)
                 .stroke(style: StrokeStyle(lineWidth: 1))
                 .foregroundStyle(Color.secondaryDarkGray)
-            
-            HStack {
-                Text(displayText)
-                    .font(.buttonSmall)
-                    .foregroundStyle(Color.secondaryDarkGray)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                
-                Spacer()
-                
-                Image(systemName: "chevron.down")
-                    .font(.buttonCompact)
-                    .foregroundStyle(Color.secondaryDarkGray)
-                    .rotationEffect(.degrees(isShowingDropdown ? 180 : 0))
-                    .animation(.easeInOut(duration: 0.2), value: isShowingDropdown)
-            }
-            .padding(.horizontal, Spacing.lg)
-        }
-        .frame(height: 50)
+        )
     }
 }
 
