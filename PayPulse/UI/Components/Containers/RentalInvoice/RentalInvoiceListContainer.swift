@@ -27,7 +27,7 @@ struct RentalInvoiceListContainer: View {
                     .padding(.bottom, Spacing.sm)
 
                 ScrollView(.vertical, showsIndicators: false) {
-                    if let invoices = yearlyInvoices[selectedYear] {
+                    if let invoices = yearlyInvoices[selectedYear], !invoices.isEmpty {
                         ForEach(invoices) { invoice in
                             InvoiceListRow(
                                 monthLabel: invoice.getDueMonthName(),
@@ -43,6 +43,8 @@ struct RentalInvoiceListContainer: View {
                             }
                             .padding([.horizontal, .top])
                         }
+                    } else {
+                        NoInvoicesForYearView(year: selectedYear)
                     }
                 }
                 .id(selectedYear)
