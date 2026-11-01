@@ -26,32 +26,30 @@ struct RetailInvoicesListView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .center) {
-                if viewModel.invoicesHaveLoadedForSubType && viewModel.retailInvoicesByYear.count > 0 {
-                    VStack {
-                        HeaderYears(
-                            years: Array(viewModel.retailInvoicesByYear.keys),
-                            selectedYear: $selectedYear
-                        )
-                        .padding(.horizontal)
-                        .padding(.bottom, Spacing.xl)
+        ZStack(alignment: .center) {
+            if viewModel.invoicesHaveLoadedForSubType && viewModel.retailInvoicesByYear.count > 0 {
+                VStack {
+                    HeaderYears(
+                        years: Array(viewModel.retailInvoicesByYear.keys),
+                        selectedYear: $selectedYear
+                    )
+                    .padding(.horizontal)
+                    .padding(.bottom, Spacing.xl)
 
-                        RetailInvoiceListContainer(
-                            selectedYear: $selectedYear,
-                            subType: subType,
-                            viewModel: viewModel
-                        )
-                    }
-                    .background(Color.secondaryDarkGray)
-                } else if viewModel.invoicesHaveLoadedForSubType {
-                    NoInvoicesFoundView(showSpinner: $showSpinner, subtitle: "No invoices found in this category yet. Try reloading or check back later.") {
-                        loadInvoices()
-                    }
+                    RetailInvoiceListContainer(
+                        selectedYear: $selectedYear,
+                        subType: subType,
+                        viewModel: viewModel
+                    )
                 }
-
-                LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
+                .background(Color.secondaryDarkGray)
+            } else if viewModel.invoicesHaveLoadedForSubType {
+                NoInvoicesFoundView(showSpinner: $showSpinner, subtitle: "No invoices found in this category yet. Try reloading or check back later.") {
+                    loadInvoices()
+                }
             }
+
+            LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
         }
         .navigationBarBackButtonHidden()
         .onAppear {
@@ -99,12 +97,14 @@ struct RetailInvoicesListView: View {
 }
 
 #Preview {
-    RetailInvoicesListView(
-        subType: .technology,
-        invoiceService: InvoiceService(
-            apiClient: PayPulseAPIClient(
-                authManager: AuthManager.shared
+    NavigationStack {
+        RetailInvoicesListView(
+            subType: .technology,
+            invoiceService: InvoiceService(
+                apiClient: PayPulseAPIClient(
+                    authManager: AuthManager.shared
+                )
             )
         )
-    )
+    }
 }
