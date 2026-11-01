@@ -33,12 +33,18 @@ struct RetailInvoiceListContainer: View {
                         ForEach(Array(invoicesWithMonthDisplay.enumerated()), id: \.offset) { index, invoiceData in
                             let (invoice, showMonth) = invoiceData
 
-                            RetailInvoiceSummaryWithDate(
-                                invoice: invoice,
-                                showMonth: showMonth,
-                                subType: subType,
-                                viewModel: viewModel
-                            )
+                            InvoiceListRow(
+                                monthLabel: showMonth ? invoice.getMonthName() : nil,
+                                monthColor: subType.color,
+                                alignment: .firstTextBaseline,
+                                vendor: invoice.vendorName,
+                                dueDate: invoice.getFormattedDate(),
+                                totalAmount: Int(invoice.totalAmount),
+                                currency: invoice.displayCurrency,
+                                trailingIndicator: .dot(subType.color)
+                            ) {
+                                RetailInvoiceDetailView(invoice: invoice, subType: subType, retailViewModel: viewModel)
+                            }
                             .padding([.horizontal, .top])
                         }
                     } else {
@@ -52,7 +58,7 @@ struct RetailInvoiceListContainer: View {
 
                             Text("Select a different year or check back later")
                                 .font(.bodyStandard)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Color.secondaryDarkGray)
                                 .multilineTextAlignment(.center)
 
                             Spacer()

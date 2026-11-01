@@ -16,9 +16,7 @@ struct RetailInvoicesListView: View {
     @State private var showSpinner: Bool = false
     @State private var loadingText: String = ""
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
-    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
 
     init(subType: RetailInvoiceSubType, invoiceService: InvoiceService) {
@@ -64,18 +62,12 @@ struct RetailInvoicesListView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    getIconColored(iconName: "circle-arrow-left")
-                }
-                .disabled(showSpinner)
+                BackButton()
+                    .disabled(showSpinner)
             }
 
             ToolbarItem(placement: .principal) {
-                Text(subType.displayName)
-                    .font(.tableHeader)
-                    .foregroundStyle(computeToolbarTextColor())
+                NavTitle(text: subType.displayName)
             }
         }
     }
@@ -104,21 +96,6 @@ struct RetailInvoicesListView: View {
         }
     }
 
-    private func computeToolbarTextColor() -> Color {
-        if viewModel.retailInvoicesByYear.count > 0 {
-            return Color.primaryOffWhite
-        } else {
-            return Color.secondaryDarkGray
-        }
-    }
-
-    private func getIconColored(iconName: String) -> Image {
-        if colorScheme == .dark {
-            return viewModel.retailInvoicesByYear.count > 0 ? Image("\(iconName)-dark") : Image("\(iconName)-light")
-        } else {
-            return viewModel.retailInvoicesByYear.count > 0 ? Image("\(iconName)-light") : Image("\(iconName)-dark")
-        }
-    }
 }
 
 #Preview {

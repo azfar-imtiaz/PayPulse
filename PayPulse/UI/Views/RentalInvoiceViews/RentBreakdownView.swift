@@ -18,21 +18,21 @@ struct RentBreakdownView: View {
     var body: some View {
         InvoiceDetailsContainer {
             // Table header
-            HeaderRow(key: "Category", value: "Amount")
-            
+            KeyValueRow(key: "Category", value: "Amount", isHeader: true)
+
             Divider()
-            
+
             // Table rows
-            KeyIntValueRow(key: "Hyra", value: baseRent)
-            KeyIntValueRow(key: "Kallvatten", value: kallvatten)
-            KeyIntValueRow(key: "Varmvatten", value: varmvatten)
-            KeyIntValueRow(key: "El", value: electricity)
-            KeyIntValueRow(key: "Moms", value: moms)
-            
+            KeyValueRow(key: "Hyra", value: Utils.formatNumber(baseRent))
+            KeyValueRow(key: "Kallvatten", value: Utils.formatNumber(kallvatten))
+            KeyValueRow(key: "Varmvatten", value: Utils.formatNumber(varmvatten))
+            KeyValueRow(key: "El", value: Utils.formatNumber(electricity))
+            KeyValueRow(key: "Moms", value: Utils.formatNumber(moms))
+
             Divider()
-            
-            // Total row            
-            KeyIntValueRow(key: "Total", value: totalAmount, makeValueBold: true)
+
+            // Total row
+            KeyValueRow(key: "Total", value: Utils.formatNumber(totalAmount), makeValueBold: true)
         }
     }
 }

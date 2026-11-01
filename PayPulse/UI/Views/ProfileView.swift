@@ -21,9 +21,7 @@ struct ProfileView: View {
     @State private var showSpinner = false
     @State private var loadingText = "Loading user information..."
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
-    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
 
     init(userService: UserService, gmailService: GmailAuthService, outlookService: OutlookAuthService) {
@@ -45,11 +43,11 @@ struct ProfileView: View {
                             .foregroundStyle(Color.secondaryDarkGray)
                         
                         VStack(alignment: .leading, spacing: 20) {
-                            UserInfoRow(label: "Name:", value: viewModel.username)
-                            UserInfoRow(label: "Email:", value: viewModel.userEmail)
-                            UserInfoRow(label: "Created on:", value: viewModel.userCreatedOn)
-                            UserInfoRow(label: "Gmail connection:", value: viewModel.gmailConnectionStatus ? "✔️" : "❌")
-                            UserInfoRow(label: "Outlook connection:", value: viewModel.outlookConnectionStatus ? "✔️" : "❌")
+                            KeyValueRow(key: "Name:", value: viewModel.username, keyWidth: 100)
+                            KeyValueRow(key: "Email:", value: viewModel.userEmail, keyWidth: 100)
+                            KeyValueRow(key: "Created on:", value: viewModel.userCreatedOn, keyWidth: 100)
+                            KeyValueRow(key: "Gmail connection:", value: viewModel.gmailConnectionStatus ? "✔️" : "❌", keyWidth: 100)
+                            KeyValueRow(key: "Outlook connection:", value: viewModel.outlookConnectionStatus ? "✔️" : "❌", keyWidth: 100)
                         }
                     })
                     .background(Color.clear)
@@ -110,19 +108,11 @@ struct ProfileView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    let iconName = "circle-arrow-left"
-                    Button {
-                        dismiss()
-                    } label: {
-                        Utils.getIconColored(colorScheme: colorScheme, iconName: iconName)
-                    }
+                    BackButton()
                 }
-                
+
                 ToolbarItem(placement: .principal) {
-                    Text("Profile")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle( colorScheme == .light ? Color.secondaryDarkGray : Color.primaryOffWhite )
+                    NavTitle(text: "Profile")
                 }
             }
         }
@@ -260,26 +250,6 @@ struct ProfileView: View {
                 )
                 presentToast(toastValue)
             }
-        }
-    }
-}
-
-struct UserInfoRow: View {
-    let label: String
-    let value: String
-    
-    var body: some View {
-        HStack {
-            Text(label)
-                .font(.tableKey)
-                .foregroundStyle(Color.secondaryDarkGray.opacity(0.7))
-                .frame(width: 100, alignment: .leading)
-            
-            Text(value)
-                .font(.tableValue)
-                .foregroundStyle(Color.secondaryDarkGray)
-            
-            Spacer()
         }
     }
 }
