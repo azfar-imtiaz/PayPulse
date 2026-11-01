@@ -21,7 +21,7 @@ struct RentalListView: View {
                     selectedYear: $selectedYear
                 )
                 .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.bottom, Spacing.xl)
                 
                 RentalInvoiceListContainer(
                     selectedYear: $selectedYear,

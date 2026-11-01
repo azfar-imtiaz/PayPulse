@@ -28,9 +28,8 @@ struct RetailLandingPage: View {
                 VStack(spacing: 0) {
                     HStack {
                         Text("Your retail invoices,\ncategorized.")
-                        // .font(.headingMedium)
                             .font(.headingStandard)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(Color.secondaryDarkGray)
 
                         Spacer()
                     }
@@ -52,9 +51,9 @@ struct RetailLandingPage: View {
                                 }
                             }
                             .padding(.horizontal)
-                            .padding(.vertical, 20)
+                            .padding(.vertical, Spacing.xl)
                         }
-                        .padding(.top, 10)
+                        .padding(.top, Spacing.sm) // rounded 10->8
                     } else {
                         Spacer()
                     }
@@ -79,15 +78,15 @@ struct RetailLandingPage: View {
                 .foregroundStyle(Color.accentDeepOrange)
             Text("invoices across \(RetailInvoiceSubType.allCases.count) categories")
                 .font(.bodyStandard)
-                .foregroundStyle(.gray)
+                .foregroundStyle(Color.secondaryDarkGray)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
+        .padding(Spacing.xl)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: Radius.xl)
                 .fill(Color.primaryOffWhite)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: Radius.xl)
                         .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                 )
         )

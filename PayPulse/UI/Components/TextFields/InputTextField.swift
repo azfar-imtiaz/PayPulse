@@ -15,14 +15,14 @@ struct InputTextField: View {
     
     var body: some View {
         ZStack(alignment: .center) {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: Radius.md)
                 .stroke(style: StrokeStyle(lineWidth: 1))
-                .foregroundStyle(Color.secondary)
+                .foregroundStyle(Color.secondaryDarkGray)
             
             inputField
                 .foregroundStyle(Color.secondaryDarkGray)
                 .font(.bodyLarge)
-                .padding(.leading, 12)
+                .padding(.leading, Spacing.md)
         }
         .frame(width: 300, height: 50)
     }

@@ -45,7 +45,7 @@ struct KeyStringValueRow: View {
             }
         }
         .font(.tableValue)
-        .foregroundStyle(.gray)
+        .foregroundStyle(Color.secondaryDarkGray)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
 }

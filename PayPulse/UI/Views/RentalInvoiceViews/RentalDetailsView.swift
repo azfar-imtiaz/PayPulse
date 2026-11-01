@@ -29,7 +29,7 @@ struct RentalDetailsView: View {
                     .font(.bodyStandard)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(Color.secondaryDarkGray)
             }
             .padding([.horizontal, .top])
             

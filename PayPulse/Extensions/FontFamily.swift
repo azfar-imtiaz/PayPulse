@@ -87,6 +87,18 @@ extension Font {
     /// UI labels - Navigation items, list labels
     /// Used for: "Rental invoices" navigation text
     static let uiLabel = Font.custom(Typography.FontName.regular, size: 15)
+
+    /// Badge text - Smallest text in the app
+    /// Used for: PAID/DUE status badge
+    static let badgeSmall = Font.custom(Typography.FontName.bold, size: Typography.Size.badge)
+
+    /// Compact buttons - Semi-bold at body size
+    /// Used for: Picker buttons
+    static let buttonCompact = Font.custom(Typography.FontName.semiBold, size: Typography.Size.body)
+
+    /// Compact headings - Medium weight at title size
+    /// Used for: Retail category row titles
+    static let headingCompact = Font.custom(Typography.FontName.medium, size: Typography.Size.title)
 }
 
 // MARK: - Typography Helper
@@ -112,5 +124,6 @@ struct Typography {
         static let display: CGFloat = 24
         static let largeTitle: CGFloat = 26
         static let navigation: CGFloat = 36
+        static let badge: CGFloat = 9
     }
 }

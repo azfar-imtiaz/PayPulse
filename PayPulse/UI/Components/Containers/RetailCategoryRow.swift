@@ -23,7 +23,7 @@ struct RetailCategoryRow<Destination: View>: View {
                         .fill(subType.color.opacity(0.15))
                         .frame(width: 52, height: 52)
                     Image(systemName: subType.sfSymbolName)
-                        .font(.system(size: 22, weight: .medium))
+                        .font(.headingCompact)
                         .foregroundStyle(subType.color)
                 }
 
@@ -39,8 +39,8 @@ struct RetailCategoryRow<Destination: View>: View {
                     .font(.footnote)
                     .fontWeight(.semibold)
                     .foregroundStyle(subType.color)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, Spacing.sm) // rounded 10->8, compact chip
+                    .padding(.vertical, Spacing.xs)
                     .background(
                         Capsule()
                             .fill(subType.color.opacity(0.15))
@@ -50,15 +50,15 @@ struct RetailCategoryRow<Destination: View>: View {
                 Image(systemName: "chevron.right")
                     .font(.caption)
                     .fontWeight(.semibold)
-                    .foregroundStyle(Color.secondary)
+                    .foregroundStyle(Color.secondaryDarkGray)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
+            .padding(.horizontal, Spacing.lg)
+            .padding(.vertical, Spacing.lg) // rounded 14->16 to match .horizontal above
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: Radius.xl)
                     .fill(Color.primaryOffWhite)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: Radius.xl)
                             .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                     )
             )

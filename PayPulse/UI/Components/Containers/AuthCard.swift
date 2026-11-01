@@ -12,7 +12,7 @@ struct AuthCard<Content: View>: View {
     
     var body: some View {        
         content
-            .padding(25)
+            .padding(Spacing.xxl) // 24, documented 25->24 micro-adjustment to fit the 4pt scale
             .frame(maxWidth: .infinity)
     }
 }

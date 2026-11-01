@@ -27,7 +27,7 @@ struct HeaderYears: View {
                 }
                 .scrollTargetLayout()
             }
-            .padding(.horizontal, 12)
+            .padding(.horizontal, Spacing.md)
             .scrollTargetBehavior(.viewAligned)
         }
     }

@@ -14,9 +14,9 @@ struct PickerButtonContent: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: Radius.md)
                 .stroke(style: StrokeStyle(lineWidth: 1))
-                .foregroundStyle(Color.secondary)
+                .foregroundStyle(Color.secondaryDarkGray)
             
             HStack {
                 Text(displayText)
@@ -28,12 +28,12 @@ struct PickerButtonContent: View {
                 Spacer()
                 
                 Image(systemName: "chevron.down")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.buttonCompact)
                     .foregroundStyle(Color.secondaryDarkGray)
                     .rotationEffect(.degrees(isShowingDropdown ? 180 : 0))
                     .animation(.easeInOut(duration: 0.2), value: isShowingDropdown)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, Spacing.lg)
         }
         .frame(height: 50)
     }
@@ -58,12 +58,12 @@ struct PickerDropdownItem: View {
                 
                 if isSelected {
                     Image(systemName: "checkmark")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.buttonCompact)
                         .foregroundStyle(Color.accentColor)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, Spacing.lg)
+            .padding(.vertical, Spacing.md)
             .background(
                 Rectangle()
                     .fill(isSelected ? Color.accentColor.opacity(0.1) : Color.clear)
@@ -97,7 +97,7 @@ struct PickerDropdownMenu<T: Hashable>: View {
                 
                 if index < options.count - 1 {
                     Divider()
-                        .background(Color.secondary.opacity(0.3))
+                        .background(Color.secondaryDarkGray.opacity(0.3))
                 }
             }
         }

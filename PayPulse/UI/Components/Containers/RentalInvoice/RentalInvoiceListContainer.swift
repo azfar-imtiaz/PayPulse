@@ -15,16 +15,16 @@ struct RentalInvoiceListContainer: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 40)
+            RoundedRectangle(cornerRadius: Radius.pill)
                 .fill(Color.primaryOffWhite)
                 .ignoresSafeArea(edges: .bottom)
             
             VStack(spacing: 0) {
-                RoundedRectangle(cornerRadius: 2.5)
-                    .fill(Color.secondary.opacity(0.3))
+                RoundedRectangle(cornerRadius: Radius.xs)
+                    .fill(Color.secondaryDarkGray.opacity(0.3))
                     .frame(width: 36, height: 4)
-                    .padding(.top, 10)
-                    .padding(.bottom, 8)
+                    .padding(.top, Spacing.sm) // rounded 10->8 to match .bottom below
+                    .padding(.bottom, Spacing.sm)
 
                 ScrollView(.vertical, showsIndicators: false) {
                     if let invoices = yearlyInvoices[selectedYear] {

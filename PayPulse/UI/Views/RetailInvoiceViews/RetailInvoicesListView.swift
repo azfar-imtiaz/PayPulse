@@ -37,7 +37,7 @@ struct RetailInvoicesListView: View {
                             selectedYear: $selectedYear
                         )
                         .padding(.horizontal)
-                        .padding(.bottom, 20)
+                        .padding(.bottom, Spacing.xl)
 
                         RetailInvoiceListContainer(
                             selectedYear: $selectedYear,

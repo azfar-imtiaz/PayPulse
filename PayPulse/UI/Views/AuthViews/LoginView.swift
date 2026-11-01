@@ -63,7 +63,7 @@ struct LoginView: View {
                     
                     TextButton(
                         buttonText: "create one!",
-                        textColor: Color.accentColorOrange,
+                        textColor: Color.accentDeepOrange,
                         font: .bodySmall,
                         action: {
                             toggleAuthView()

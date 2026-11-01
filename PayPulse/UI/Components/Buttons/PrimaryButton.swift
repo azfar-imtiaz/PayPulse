@@ -19,8 +19,8 @@ struct PrimaryButton<Content: View>: View {
             }
         } label: {
             ZStack(alignment: .center) {
-                RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(isDisabled ? .gray : Color.accent)
+                RoundedRectangle(cornerRadius: Radius.md)
+                    .foregroundStyle(isDisabled ? Color.disabledGray : Color.accent)
                 
                 buttonView
                     .font(.buttonLarge)

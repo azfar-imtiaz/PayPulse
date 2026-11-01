@@ -37,7 +37,7 @@ struct AuthView: View {
                                     .transition(.move(edge: .trailing).combined(with: .opacity))
                             }
                         }
-                        .foregroundStyle(Color.gray)
+                        .foregroundStyle(Color.secondaryDarkGray)
                     }
                     .foregroundStyle(Color.secondaryDarkGray)
                     .font(.headingLarge)
@@ -46,7 +46,7 @@ struct AuthView: View {
                     Spacer()
                 }
                 .padding(.leading)
-                .padding(.top, 40)
+                .padding(.top, 40) // deliberate outlier (screen-level offset), doesn't fit the xs..xxl ramp cleanly; left as a reserved literal
                 
                 Spacer()
                 

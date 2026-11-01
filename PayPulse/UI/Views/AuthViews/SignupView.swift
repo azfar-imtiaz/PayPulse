@@ -70,7 +70,7 @@ struct SignupView: View {
                     
                     TextButton(
                         buttonText: "Sign in!",
-                        textColor: Color.accentColorOrange,
+                        textColor: Color.accentDeepOrange,
                         font: .bodySmall,
                         action: {
                             toggleAuthView()
