@@ -16,6 +16,8 @@ struct InvoiceListRow<Destination: View>: View {
     let totalAmount: Int
     let currency: String
     let trailingIndicator: InvoiceTrailingIndicator
+    let transitionID: String
+    let namespace: Namespace.ID
     @ViewBuilder let destination: () -> Destination
 
     var body: some View {
@@ -32,6 +34,7 @@ struct InvoiceListRow<Destination: View>: View {
 
             NavigationLink {
                 destination()
+                    .navigationTransition(.zoom(sourceID: transitionID, in: namespace))
             } label: {
                 InvoiceDetailsContainer {
                     InvoiceSummary(
@@ -43,12 +46,21 @@ struct InvoiceListRow<Destination: View>: View {
                     )
                 }
             }
+            .matchedTransitionSource(id: transitionID, in: namespace)
         }
     }
 }
 
 #Preview {
     NavigationStack {
+        InvoiceListRowPreviewContainer()
+    }
+}
+
+private struct InvoiceListRowPreviewContainer: View {
+    @Namespace private var namespace
+
+    var body: some View {
         InvoiceListRow(
             monthLabel: "Nov",
             monthColor: .accentDeepOrange,
@@ -57,7 +69,9 @@ struct InvoiceListRow<Destination: View>: View {
             dueDate: "12-11-2021",
             totalAmount: 5000,
             currency: "SEK",
-            trailingIndicator: .statusBadge
+            trailingIndicator: .statusBadge,
+            transitionID: "preview",
+            namespace: namespace
         ) {
             Text("Destination")
         }

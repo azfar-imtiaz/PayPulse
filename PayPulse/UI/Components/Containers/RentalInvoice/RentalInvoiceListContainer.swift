@@ -12,7 +12,8 @@ struct RentalInvoiceListContainer: View {
     @Binding var selectedYear : Int
     let vendor                : String
     let yearlyInvoices        : OrderedDictionary<Int, [RentalInvoice]>
-    
+    @Namespace private var zoomNamespace
+
     var body: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: Radius.pill)
@@ -37,7 +38,9 @@ struct RentalInvoiceListContainer: View {
                                 dueDate: invoice.dueDate,
                                 totalAmount: invoice.totalAmount,
                                 currency: "SEK",
-                                trailingIndicator: .statusBadge
+                                trailingIndicator: .statusBadge,
+                                transitionID: invoice.invoiceID,
+                                namespace: zoomNamespace
                             ) {
                                 RentalDetailsView(invoice: invoice)
                             }

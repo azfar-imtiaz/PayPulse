@@ -12,6 +12,7 @@ struct RetailInvoiceListContainer: View {
     @Binding var selectedYear: Int
     let subType: RetailInvoiceSubType
     let viewModel: RetailInvoicesViewModel
+    @Namespace private var zoomNamespace
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -41,7 +42,9 @@ struct RetailInvoiceListContainer: View {
                                 dueDate: invoice.getFormattedDate(),
                                 totalAmount: Int(invoice.totalAmount),
                                 currency: invoice.displayCurrency,
-                                trailingIndicator: .dot(subType.color)
+                                trailingIndicator: .dot(subType.color),
+                                transitionID: invoice.invoiceID,
+                                namespace: zoomNamespace
                             ) {
                                 RetailInvoiceDetailView(invoice: invoice, subType: subType, retailViewModel: viewModel)
                             }
