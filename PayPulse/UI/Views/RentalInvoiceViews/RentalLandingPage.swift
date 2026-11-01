@@ -38,7 +38,10 @@ struct RentalLandingPage: View {
                         RentalListView(
                             viewModel: viewModel,
                             selectedYear: $selectedYear,
-                            showSpinner: $showSpinner
+                            showSpinner: $showSpinner,
+                            refreshAction: {
+                                ingestLatestInvoice()
+                            }
                         ) {
                             ingestInvoicesWithPolling()
                         }

@@ -12,6 +12,7 @@ struct RentalInvoiceListContainer: View {
     @Binding var selectedYear : Int
     let vendor                : String
     let yearlyInvoices        : OrderedDictionary<Int, [RentalInvoice]>
+    var refreshAction         : () async -> Void = {}
     @Namespace private var zoomNamespace
 
     var body: some View {
@@ -52,6 +53,9 @@ struct RentalInvoiceListContainer: View {
                 }
                 .id(selectedYear)
                 .transition(.opacity)
+                .refreshable {
+                    await refreshAction()
+                }
             }
         }
     }

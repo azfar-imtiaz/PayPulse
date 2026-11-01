@@ -12,6 +12,7 @@ struct RetailInvoiceListContainer: View {
     @Binding var selectedYear: Int
     let subType: RetailInvoiceSubType
     let viewModel: RetailInvoicesViewModel
+    var refreshAction: () async -> Void = {}
     @Namespace private var zoomNamespace
 
     var body: some View {
@@ -56,6 +57,9 @@ struct RetailInvoiceListContainer: View {
                 }
                 .id(selectedYear)
                 .transition(.opacity)
+                .refreshable {
+                    await refreshAction()
+                }
             }
         }
     }

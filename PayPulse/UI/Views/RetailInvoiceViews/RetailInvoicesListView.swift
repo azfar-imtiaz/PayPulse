@@ -39,7 +39,8 @@ struct RetailInvoicesListView: View {
                     RetailInvoiceListContainer(
                         selectedYear: $selectedYear,
                         subType: subType,
-                        viewModel: viewModel
+                        viewModel: viewModel,
+                        refreshAction: refreshInvoices
                     )
                 }
                 .background(Color.secondaryDarkGray)
@@ -80,18 +81,22 @@ struct RetailInvoicesListView: View {
                 viewModel.invoicesHaveLoadedForSubType = true
             }
 
-            do {
-                try await viewModel.getRetailInvoices(for: subType)
-            } catch let apiError as APIError {
-                Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
-                    let errorToast = ToastValue(
-                        icon: Icon(name: "circle-x"),
-                        message: "Failed to load \(subType.displayName.lowercased()) invoices: \(viewModel.errorMessage ?? apiError.errorDescription ?? apiError.localizedDescription)"
-                    )
-                    presentToast(errorToast)
-                }
-            }
+            await refreshInvoices()
         }
+    }
+
+    private func refreshInvoices() async {
+        do {
+            try await viewModel.getRetailInvoices(for: subType)
+        } catch let apiError as APIError {
+            Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
+                let errorToast = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: "Failed to load \(subType.displayName.lowercased()) invoices: \(viewModel.errorMessage ?? apiError.errorDescription ?? apiError.localizedDescription)"
+                )
+                presentToast(errorToast)
+            }
+        } catch {}
     }
 
 }

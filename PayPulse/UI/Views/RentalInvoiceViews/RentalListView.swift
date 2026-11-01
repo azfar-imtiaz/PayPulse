@@ -11,8 +11,9 @@ struct RentalListView: View {
     @StateObject var viewModel    : RentalInvoicesViewModel
     @Binding var selectedYear     : Int
     @Binding var showSpinner      : Bool
+    var refreshAction             : () async -> Void = {}
     var loadInvoicesAction        : () async throws -> Void
-    
+
     var body: some View {
         if viewModel.invoicesHaveLoaded && viewModel.invoices.count > 0 {
             VStack {
@@ -22,11 +23,12 @@ struct RentalListView: View {
                 )
                 .padding(.horizontal)
                 .padding(.bottom, Spacing.xl)
-                
+
                 RentalInvoiceListContainer(
                     selectedYear: $selectedYear,
                     vendor: "Wallenstam",
-                    yearlyInvoices: viewModel.invoices
+                    yearlyInvoices: viewModel.invoices,
+                    refreshAction: refreshAction
                 )
             }
             .background(Color.secondaryDarkGray)
