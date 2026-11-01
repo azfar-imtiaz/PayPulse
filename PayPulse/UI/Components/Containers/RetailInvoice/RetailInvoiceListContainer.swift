@@ -21,7 +21,7 @@ struct RetailInvoiceListContainer: View {
 
             VStack(spacing: 0) {
                 RoundedRectangle(cornerRadius: Radius.xs)
-                    .fill(Color.secondary.opacity(0.3))
+                    .fill(Color.secondaryDarkGray.opacity(0.3))
                     .frame(width: 36, height: 4)
                     .padding(.top, Spacing.sm) // rounded 10->8 to match .bottom below
                     .padding(.bottom, Spacing.sm)
@@ -47,7 +47,7 @@ struct RetailInvoiceListContainer: View {
 
                             Text("No invoices found for \(selectedYear.description)")
                                 .font(.headingStandard)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(Color.secondaryDarkGray)
                                 .multilineTextAlignment(.center)
 
                             Text("Select a different year or check back later")

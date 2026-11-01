@@ -18,7 +18,7 @@ struct SecondaryButton<Content: View>: View {
             ZStack(alignment: .center) {
                 RoundedRectangle(cornerRadius: Radius.md)
                     .stroke(style: StrokeStyle(lineWidth: 1))
-                    .foregroundStyle(Color.secondary)
+                    .foregroundStyle(Color.secondaryDarkGray)
                 
                 buttonView
                     .font(.buttonStandard)

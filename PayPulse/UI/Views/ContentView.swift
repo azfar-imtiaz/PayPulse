@@ -53,7 +53,7 @@ struct ContentView: View {
                     Text("All your invoices, one place.")
                         // .font(.headingMedium)
                         .font(.headingStandard)
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(Color.secondaryDarkGray)
 
                     Spacer()
                 }

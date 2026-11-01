@@ -17,7 +17,7 @@ struct InputTextField: View {
         ZStack(alignment: .center) {
             RoundedRectangle(cornerRadius: Radius.md)
                 .stroke(style: StrokeStyle(lineWidth: 1))
-                .foregroundStyle(Color.secondary)
+                .foregroundStyle(Color.secondaryDarkGray)
             
             inputField
                 .foregroundStyle(Color.secondaryDarkGray)

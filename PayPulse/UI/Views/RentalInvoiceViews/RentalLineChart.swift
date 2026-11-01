@@ -65,7 +65,7 @@ struct RentalLineChart: View {
                         path.move(to: CGPoint(x: 0, y: gridY))
                         path.addLine(to: CGPoint(x: width + 5, y: gridY))
                     }
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                    .stroke(Color.chartGridline, lineWidth: 1)
                     
                     // draw the Y-axis labels
                     let label = Utils.formatNumber(gridValue)
@@ -100,7 +100,7 @@ struct RentalLineChart: View {
                         path.move(to: CGPoint(x: point.x, y: height))
                         path.addLine(to: CGPoint(x: point.x, y: point.y))
                     }
-                    .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                    .stroke(Color.chartGridline, style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
                     
                     Circle()
                         .fill(Color.accentColor)

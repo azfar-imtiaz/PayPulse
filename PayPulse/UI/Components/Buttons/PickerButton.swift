@@ -16,7 +16,7 @@ struct PickerButtonContent: View {
         ZStack {
             RoundedRectangle(cornerRadius: Radius.md)
                 .stroke(style: StrokeStyle(lineWidth: 1))
-                .foregroundStyle(Color.secondary)
+                .foregroundStyle(Color.secondaryDarkGray)
             
             HStack {
                 Text(displayText)
@@ -97,7 +97,7 @@ struct PickerDropdownMenu<T: Hashable>: View {
                 
                 if index < options.count - 1 {
                     Divider()
-                        .background(Color.secondary.opacity(0.3))
+                        .background(Color.secondaryDarkGray.opacity(0.3))
                 }
             }
         }

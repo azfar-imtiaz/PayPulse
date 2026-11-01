@@ -50,7 +50,7 @@ struct RetailCategoryRow<Destination: View>: View {
                 Image(systemName: "chevron.right")
                     .font(.caption)
                     .fontWeight(.semibold)
-                    .foregroundStyle(Color.secondary)
+                    .foregroundStyle(Color.secondaryDarkGray)
             }
             .padding(.horizontal, Spacing.lg)
             .padding(.vertical, Spacing.lg) // rounded 14->16 to match .horizontal above

@@ -30,7 +30,7 @@ struct RetailLandingPage: View {
                         Text("Your retail invoices,\ncategorized.")
                         // .font(.headingMedium)
                             .font(.headingStandard)
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(Color.secondaryDarkGray)
 
                         Spacer()
                     }
@@ -79,7 +79,7 @@ struct RetailLandingPage: View {
                 .foregroundStyle(Color.accentDeepOrange)
             Text("invoices across \(RetailInvoiceSubType.allCases.count) categories")
                 .font(.bodyStandard)
-                .foregroundStyle(.gray)
+                .foregroundStyle(Color.secondaryDarkGray)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.xl)

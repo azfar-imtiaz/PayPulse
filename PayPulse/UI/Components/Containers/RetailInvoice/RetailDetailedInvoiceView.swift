@@ -60,7 +60,7 @@ struct RetailDetailedInvoiceItemsView: View {
                 InvoiceDetailsContainer {
                     Text("Additional details not yet available for \(subType.displayName)")
                         .font(.bodyStandard)
-                        .foregroundColor(.gray)
+                        .foregroundColor(Color.secondaryDarkGray)
                         .padding()
                 }
             }

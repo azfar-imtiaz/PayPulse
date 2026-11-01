@@ -52,7 +52,7 @@ struct InvoiceSummary: View {
                 Text(dueDate)
             }
             .font(.bodyStandard)
-            .foregroundStyle(.gray)
+            .foregroundStyle(Color.secondaryDarkGray)
         }
     }
 
