@@ -13,10 +13,8 @@ struct RentalDetailsView: View {
     @State private var showOCRToast: Bool = false
     @State private var showTotalAmountToast: Bool = false
     
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
-    @Environment(\.colorScheme) private var colorScheme
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             
@@ -86,31 +84,22 @@ struct RentalDetailsView: View {
             }
         }
         .background(Color.primaryOffWhite)
-        .navigationTitle("Invoice Details")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Icon(name: getIconNameColored(iconName: "circle-arrow-left"))
-                }
+                BackButton()
+            }
+
+            ToolbarItem(placement: .principal) {
+                NavTitle(text: "Invoice Details")
             }
         }
     }
-    
+
     func showTextCopiedToast(text: String) {
         let toast = ToastValue(icon: Image("copy"), message: "\(text) copied!")
         presentToast(toast)
-    }
-    
-    private func getIconNameColored(iconName: String) -> String {
-        if colorScheme == .dark {
-            return "\(iconName)-light"
-        } else {
-            return "\(iconName)-dark"
-        }
     }
 }
 

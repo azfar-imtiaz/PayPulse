@@ -21,7 +21,6 @@ struct RentalLandingPage: View {
     @State var showSpinner         : Bool = false
     @State var loadingText         : String = ""
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
@@ -78,21 +77,12 @@ struct RentalLandingPage: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    getIconColored(iconName: "circle-arrow-left")
-                }
-                .disabled(showSpinner)
+                BackButton()
+                    .disabled(showSpinner)
             }
-            
+
             ToolbarItem(placement: .principal) {
-                Text(selectedTab.rawValue.capitalized)
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(
-                        computeToolbarTextColor()
-                    )
+                NavTitle(text: selectedTab.rawValue.capitalized)
             }
             
             if selectedTab == .invoices {
@@ -220,25 +210,6 @@ struct RentalLandingPage: View {
                     )
                     presentToast(errorToast)
                 }
-            }
-        }
-    }
-    
-    private func computeToolbarTextColor() -> Color {
-        if selectedTab == .graphs {
-            switch colorScheme {
-            case .dark:
-                return Color.secondaryDarkGray
-            case .light:
-                return Color.secondaryDarkGray
-            @unknown default:
-                return Color.primaryOffWhite
-            }
-        } else {
-            if viewModel.invoices.count > 0 {
-                return Color.primaryOffWhite
-            } else {
-                return Color.secondaryDarkGray
             }
         }
     }

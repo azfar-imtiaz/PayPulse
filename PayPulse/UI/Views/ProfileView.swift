@@ -21,9 +21,7 @@ struct ProfileView: View {
     @State private var showSpinner = false
     @State private var loadingText = "Loading user information..."
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
-    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
 
     init(userService: UserService, gmailService: GmailAuthService, outlookService: OutlookAuthService) {
@@ -110,19 +108,11 @@ struct ProfileView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    let iconName = "circle-arrow-left"
-                    Button {
-                        dismiss()
-                    } label: {
-                        Utils.getIconColored(colorScheme: colorScheme, iconName: iconName)
-                    }
+                    BackButton()
                 }
-                
+
                 ToolbarItem(placement: .principal) {
-                    Text("Profile")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle( colorScheme == .light ? Color.secondaryDarkGray : Color.primaryOffWhite )
+                    NavTitle(text: "Profile")
                 }
             }
         }

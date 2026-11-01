@@ -21,7 +21,6 @@ struct RetailInvoiceDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentToast) var presentToast
-    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
     @ObservedObject var retailViewModel: RetailInvoicesViewModel
 
@@ -123,16 +122,15 @@ struct RetailInvoiceDetailView: View {
             }
         }
         .background(Color.primaryOffWhite)
-        .navigationTitle("Invoice Details")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Icon(name: getIconNameColored(iconName: "circle-arrow-left"))
-                }
+                BackButton()
+            }
+
+            ToolbarItem(placement: .principal) {
+                NavTitle(text: "Invoice Details")
             }
 
             ToolbarItem(placement: .topBarTrailing) {
@@ -235,14 +233,6 @@ struct RetailInvoiceDetailView: View {
                     self.isLoading = false
                 }
             }
-        }
-    }
-
-    private func getIconNameColored(iconName: String) -> String {
-        if colorScheme == .dark {
-            return "\(iconName)-light"
-        } else {
-            return "\(iconName)-dark"
         }
     }
 
