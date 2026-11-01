@@ -24,7 +24,8 @@ struct SecondaryButton<Content: View>: View {
                     .font(.buttonStandard)
                     .foregroundStyle(Color.secondaryDarkGray)
             }
-            .frame(width: 300, height: 50)
+            .frame(maxWidth: .infinity, minHeight: 50)
+            .padding(.horizontal, Spacing.xxl)
         }
     }
 }

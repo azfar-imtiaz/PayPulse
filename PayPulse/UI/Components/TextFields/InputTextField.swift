@@ -24,7 +24,8 @@ struct InputTextField: View {
                 .font(.bodyLarge)
                 .padding(.leading, Spacing.md)
         }
-        .frame(width: 300, height: 50)
+        .frame(maxWidth: .infinity, minHeight: 50)
+        .padding(.horizontal, Spacing.xxl)
     }
     
     @ViewBuilder

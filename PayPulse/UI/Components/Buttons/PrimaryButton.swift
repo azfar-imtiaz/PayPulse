@@ -26,7 +26,8 @@ struct PrimaryButton<Content: View>: View {
                     .font(.buttonLarge)
                     .foregroundStyle(Color.white)
             }
-            .frame(width: 300, height: 50)
+            .frame(maxWidth: .infinity, minHeight: 50)
+            .padding(.horizontal, Spacing.xxl)
         }
     }
 }

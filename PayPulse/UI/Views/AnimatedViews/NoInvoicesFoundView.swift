@@ -30,7 +30,8 @@ struct NoInvoicesFoundView: View {
             }
             .foregroundStyle(Color.secondaryDarkGray)
             .multilineTextAlignment(.center)
-            .frame(width: 300)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, Spacing.xxl)
                 
             
             PrimaryButton(

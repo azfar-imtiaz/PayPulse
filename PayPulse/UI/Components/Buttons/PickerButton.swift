@@ -35,7 +35,7 @@ struct PickerButtonContent: View {
             }
             .padding(.horizontal, Spacing.lg)
         }
-        .frame(height: 50)
+        .frame(minHeight: 50)
     }
 }
 
