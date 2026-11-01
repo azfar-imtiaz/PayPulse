@@ -14,18 +14,17 @@ struct InputTextField: View {
     var isSecure        : Bool = false
     
     var body: some View {
-        ZStack(alignment: .center) {
-            RoundedRectangle(cornerRadius: Radius.md)
-                .stroke(style: StrokeStyle(lineWidth: 1))
-                .foregroundStyle(Color.secondaryDarkGray)
-            
-            inputField
-                .foregroundStyle(Color.secondaryDarkGray)
-                .font(.bodyLarge)
-                .padding(.leading, Spacing.md)
-        }
-        .frame(maxWidth: .infinity, minHeight: 50)
-        .padding(.horizontal, Spacing.xxl)
+        inputField
+            .foregroundStyle(Color.secondaryDarkGray)
+            .font(.bodyLarge)
+            .padding(.leading, Spacing.md)
+            .frame(maxWidth: .infinity, minHeight: 50)
+            .background(
+                RoundedRectangle(cornerRadius: Radius.md)
+                    .stroke(style: StrokeStyle(lineWidth: 1))
+                    .foregroundStyle(Color.secondaryDarkGray)
+            )
+            .padding(.horizontal, Spacing.xxl)
     }
     
     @ViewBuilder

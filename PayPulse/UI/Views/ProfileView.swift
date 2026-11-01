@@ -53,7 +53,7 @@ struct ProfileView: View {
                                     .frame(width: 100, alignment: .leading)
                                 Image(systemName: viewModel.gmailConnectionStatus ? "checkmark.circle.fill" : "xmark.circle.fill")
                                     .foregroundStyle(viewModel.gmailConnectionStatus ? Color.green : Color.secondaryDarkGray)
-                                Spacer()
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                             HStack(spacing: 5) {
                                 Text("Outlook connection:")
@@ -62,7 +62,7 @@ struct ProfileView: View {
                                     .frame(width: 100, alignment: .leading)
                                 Image(systemName: viewModel.outlookConnectionStatus ? "checkmark.circle.fill" : "xmark.circle.fill")
                                     .foregroundStyle(viewModel.outlookConnectionStatus ? Color.green : Color.secondaryDarkGray)
-                                Spacer()
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                             }
                         }
                     })

@@ -18,16 +18,15 @@ struct PrimaryButton<Content: View>: View {
                 action()
             }
         } label: {
-            ZStack(alignment: .center) {
-                RoundedRectangle(cornerRadius: Radius.md)
-                    .foregroundStyle(isDisabled ? Color.disabledGray : Color.accent)
-                
-                buttonView
-                    .font(.buttonLarge)
-                    .foregroundStyle(Color.white)
-            }
-            .frame(maxWidth: .infinity, minHeight: 50)
-            .padding(.horizontal, Spacing.xxl)
+            buttonView
+                .font(.buttonLarge)
+                .foregroundStyle(Color.white)
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(
+                    RoundedRectangle(cornerRadius: Radius.md)
+                        .foregroundStyle(isDisabled ? Color.disabledGray : Color.accent)
+                )
+                .padding(.horizontal, Spacing.xxl)
         }
     }
 }

@@ -15,17 +15,16 @@ struct SecondaryButton<Content: View>: View {
         Button {
             action()
         } label: {
-            ZStack(alignment: .center) {
-                RoundedRectangle(cornerRadius: Radius.md)
-                    .stroke(style: StrokeStyle(lineWidth: 1))
-                    .foregroundStyle(Color.secondaryDarkGray)
-                
-                buttonView
-                    .font(.buttonStandard)
-                    .foregroundStyle(Color.secondaryDarkGray)
-            }
-            .frame(maxWidth: .infinity, minHeight: 50)
-            .padding(.horizontal, Spacing.xxl)
+            buttonView
+                .font(.buttonStandard)
+                .foregroundStyle(Color.secondaryDarkGray)
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(
+                    RoundedRectangle(cornerRadius: Radius.md)
+                        .stroke(style: StrokeStyle(lineWidth: 1))
+                        .foregroundStyle(Color.secondaryDarkGray)
+                )
+                .padding(.horizontal, Spacing.xxl)
         }
     }
 }
