@@ -63,7 +63,7 @@ struct RetailCategoryRow<Destination: View>: View {
                     )
             )
         }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleButtonStyle())
     }
 }
 

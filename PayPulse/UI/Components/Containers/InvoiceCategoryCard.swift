@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-private struct PressScaleButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
-    }
-}
-
 struct InvoiceCategoryCard<Destination: View>: View {
     let iconName: String
     let iconTitle: String
