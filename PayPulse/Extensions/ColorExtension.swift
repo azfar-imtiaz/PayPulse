@@ -12,4 +12,6 @@ extension Color {
     static let secondaryDarkGray = Color("SecondaryColor")
     static let accentDeepOrange = Color("AccentColorOrange")
     static let accentDeepRed = Color("AccentColorRed")
+    static let disabledGray = Color("DisabledControlTint")
+    static let chartGridline = Color("ChartGridTint")
 }
