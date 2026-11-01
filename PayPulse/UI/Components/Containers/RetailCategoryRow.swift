@@ -23,7 +23,7 @@ struct RetailCategoryRow<Destination: View>: View {
                         .fill(subType.color.opacity(0.15))
                         .frame(width: 52, height: 52)
                     Image(systemName: subType.sfSymbolName)
-                        .font(.system(size: 22, weight: .medium))
+                        .font(.headingCompact)
                         .foregroundStyle(subType.color)
                 }
 

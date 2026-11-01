@@ -51,7 +51,6 @@ struct ContentView: View {
 
                 HStack {
                     Text("All your invoices, one place.")
-                        // .font(.headingMedium)
                         .font(.headingStandard)
                         .foregroundStyle(Color.secondaryDarkGray)
 

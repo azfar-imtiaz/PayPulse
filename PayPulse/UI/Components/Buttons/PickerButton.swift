@@ -28,7 +28,7 @@ struct PickerButtonContent: View {
                 Spacer()
                 
                 Image(systemName: "chevron.down")
-                    .font(.system(size: 14, weight: .semibold))
+                    .font(.buttonCompact)
                     .foregroundStyle(Color.secondaryDarkGray)
                     .rotationEffect(.degrees(isShowingDropdown ? 180 : 0))
                     .animation(.easeInOut(duration: 0.2), value: isShowingDropdown)
@@ -58,7 +58,7 @@ struct PickerDropdownItem: View {
                 
                 if isSelected {
                     Image(systemName: "checkmark")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.buttonCompact)
                         .foregroundStyle(Color.accentColor)
                 }
             }

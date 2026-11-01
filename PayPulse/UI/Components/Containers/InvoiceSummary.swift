@@ -34,7 +34,7 @@ struct InvoiceSummary: View {
                 if circleColor == nil {
                     let hasPassed = Utils.hasDueDateExpired(dueDate)
                     Text(hasPassed ? "PAID" : "DUE")
-                        .font(.system(size: 9, weight: .bold))
+                        .font(.badgeSmall)
                         .foregroundStyle(.white)
                         .padding(.horizontal, Spacing.sm)
                         .padding(.vertical, Spacing.xs)

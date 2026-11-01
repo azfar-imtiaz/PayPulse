@@ -28,7 +28,6 @@ struct RetailLandingPage: View {
                 VStack(spacing: 0) {
                     HStack {
                         Text("Your retail invoices,\ncategorized.")
-                        // .font(.headingMedium)
                             .font(.headingStandard)
                             .foregroundStyle(Color.secondaryDarkGray)
 
