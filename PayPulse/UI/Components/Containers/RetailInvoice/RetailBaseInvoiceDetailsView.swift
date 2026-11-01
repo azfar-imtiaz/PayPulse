@@ -15,28 +15,28 @@ struct RetailBaseInvoiceDetailsView: View {
 
     var body: some View {
         InvoiceDetailsContainer {
-            KeyStringValueRow(
+            KeyValueRow(
                 key: "Category",
                 value: subType.displayName
             )
 
             Divider()
 
-            KeyStringValueRow(
+            KeyValueRow(
                 key: "Vendor",
                 value: invoice.vendorName
             )
 
             Divider()
 
-            KeyStringValueRow(
+            KeyValueRow(
                 key: "Invoice Date",
                 value: invoice.getFormattedDate()
             )
 
             Divider()
 
-            KeyStringValueRow(
+            KeyValueRow(
                 key: "Total Amount",
                 value: invoice.getFormattedAmount(),
                 showCopyButton: true,

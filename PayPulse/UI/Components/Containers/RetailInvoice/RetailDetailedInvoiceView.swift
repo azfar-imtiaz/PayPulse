@@ -158,7 +158,7 @@ private struct FoodDeliveryItemsView: View {
                             if let description = item.description, !description.isEmpty {
                                 Text(description)
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color.secondaryDarkGray)
                             }
                         }
 
@@ -171,7 +171,7 @@ private struct FoodDeliveryItemsView: View {
 
                             Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color.secondaryDarkGray)
                         }
                     }
                 }
@@ -190,14 +190,14 @@ private struct FoodDeliverySummaryView: View {
     var body: some View {
         InvoiceDetailsContainer {
             VStack(spacing: 8) {
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Subtotal",
                     value: Utils.formatCurrency(detail.getSubtotal(), currency: baseCurrency)
                 )
 
                 if detail.deliveryFee > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Delivery Fee",
                         value: Utils.formatCurrency(detail.deliveryFee, currency: baseCurrency)
                     )
@@ -205,7 +205,7 @@ private struct FoodDeliverySummaryView: View {
 
                 if let discount = detail.discount, discount > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Discount",
                         value: Utils.formatCurrency(-discount, currency: baseCurrency)
                     )
@@ -213,14 +213,14 @@ private struct FoodDeliverySummaryView: View {
 
                 if detail.promoCode != nil {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Promo Code",
                         value: detail.getFormattedPromoCode()
                     )
                 }
 
                 Divider()
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Total",
                     value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )
@@ -263,7 +263,7 @@ private struct MiscellaneousItemsView: View {
 
                                 Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color.secondaryDarkGray)
                             }
                         }
                     }
@@ -275,7 +275,7 @@ private struct MiscellaneousItemsView: View {
                 InvoiceDetailsContainer {
                     VStack(alignment: .leading, spacing: 8) {
                         if let category = detail.category, !category.isEmpty {
-                            KeyStringValueRow(
+                            KeyValueRow(
                                 key: "Category",
                                 value: category
                             )
@@ -285,7 +285,7 @@ private struct MiscellaneousItemsView: View {
                         }
 
                         if let description = detail.description, !description.isEmpty {
-                            KeyStringValueRow(
+                            KeyValueRow(
                                 key: "Description",
                                 value: description
                             )
@@ -295,7 +295,7 @@ private struct MiscellaneousItemsView: View {
                         }
 
                         if let notes = detail.notes, !notes.isEmpty {
-                            KeyStringValueRow(
+                            KeyValueRow(
                                 key: "Notes",
                                 value: notes
                             )
@@ -368,7 +368,7 @@ private struct TechnologyItemsView: View {
 
                                 Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                     .font(.caption)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color.secondaryDarkGray)
                             }
                         }
                     }
@@ -380,7 +380,7 @@ private struct TechnologyItemsView: View {
                 InvoiceDetailsContainer {
                     VStack(alignment: .leading, spacing: 8) {
                         if let notes = detail.notes, !notes.isEmpty {
-                            KeyStringValueRow(
+                            KeyValueRow(
                                 key: "Notes",
                                 value: notes
                             )
@@ -402,14 +402,14 @@ private struct TechnologySummaryView: View {
     var body: some View {
         InvoiceDetailsContainer {
             VStack(spacing: 8) {
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Subtotal",
                     value: Utils.formatCurrency(detail.getSubtotal(), currency: baseCurrency)
                 )
 
                 if detail.deliveryFee > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Delivery Fee",
                         value: Utils.formatCurrency(detail.deliveryFee, currency: baseCurrency)
                     )
@@ -417,7 +417,7 @@ private struct TechnologySummaryView: View {
 
                 if detail.tax > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Tax",
                         value: Utils.formatCurrency(detail.tax, currency: baseCurrency)
                     )
@@ -425,14 +425,14 @@ private struct TechnologySummaryView: View {
 
                 if detail.paymentMethod != nil {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Payment Method",
                         value: detail.getFormattedPaymentMethod()
                     )
                 }
 
                 Divider()
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Total",
                     value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )
@@ -476,7 +476,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("From:")
                                                 .font(.caption)
-                                                .foregroundColor(.secondary)
+                                                .foregroundColor(Color.secondaryDarkGray)
                                             Text(segment.departureLocation!)
                                                 .font(.bodyStandard)
                                                 .foregroundColor(.primary)
@@ -486,7 +486,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("To:")
                                                 .font(.caption)
-                                                .foregroundColor(.secondary)
+                                                .foregroundColor(Color.secondaryDarkGray)
                                             Text(segment.arrivalLocation!)
                                                 .font(.bodyStandard)
                                                 .foregroundColor(.primary)
@@ -496,7 +496,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("Location:")
                                                 .font(.caption)
-                                                .foregroundColor(.secondary)
+                                                .foregroundColor(Color.secondaryDarkGray)
                                             Text(segment.departureLocation!)
                                                 .font(.bodyStandard)
                                                 .foregroundColor(.primary)
@@ -508,7 +508,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("Departure:")
                                                 .font(.caption)
-                                                .foregroundColor(.secondary)
+                                                .foregroundColor(Color.secondaryDarkGray)
                                             Text(segment.getFormattedDepartureDate())
                                                 .font(.caption)
                                                 .foregroundColor(.primary)
@@ -520,7 +520,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("Arrival:")
                                                 .font(.caption)
-                                                .foregroundColor(.secondary)
+                                                .foregroundColor(Color.secondaryDarkGray)
                                             Text(segment.getFormattedArrivalDate())
                                                 .font(.caption)
                                                 .foregroundColor(.primary)
@@ -574,20 +574,20 @@ private struct TravelSummaryView: View {
     var body: some View {
         InvoiceDetailsContainer {
             VStack(spacing: 8) {
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Transport Type",
                     value: detail.getFormattedTransportType()
                 )
 
                 Divider()
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Company",
                     value: detail.getFormattedTransportCompany()
                 )
 
                 if detail.bookingReference != nil {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Booking Reference",
                         value: detail.bookingReference!
                     )
@@ -595,7 +595,7 @@ private struct TravelSummaryView: View {
 
                 if detail.getSegmentCount() > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Travel Legs",
                         value: "\(detail.getSegmentCount())"
                     )
@@ -603,7 +603,7 @@ private struct TravelSummaryView: View {
 
                 if detail.passengers.count > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Passengers",
                         value: "\(detail.getPassengerCount())"
                     )
@@ -637,7 +637,7 @@ private struct ClothingItemsView: View {
 
                             Text(item.brand)
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color.secondaryDarkGray)
                         }
 
                         Spacer()
@@ -649,7 +649,7 @@ private struct ClothingItemsView: View {
 
                             Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                 .font(.caption)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(Color.secondaryDarkGray)
                         }
                     }
                 }
@@ -668,14 +668,14 @@ private struct ClothingSummaryView: View {
     var body: some View {
         InvoiceDetailsContainer {
             VStack(spacing: 8) {
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Subtotal",
                     value: Utils.formatCurrency(detail.getSubtotal(), currency: baseCurrency)
                 )
 
                 if detail.deliveryFee > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Delivery Fee",
                         value: Utils.formatCurrency(detail.deliveryFee, currency: baseCurrency)
                     )
@@ -683,7 +683,7 @@ private struct ClothingSummaryView: View {
 
                 if detail.tax > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Tax",
                         value: Utils.formatCurrency(detail.tax, currency: baseCurrency)
                     )
@@ -691,14 +691,14 @@ private struct ClothingSummaryView: View {
 
                 if detail.paymentMethod != nil {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Payment Method",
                         value: detail.getFormattedPaymentMethod()
                     )
                 }
 
                 Divider()
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Total",
                     value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )
@@ -715,14 +715,14 @@ private struct SubscriptionItemsView: View {
     var body: some View {
         InvoiceDetailsContainer {
             VStack(alignment: .leading, spacing: 8) {
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Payment Method",
                     value: detail.getFormattedPaymentMethod()
                 )
 
                 if detail.duration != nil {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Duration",
                         value: detail.getFormattedDuration()
                     )
@@ -730,7 +730,7 @@ private struct SubscriptionItemsView: View {
 
                 if detail.invoiceNumber != nil {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Invoice Number",
                         value: detail.getFormattedInvoiceNumber()
                     )
@@ -738,7 +738,7 @@ private struct SubscriptionItemsView: View {
 
                 if detail.receiptNumber != nil {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Receipt Number",
                         value: detail.getFormattedReceiptNumber()
                     )
@@ -758,14 +758,14 @@ private struct MiscellaneousSummaryView: View {
     var body: some View {
         InvoiceDetailsContainer {
             VStack(spacing: 8) {
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Subtotal",
                     value: Utils.formatCurrency(detail.getSubtotal(), currency: baseCurrency)
                 )
 
                 if let deliveryFee = detail.deliveryFee, deliveryFee > 0 {
                     Divider()
-                    KeyStringValueRow(
+                    KeyValueRow(
                         key: "Delivery Fee",
                         value: Utils.formatCurrency(deliveryFee, currency: baseCurrency)
                     )
@@ -774,7 +774,7 @@ private struct MiscellaneousSummaryView: View {
                 if detail.tax != nil {
                     if detail.tax! > 0 {
                         Divider()
-                        KeyStringValueRow(
+                        KeyValueRow(
                             key: "Tax",
                             value: Utils.formatCurrency(detail.tax!, currency: baseCurrency)
                         )
@@ -782,7 +782,7 @@ private struct MiscellaneousSummaryView: View {
                 }
 
                 Divider()
-                KeyStringValueRow(
+                KeyValueRow(
                     key: "Total",
                     value: Utils.formatCurrency(actualTotal, currency: baseCurrency)
                 )

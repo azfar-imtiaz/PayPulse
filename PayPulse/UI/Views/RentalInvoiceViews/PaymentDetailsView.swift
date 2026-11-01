@@ -16,14 +16,14 @@ struct PaymentDetailsView: View {
     
     var body: some View {
         InvoiceDetailsContainer {
-            KeyStringValueRow(
+            KeyValueRow(
                 key: "Due Date",
                 value: dueDate
             )
-            
+
             Divider()
-            
-            KeyStringValueRow(
+
+            KeyValueRow(
                 key: "OCR Reference",
                 value: ocrRef,
                 showCopyButton: true,
@@ -34,14 +34,13 @@ struct PaymentDetailsView: View {
                     )
                 }
             )
-            
+
             Divider()
-            
-            KeyIntValueRow(
+
+            KeyValueRow(
                 key: "Total Amount",
-                value: totalAmount,
+                value: Utils.formatCurrency(Double(totalAmount), currency: "SEK"),
                 showCopyButton: true,
-                showCurrency: true,
                 copyButtonAction: {
                     copyTextToClipboard(
                         text: "\(totalAmount)",
