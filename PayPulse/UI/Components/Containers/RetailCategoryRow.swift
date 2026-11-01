@@ -39,8 +39,8 @@ struct RetailCategoryRow<Destination: View>: View {
                     .font(.footnote)
                     .fontWeight(.semibold)
                     .foregroundStyle(subType.color)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
+                    .padding(.horizontal, Spacing.sm) // rounded 10->8, compact chip
+                    .padding(.vertical, Spacing.xs)
                     .background(
                         Capsule()
                             .fill(subType.color.opacity(0.15))
@@ -52,8 +52,8 @@ struct RetailCategoryRow<Destination: View>: View {
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.secondary)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
+            .padding(.horizontal, Spacing.lg)
+            .padding(.vertical, Spacing.lg) // rounded 14->16 to match .horizontal above
             .background(
                 RoundedRectangle(cornerRadius: Radius.xl)
                     .fill(Color.primaryOffWhite)

@@ -47,7 +47,7 @@ struct ContentView: View {
                     .padding(.trailing)
                 }
                 .padding(.leading)
-                .padding(.top, 20)
+                .padding(.top, Spacing.xl)
 
                 HStack {
                     Text("All your invoices, one place.")
@@ -89,7 +89,7 @@ struct ContentView: View {
                         )
                     }
                     .padding(.horizontal)
-                    .padding(.vertical, 20)
+                    .padding(.vertical, Spacing.xl)
                 }
             }
             .background(Color.primaryOffWhite)

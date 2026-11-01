@@ -23,8 +23,8 @@ struct RetailInvoiceListContainer: View {
                 RoundedRectangle(cornerRadius: Radius.xs)
                     .fill(Color.secondary.opacity(0.3))
                     .frame(width: 36, height: 4)
-                    .padding(.top, 10)
-                    .padding(.bottom, 8)
+                    .padding(.top, Spacing.sm) // rounded 10->8 to match .bottom below
+                    .padding(.bottom, Spacing.sm)
 
                 ScrollView(.vertical, showsIndicators: false) {
                     let invoicesWithMonthDisplay = viewModel.getInvoicesWithMonthDisplay(for: selectedYear)

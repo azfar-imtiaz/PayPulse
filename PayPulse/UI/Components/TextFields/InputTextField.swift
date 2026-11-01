@@ -22,7 +22,7 @@ struct InputTextField: View {
             inputField
                 .foregroundStyle(Color.secondaryDarkGray)
                 .font(.bodyLarge)
-                .padding(.leading, 12)
+                .padding(.leading, Spacing.md)
         }
         .frame(width: 300, height: 50)
     }

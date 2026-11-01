@@ -52,9 +52,9 @@ struct RetailLandingPage: View {
                                 }
                             }
                             .padding(.horizontal)
-                            .padding(.vertical, 20)
+                            .padding(.vertical, Spacing.xl)
                         }
-                        .padding(.top, 10)
+                        .padding(.top, Spacing.sm) // rounded 10->8
                     } else {
                         Spacer()
                     }
@@ -82,7 +82,7 @@ struct RetailLandingPage: View {
                 .foregroundStyle(.gray)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(20)
+        .padding(Spacing.xl)
         .background(
             RoundedRectangle(cornerRadius: Radius.xl)
                 .fill(Color.primaryOffWhite)

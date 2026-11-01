@@ -74,7 +74,7 @@ struct RentalLineChart: View {
                         .foregroundColor(Color.secondaryDarkGray)
                         .frame(width: 40, alignment: .center)
                         .position(y: gridY - 10)
-                        .padding(.leading, 5)
+                        .padding(.leading, Spacing.xs) // rounded 5->4
                     
                 }
                 

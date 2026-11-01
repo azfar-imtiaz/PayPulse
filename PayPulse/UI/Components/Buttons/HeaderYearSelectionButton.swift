@@ -18,8 +18,8 @@ struct HeaderYearSelectionButton: View {
         } label: {
             Text(String(year))
                 .id(year)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
+                .padding(.horizontal, Spacing.lg)
+                .padding(.vertical, Spacing.sm) // rounded 10->8, tight capsule pill
                 .font(.tableHeader)
                 .foregroundStyle(
                     year == selectedYear ? Color.secondaryDarkGray : Color.primaryOffWhite

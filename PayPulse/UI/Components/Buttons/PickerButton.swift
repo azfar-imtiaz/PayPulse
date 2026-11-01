@@ -33,7 +33,7 @@ struct PickerButtonContent: View {
                     .rotationEffect(.degrees(isShowingDropdown ? 180 : 0))
                     .animation(.easeInOut(duration: 0.2), value: isShowingDropdown)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, Spacing.lg)
         }
         .frame(height: 50)
     }
@@ -62,8 +62,8 @@ struct PickerDropdownItem: View {
                         .foregroundStyle(Color.accentColor)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, Spacing.lg)
+            .padding(.vertical, Spacing.md)
             .background(
                 Rectangle()
                     .fill(isSelected ? Color.accentColor.opacity(0.1) : Color.clear)

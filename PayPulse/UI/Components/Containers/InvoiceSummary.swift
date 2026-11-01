@@ -36,8 +36,8 @@ struct InvoiceSummary: View {
                     Text(hasPassed ? "PAID" : "DUE")
                         .font(.system(size: 9, weight: .bold))
                         .foregroundStyle(.white)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
+                        .padding(.horizontal, Spacing.sm)
+                        .padding(.vertical, Spacing.xs)
                         .background(Capsule().fill(hasPassed ? Color.green : Color.accentDeepOrange))
                 } else {
                     Circle()

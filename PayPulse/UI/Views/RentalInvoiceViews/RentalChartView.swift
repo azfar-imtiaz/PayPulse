@@ -50,7 +50,7 @@ struct RentalChartView: View {
                 } else {
                     RentalLineChart(data: filteredData)
                         .padding([.top, .horizontal])
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 30) // deliberate outlier, doesn't fit the xs..xxl ramp cleanly; left as a reserved literal rather than distorting the scale
                 }
             }
         }
