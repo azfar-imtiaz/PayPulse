@@ -58,6 +58,7 @@ struct RentalLandingPage: View {
                         }
                     }
                 }
+                .sensoryFeedback(.selection, trigger: selectedTab)
                 .onAppear {
                     loadingText = "Loading invoices..."
                     if !viewModel.invoicesHaveLoaded {

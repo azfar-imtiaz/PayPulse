@@ -135,6 +135,7 @@ struct ProfileView: View {
         .alert("Confirm Logout", isPresented: $showLogoutConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Logout", role: .destructive) {
+                UINotificationFeedbackGenerator().notificationOccurred(.warning)
                 let logoutToast = ToastValue(
                     icon: Icon(name: "circle-check"),
                     message: "You have been logged out"
@@ -148,6 +149,7 @@ struct ProfileView: View {
         .alert("Confirm Delete Account", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
+                UINotificationFeedbackGenerator().notificationOccurred(.warning)
                 let logoutToast = ToastValue(
                     icon: Icon(name: "circle-check"),
                     message: "Sad to see you go!"

@@ -53,6 +53,7 @@ struct PaymentDetailsView: View {
     
     func copyTextToClipboard(text: String, isOCR: Bool) {
         UIPasteboard.general.string = text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         // The isOCR parameter is used to identify whether the OCR has been copied, or the totalAmount
         if isOCR {
             showOCRToast = true
