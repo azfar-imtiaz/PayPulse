@@ -91,7 +91,7 @@ struct RentalLandingPage: View {
                         Button {
                             ingestLatestInvoice()
                         } label: {
-                            getIconColored(iconName: "refresh-ccw-dot")
+                            Utils.getIconColored(colorScheme: colorScheme, iconName: "refresh-ccw-dot")
                         }
                         .disabled(showSpinner)
                     }
@@ -210,25 +210,6 @@ struct RentalLandingPage: View {
                     )
                     presentToast(errorToast)
                 }
-            }
-        }
-    }
-    
-    private func getIconColored(iconName: String) -> Image {
-        if selectedTab == .graphs {
-            switch colorScheme {
-            case .dark:
-                return Image("\(iconName)-light")
-            case .light:
-                return Image("\(iconName)-dark")
-            @unknown default:
-                return Image("\(iconName)-light")
-            }
-        } else {
-            if colorScheme == .dark {
-                return viewModel.invoices.count > 0 ? Image("\(iconName)-dark") : Image("\(iconName)-light")
-            } else {
-                return viewModel.invoices.count > 0 ? Image("\(iconName)-light") : Image("\(iconName)-dark")
             }
         }
     }
