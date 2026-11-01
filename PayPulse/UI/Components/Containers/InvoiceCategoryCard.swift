@@ -33,10 +33,10 @@ struct InvoiceCategoryCard<Destination: View>: View {
             destination
         } label: {
             VStack(alignment: .center, spacing: 8) {
-                RoundedRectangle(cornerRadius: 20)
+                RoundedRectangle(cornerRadius: Radius.xxl)
                     .fill(Color.secondaryDarkGray.opacity(0.06))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: Radius.xxl)
                             .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                     )
                     .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)

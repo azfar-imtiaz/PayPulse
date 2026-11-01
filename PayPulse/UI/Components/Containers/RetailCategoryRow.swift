@@ -55,10 +55,10 @@ struct RetailCategoryRow<Destination: View>: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: Radius.xl)
                     .fill(Color.primaryOffWhite)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: Radius.xl)
                             .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                     )
             )

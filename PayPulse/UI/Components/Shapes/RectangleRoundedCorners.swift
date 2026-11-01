@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RectangleRoundedCorners: View {
-    var cornerRadius : CGFloat = 8
+    var cornerRadius : CGFloat = Radius.sm
     var strokeWidth  : CGFloat = 1
     var color        : Color = Color.secondaryDarkGray
     

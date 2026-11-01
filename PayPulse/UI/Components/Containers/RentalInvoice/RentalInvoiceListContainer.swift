@@ -15,12 +15,12 @@ struct RentalInvoiceListContainer: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 40)
+            RoundedRectangle(cornerRadius: Radius.pill)
                 .fill(Color.primaryOffWhite)
                 .ignoresSafeArea(edges: .bottom)
             
             VStack(spacing: 0) {
-                RoundedRectangle(cornerRadius: 2.5)
+                RoundedRectangle(cornerRadius: Radius.xs)
                     .fill(Color.secondary.opacity(0.3))
                     .frame(width: 36, height: 4)
                     .padding(.top, 10)

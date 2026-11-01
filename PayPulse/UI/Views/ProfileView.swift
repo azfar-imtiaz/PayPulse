@@ -54,7 +54,7 @@ struct ProfileView: View {
                     })
                     .background(Color.clear)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 12)
+                        RoundedRectangle(cornerRadius: Radius.lg)
                             .stroke(Color.secondaryDarkGray, lineWidth: 1)
                     )
                     .padding()

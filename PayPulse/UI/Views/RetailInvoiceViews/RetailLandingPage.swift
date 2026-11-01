@@ -84,10 +84,10 @@ struct RetailLandingPage: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: Radius.xl)
                 .fill(Color.primaryOffWhite)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: Radius.xl)
                         .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                 )
         )

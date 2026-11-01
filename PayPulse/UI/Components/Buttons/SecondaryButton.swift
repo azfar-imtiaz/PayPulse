@@ -16,7 +16,7 @@ struct SecondaryButton<Content: View>: View {
             action()
         } label: {
             ZStack(alignment: .center) {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: Radius.md)
                     .stroke(style: StrokeStyle(lineWidth: 1))
                     .foregroundStyle(Color.secondary)
                 

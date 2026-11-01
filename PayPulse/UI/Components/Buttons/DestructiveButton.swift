@@ -19,7 +19,7 @@ struct DestructiveButton<Content: View>: View {
             }
         } label: {
             ZStack(alignment: .center) {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: Radius.md)
                     .foregroundStyle(isDisabled ? .gray : Color.accentDeepRed)
                 
                 buttonView
