@@ -34,44 +34,48 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack(spacing: 30) {
-                    // User Information Card
-                    AuthCard(content:
-                                VStack(alignment: .leading, spacing: 20) {
-                        Text("Account Information")
-                            .font(.headingSmall)
-                            .foregroundStyle(Color.secondaryDarkGray)
-                        
-                        VStack(alignment: .leading, spacing: 20) {
-                            KeyValueRow(key: "Name:", value: viewModel.username, keyWidth: 100)
-                            KeyValueRow(key: "Email:", value: viewModel.userEmail, keyWidth: 100)
-                            KeyValueRow(key: "Created on:", value: viewModel.userCreatedOn, keyWidth: 100)
-                            HStack(spacing: 5) {
-                                Text("Gmail connection:")
-                                    .font(.tableKey)
-                                    .foregroundStyle(Color.secondaryDarkGray)
-                                    .frame(width: 100, alignment: .leading)
-                                Image(systemName: viewModel.gmailConnectionStatus ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                    .foregroundStyle(viewModel.gmailConnectionStatus ? Color.green : Color.secondaryDarkGray)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                            }
-                            HStack(spacing: 5) {
-                                Text("Outlook connection:")
-                                    .font(.tableKey)
-                                    .foregroundStyle(Color.secondaryDarkGray)
-                                    .frame(width: 100, alignment: .leading)
-                                Image(systemName: viewModel.outlookConnectionStatus ? "checkmark.circle.fill" : "xmark.circle.fill")
-                                    .foregroundStyle(viewModel.outlookConnectionStatus ? Color.green : Color.secondaryDarkGray)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                VStack(spacing: Spacing.lg) {
+                    SoftCard {
+                        VStack(alignment: .leading, spacing: Spacing.md) {
+                            Text("Account Information")
+                                .font(.headingSmall)
+                                .foregroundStyle(Color.secondaryDarkGray)
+
+                            VStack(alignment: .leading, spacing: 0) {
+                                KeyValueRow(key: "Name", value: viewModel.username, makeValueBold: true, keyOpacity: 0.6)
+                                Divider()
+                                KeyValueRow(key: "Email", value: viewModel.userEmail, makeValueBold: true, keyOpacity: 0.6)
+                                Divider()
+                                KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, makeValueBold: true, keyOpacity: 0.6)
                             }
                         }
-                    })
-                    .background(Color.clear)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: Radius.lg)
-                            .stroke(Color.secondaryDarkGray, lineWidth: 1)
-                    )
-                    .padding()
+                    }
+                    .padding(.horizontal)
+
+                    SoftCard {
+                        VStack(alignment: .leading, spacing: Spacing.md) {
+                            Text("Connected accounts")
+                                .font(.headingSmall)
+                                .foregroundStyle(Color.secondaryDarkGray)
+
+                            VStack(spacing: 0) {
+                                ConnectionStatusRow(
+                                    markText: "G",
+                                    markColor: Color(red: 0.78, green: 0.31, blue: 0.23),
+                                    name: "Gmail",
+                                    isConnected: viewModel.gmailConnectionStatus
+                                )
+                                Divider()
+                                ConnectionStatusRow(
+                                    markText: "O",
+                                    markColor: Color(red: 0.18, green: 0.44, blue: 0.69),
+                                    name: "Outlook",
+                                    isConnected: viewModel.outlookConnectionStatus
+                                )
+                            }
+                        }
+                    }
+                    .padding(.horizontal)
 
                     Spacer()
 
@@ -94,16 +98,16 @@ struct ProfileView: View {
 
                         Spacer()
                     }
-                    
+
                     // Action Buttons
                     VStack(spacing: 16) {
-                        SecondaryButton(
-                            buttonView: Text("Logout"),
+                        SoftButton(
+                            buttonView: Text("Log out"),
                             action: {
                                 showLogoutConfirmation = true
                             }
                         )
-                        
+
                         DestructiveButton(
                             buttonView: Text("Delete Account"),
                             action: {
