@@ -65,13 +65,13 @@ struct SignupView: View {
                 
                 HStack(spacing: 0) {
                     Text("Already have an account? ")
-                        .font(.bodySmall)
+                        .font(.bodyStandard)
                         .foregroundStyle(Color.secondaryDarkGray)
-                    
+
                     TextButton(
                         buttonText: "Sign in!",
                         textColor: Color.accentDeepOrange,
-                        font: .bodySmall,
+                        font: .bodyStandard,
                         action: {
                             toggleAuthView()
                         }
