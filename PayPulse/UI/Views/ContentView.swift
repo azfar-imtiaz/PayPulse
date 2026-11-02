@@ -60,6 +60,8 @@ struct ContentView: View {
 
                 ScrollView {
                     VStack(spacing: 12) {
+                        summaryCard
+
                         // Reserved slot for a future Scan button - inert for now
                         scanSlot
 
@@ -113,6 +115,43 @@ struct ContentView: View {
                 fetchInvoiceCounts()
             }
         }
+    }
+
+    // Retail isn't included yet: ContentView only fetches retail invoice *counts*
+    // on launch, not amounts, so a true combined total needs a backend endpoint
+    // for month-based retail totals before it can be added here.
+    private var summaryCard: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if rentalViewModel.invoicesHaveLoaded {
+                Text(Utils.formatCurrency(Double(currentMonthRentalTotal), currency: "SEK"))
+                    .font(.headingMedium)
+                    .foregroundStyle(Color.accentDeepOrange)
+            } else {
+                Text("-")
+                    .font(.headingMedium)
+                    .foregroundStyle(Color.accentDeepOrange)
+            }
+            Text("This month's rent")
+                .font(.bodyStandard)
+                .foregroundStyle(Color.secondaryDarkGray)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Spacing.xl)
+        .background(
+            RoundedRectangle(cornerRadius: Radius.xl)
+                .fill(Color.primaryOffWhite)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.xl)
+                        .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
+                )
+        )
+    }
+
+    private var currentMonthRentalTotal: Int {
+        rentalViewModel.invoices.values
+            .flatMap { $0 }
+            .filter { $0.isDueInCurrentMonth() }
+            .reduce(0) { $0 + $1.totalAmount }
     }
 
     // Reserved for a future Scan button - intentionally inert, no action wired yet.
