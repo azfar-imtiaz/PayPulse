@@ -158,26 +158,30 @@ struct ContentView: View {
     // Retail isn't included yet for the same reason as the summary card -
     // only counts are fetched for retail today, not full invoice data.
     private var recentActivitySection: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
+        VStack(alignment: .leading, spacing: Spacing.lg) {
             Text("Recent rental invoices")
-                .font(.bodyLarge)
+                .font(.headingSmall)
+                .fontWeight(.semibold)
                 .foregroundStyle(Color.secondaryDarkGray)
                 .padding(.top, Spacing.sm)
 
-            ForEach(recentRentalInvoices, id: \.invoiceID) { invoice in
-                InvoiceListRow(
-                    monthLabel: invoice.getDueMonthName(),
-                    monthColor: .accentDeepOrange,
-                    alignment: .center,
-                    vendor: "Wallenstam",
-                    dueDate: invoice.dueDate,
-                    totalAmount: invoice.totalAmount,
-                    currency: "SEK",
-                    trailingIndicator: .statusBadge,
-                    transitionID: "home_recent_\(invoice.invoiceID)",
-                    namespace: recentActivityNamespace
-                ) {
-                    RentalDetailsView(invoice: invoice)
+            VStack(spacing: Spacing.md) {
+                ForEach(recentRentalInvoices, id: \.invoiceID) { invoice in
+                    InvoiceListRow(
+                        monthLabel: nil,
+                        monthColor: .accentDeepOrange,
+                        alignment: .center,
+                        showMonthGutter: false,
+                        vendor: "Wallenstam",
+                        dueDate: invoice.dueDate,
+                        totalAmount: invoice.totalAmount,
+                        currency: "SEK",
+                        trailingIndicator: .statusBadge,
+                        transitionID: "home_recent_\(invoice.invoiceID)",
+                        namespace: recentActivityNamespace
+                    ) {
+                        RentalDetailsView(invoice: invoice)
+                    }
                 }
             }
         }

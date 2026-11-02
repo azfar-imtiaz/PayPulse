@@ -11,6 +11,7 @@ struct InvoiceListRow<Destination: View>: View {
     let monthLabel: String?
     let monthColor: Color
     let alignment: VerticalAlignment
+    var showMonthGutter: Bool = true
     let vendor: String
     let dueDate: String
     let totalAmount: Int
@@ -27,7 +28,7 @@ struct InvoiceListRow<Destination: View>: View {
                     .font(.headingMedium)
                     .foregroundStyle(monthColor)
                     .frame(width: 70, alignment: .leading)
-            } else {
+            } else if showMonthGutter {
                 Spacer()
                     .frame(width: 70)
             }
