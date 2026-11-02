@@ -36,19 +36,19 @@ struct ProfileView: View {
             ZStack {
                 VStack(spacing: Spacing.xl) {
                     SoftCard {
-                        VStack(alignment: .leading, spacing: Spacing.lg) {
+                        VStack(alignment: .leading, spacing: Spacing.xl) {
                             Text("Account Information")
                                 .font(.headingSmall)
                                 .foregroundStyle(Color.secondaryDarkGray)
 
                             VStack(alignment: .leading, spacing: 0) {
-                                KeyValueRow(key: "Name", value: viewModel.username, makeValueBold: true, keyOpacity: 0.6)
+                                KeyValueRow(key: "Name", value: viewModel.username, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true)
                                     .padding(.vertical, Spacing.sm)
                                 Divider()
-                                KeyValueRow(key: "Email", value: viewModel.userEmail, makeValueBold: true, keyOpacity: 0.6)
+                                KeyValueRow(key: "Email", value: viewModel.userEmail, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true)
                                     .padding(.vertical, Spacing.sm)
                                 Divider()
-                                KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, makeValueBold: true, keyOpacity: 0.6)
+                                KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true)
                                     .padding(.vertical, Spacing.sm)
                             }
                         }

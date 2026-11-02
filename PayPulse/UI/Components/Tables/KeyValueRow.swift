@@ -16,6 +16,7 @@ struct KeyValueRow: View {
     var showCopyButton: Bool = false
     var copyButtonAction: (() -> Void)? = nil
     var keyOpacity: CGFloat = 1.0
+    var useLargeFont: Bool = false
 
     var body: some View {
         HStack(spacing: 5) {
@@ -26,7 +27,7 @@ struct KeyValueRow: View {
                     Text(key).frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-                .font(isHeader ? .tableHeader : .tableKey)
+                .font(isHeader ? .tableHeader : (useLargeFont ? .bodyLarge : .tableKey))
                 .foregroundStyle(Color.secondaryDarkGray)
                 .opacity(keyOpacity)
 
@@ -49,14 +50,16 @@ struct KeyValueRow: View {
                     .font(.tableHeader)
             } else if makeValueBold {
                 Text(value)
-                    .font(.tableValue)
+                    .font(useLargeFont ? .bodyLarge : .tableValue)
                     .bold()
             } else {
                 Text(value)
-                    .font(.tableValue)
+                    .font(useLargeFont ? .bodyLarge : .tableValue)
             }
         }
         .foregroundStyle(Color.secondaryDarkGray)
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
 }
