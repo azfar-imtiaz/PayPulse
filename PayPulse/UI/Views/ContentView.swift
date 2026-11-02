@@ -59,32 +59,38 @@ struct ContentView: View {
                 .padding([.leading, .bottom])
 
                 ScrollView {
-                    LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 16),
-                        GridItem(.flexible(), spacing: 16)
-                    ], spacing: 20) {
-                        InvoiceCategoryCard(
-                            iconName: "house",
-                            iconTitle: "Rental Invoices",
+                    VStack(spacing: 12) {
+                        // Reserved slot for a future Scan button - inert for now
+                        scanSlot
+
+                        CategorySummaryRow(
+                            iconColor: Color.accentDeepOrange,
+                            icon: {
+                                Icon(name: "house", size: 24, color: .accentDeepOrange)
+                            },
+                            title: "Rental Invoices",
+                            count: rentalViewModel.invoicesHaveLoaded
+                                ? rentalViewModel.invoices.values.flatMap { $0 }.count
+                                : nil,
                             destination: RentalLandingPage(
                                 invoiceService: invoiceService,
                                 viewModel: rentalViewModel
-                            ),
-                            invoiceCount: rentalViewModel.invoicesHaveLoaded
-                                ? rentalViewModel.invoices.values.flatMap { $0 }.count
-                                : nil
+                            )
                         )
 
-                        InvoiceCategoryCard(
-                            iconName: "file-spreadsheet",
-                            iconTitle: "Retail Invoices",
+                        CategorySummaryRow(
+                            iconColor: Color.accentDeepRed,
+                            icon: {
+                                Icon(name: "file-spreadsheet", size: 24, color: .accentDeepRed)
+                            },
+                            title: "Retail Invoices",
+                            count: retailViewModel.countsHaveLoaded
+                                ? retailViewModel.getTotalCount()
+                                : nil,
                             destination: RetailLandingPage(
                                 invoiceService: invoiceService,
                                 viewModel: retailViewModel
-                            ),
-                            invoiceCount: retailViewModel.countsHaveLoaded
-                                ? retailViewModel.getTotalCount()
-                                : nil
+                            )
                         )
                     }
                     .padding(.horizontal)
@@ -107,6 +113,47 @@ struct ContentView: View {
                 fetchInvoiceCounts()
             }
         }
+    }
+
+    // Reserved for a future Scan button - intentionally inert, no action wired yet.
+    private var scanSlot: some View {
+        HStack(spacing: 16) {
+            ZStack {
+                Circle()
+                    .fill(Color.disabledGray.opacity(0.15))
+                    .frame(width: 52, height: 52)
+                Image(systemName: "camera.fill")
+                    .font(.headingCompact)
+                    .foregroundStyle(Color.disabledGray)
+            }
+
+            Text("Scan Invoice")
+                .font(.bodyLarge)
+                .foregroundStyle(Color.disabledGray)
+
+            Spacer()
+
+            Text("Soon")
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.disabledGray)
+                .padding(.horizontal, Spacing.sm)
+                .padding(.vertical, Spacing.xs)
+                .background(
+                    Capsule()
+                        .fill(Color.disabledGray.opacity(0.15))
+                )
+        }
+        .padding(.horizontal, Spacing.lg)
+        .padding(.vertical, Spacing.lg)
+        .background(
+            RoundedRectangle(cornerRadius: Radius.xl)
+                .fill(Color.primaryOffWhite)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.xl)
+                        .stroke(Color.disabledGray.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
+                )
+        )
     }
 
     private func fetchInvoiceCounts() {
