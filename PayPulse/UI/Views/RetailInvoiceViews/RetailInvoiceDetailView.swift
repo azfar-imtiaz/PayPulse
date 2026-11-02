@@ -146,6 +146,7 @@ struct RetailInvoiceDetailView: View {
             }
         }
         .alert("Delete Invoice", isPresented: $showDeleteConfirmation) {
+            Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
                 UINotificationFeedbackGenerator().notificationOccurred(.warning)
                 Task {
@@ -170,7 +171,6 @@ struct RetailInvoiceDetailView: View {
                     }
                 }
             }
-            Button("Cancel", role: .cancel) {}
         } message: {
             Text("This will permanently delete the invoice from \(invoice.vendorName). This action cannot be undone.")
         }
