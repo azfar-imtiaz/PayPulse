@@ -15,6 +15,7 @@ struct KeyValueRow: View {
     var makeValueBold: Bool = false
     var showCopyButton: Bool = false
     var copyButtonAction: (() -> Void)? = nil
+    var keyOpacity: CGFloat = 1.0
 
     var body: some View {
         HStack(spacing: 5) {
@@ -27,6 +28,7 @@ struct KeyValueRow: View {
             }
                 .font(isHeader ? .tableHeader : .tableKey)
                 .foregroundStyle(Color.secondaryDarkGray)
+                .opacity(keyOpacity)
 
             if showCopyButton, let action = copyButtonAction {
                 HStack(spacing: 5) {
