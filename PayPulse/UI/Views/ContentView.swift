@@ -130,9 +130,9 @@ struct ContentView: View {
                         .font(.headingMedium)
                         .foregroundStyle(Color.accentDeepOrange)
                 } else {
-                    Text("Invoice not available yet")
-                        .font(.headingMedium)
-                        .foregroundStyle(Color.accentDeepOrange)
+                    Text("No invoice yet this month")
+                        .font(.bodyLarge)
+                        .foregroundStyle(Color.secondaryDarkGray)
                 }
             } else {
                 Text("-")
