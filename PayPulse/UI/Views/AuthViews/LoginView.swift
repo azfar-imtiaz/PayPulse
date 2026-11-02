@@ -58,13 +58,13 @@ struct LoginView: View {
                 
                 HStack(spacing: 0) {
                     Text("No account? Let's ")
-                        .font(.bodySmall)
+                        .font(.bodyStandard)
                         .foregroundStyle(Color.secondaryDarkGray)
-                    
+
                     TextButton(
                         buttonText: "Create one!",
                         textColor: Color.accentDeepOrange,
-                        font: .bodySmall,
+                        font: .bodyStandard,
                         action: {
                             toggleAuthView()
                         }

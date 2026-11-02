@@ -22,12 +22,14 @@ struct RentalDetailsView: View {
                 Text("Invoice ID")
                     .font(.bodyLarge)
                     .foregroundStyle(Color.secondaryDarkGray)
-                
+                    .opacity(0.6)
+
                 Text(invoice.invoiceID)
                     .font(.bodyStandard)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .foregroundStyle(Color.secondaryDarkGray)
+                    .opacity(0.6)
             }
             .padding([.horizontal, .top])
             

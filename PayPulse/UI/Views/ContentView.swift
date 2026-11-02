@@ -16,6 +16,7 @@ struct ContentView: View {
 
     @StateObject private var rentalViewModel : RentalInvoicesViewModel
     @StateObject private var retailViewModel : RetailInvoicesViewModel
+    @Namespace private var recentActivityNamespace
 
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.colorScheme) private var colorScheme
@@ -52,40 +53,50 @@ struct ContentView: View {
                 HStack {
                     Text("All your invoices, one place.")
                         .font(.headingStandard)
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(.gray)
 
                     Spacer()
                 }
                 .padding([.leading, .bottom])
 
                 ScrollView {
-                    LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 16),
-                        GridItem(.flexible(), spacing: 16)
-                    ], spacing: 20) {
-                        InvoiceCategoryCard(
-                            iconName: "house",
-                            iconTitle: "Rental Invoices",
+                    VStack(spacing: 12) {
+                        summaryCard
+
+                        CategorySummaryRow(
+                            iconColor: Color.accentDeepOrange,
+                            icon: {
+                                Icon(name: "house", size: 24, color: .accentDeepOrange)
+                            },
+                            title: "Rental Invoices",
+                            count: rentalViewModel.invoicesHaveLoaded
+                                ? rentalViewModel.invoices.values.flatMap { $0 }.count
+                                : nil,
                             destination: RentalLandingPage(
                                 invoiceService: invoiceService,
                                 viewModel: rentalViewModel
-                            ),
-                            invoiceCount: rentalViewModel.invoicesHaveLoaded
-                                ? rentalViewModel.invoices.values.flatMap { $0 }.count
-                                : nil
+                            )
                         )
 
-                        InvoiceCategoryCard(
-                            iconName: "file-spreadsheet",
-                            iconTitle: "Retail Invoices",
+                        CategorySummaryRow(
+                            iconColor: Color.accentDeepRed,
+                            icon: {
+                                Icon(name: "file-spreadsheet", size: 24, color: .accentDeepRed)
+                            },
+                            title: "Retail Invoices",
+                            count: retailViewModel.countsHaveLoaded
+                                ? retailViewModel.getTotalCount()
+                                : nil,
                             destination: RetailLandingPage(
                                 invoiceService: invoiceService,
                                 viewModel: retailViewModel
-                            ),
-                            invoiceCount: retailViewModel.countsHaveLoaded
-                                ? retailViewModel.getTotalCount()
-                                : nil
+                            )
                         )
+
+                        if !recentRentalInvoices.isEmpty {
+                            recentActivitySection
+                                .padding(.top, Spacing.md)
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.vertical, Spacing.xl)
@@ -107,6 +118,98 @@ struct ContentView: View {
                 fetchInvoiceCounts()
             }
         }
+    }
+
+    // Retail isn't included yet: ContentView only fetches retail invoice *counts*
+    // on launch, not amounts, so a true combined total needs a backend endpoint
+    // for month-based retail totals before it can be added here.
+    private var summaryCard: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if rentalViewModel.invoicesHaveLoaded {
+                if currentMonthRentalTotal > 0 {
+                    Text(Utils.formatCurrency(Double(currentMonthRentalTotal), currency: "SEK"))
+                        .font(.headingMedium)
+                        .foregroundStyle(Color.accentDeepOrange)
+                } else {
+                    Text("No invoice yet this month")
+                        .font(.bodyLarge)
+                        .foregroundStyle(Color.secondaryDarkGray)
+                }
+            } else {
+                Text("-")
+                    .font(.headingMedium)
+                    .foregroundStyle(Color.accentDeepOrange)
+            }
+            Text("This month's rent")
+                .font(.bodyStandard)
+                .foregroundStyle(Color.secondaryDarkGray)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Spacing.xl)
+        .background(
+            RoundedRectangle(cornerRadius: Radius.xl)
+                .fill(Color.primaryOffWhite)
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.xl)
+                        .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
+                )
+        )
+    }
+
+    // Retail isn't included yet for the same reason as the summary card -
+    // only counts are fetched for retail today, not full invoice data.
+    private var recentActivitySection: some View {
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            Text("Recent rental invoices")
+                .font(.headingSmall)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.secondaryDarkGray)
+                .padding(.top, Spacing.sm)
+
+            VStack(spacing: Spacing.md) {
+                ForEach(recentRentalInvoices, id: \.invoiceID) { invoice in
+                    InvoiceListRow(
+                        monthLabel: nil,
+                        monthColor: .accentDeepOrange,
+                        alignment: .center,
+                        showMonthGutter: false,
+                        cardBorderOpacity: 0.15,
+                        vendor: "Wallenstam",
+                        dueDate: invoice.dueDate,
+                        totalAmount: invoice.totalAmount,
+                        currency: "SEK",
+                        trailingIndicator: .statusBadge,
+                        transitionID: "home_recent_\(invoice.invoiceID)",
+                        namespace: recentActivityNamespace
+                    ) {
+                        RentalDetailsView(invoice: invoice)
+                    }
+                }
+            }
+        }
+    }
+
+    private var recentRentalInvoices: [RentalInvoice] {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+
+        return rentalViewModel.invoices.values
+            .flatMap { $0 }
+            .sorted { lhs, rhs in
+                let lhsDate = formatter.date(from: lhs.dueDate) ?? .distantPast
+                let rhsDate = formatter.date(from: rhs.dueDate) ?? .distantPast
+                return lhsDate > rhsDate
+            }
+            .prefix(5)
+            .map { $0 }
+    }
+
+    private var currentMonthRentalTotal: Int {
+        rentalViewModel.invoices.values
+            .flatMap { $0 }
+            .filter { $0.isDueInCurrentMonth() }
+            .reduce(0) { $0 + $1.totalAmount }
     }
 
     private func fetchInvoiceCounts() {

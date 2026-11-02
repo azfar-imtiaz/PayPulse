@@ -14,36 +14,39 @@ struct RetailBaseInvoiceDetailsView: View {
     @Binding var toastMessage: String
 
     var body: some View {
-        InvoiceDetailsContainer {
-            KeyValueRow(
-                key: "Category",
-                value: subType.displayName
-            )
-
-            Divider()
-
-            KeyValueRow(
-                key: "Vendor",
-                value: invoice.vendorName
-            )
-
-            Divider()
-
-            KeyValueRow(
-                key: "Invoice Date",
-                value: invoice.getFormattedDate()
-            )
-
-            Divider()
-
-            KeyValueRow(
-                key: "Total Amount",
-                value: invoice.getFormattedAmount(),
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            ReceiptHeroTotal(
+                amount: invoice.totalAmount,
+                currency: invoice.displayCurrency,
                 showCopyButton: true,
                 copyButtonAction: {
                     copyTextToClipboard(text: invoice.getFormattedAmount())
                 }
             )
+
+            InvoiceDetailsContainer {
+                KeyValueRow(
+                    key: "Category",
+                    value: subType.displayName,
+                    keyOpacity: 0.6
+                )
+
+                Divider()
+
+                KeyValueRow(
+                    key: "Vendor",
+                    value: invoice.vendorName,
+                    keyOpacity: 0.6
+                )
+
+                Divider()
+
+                KeyValueRow(
+                    key: "Invoice Date",
+                    value: invoice.getFormattedDate(),
+                    keyOpacity: 0.6
+                )
+            }
         }
     }
 

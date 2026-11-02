@@ -40,9 +40,15 @@ struct RetailLandingPage: View {
                             VStack(spacing: 12) {
                                 summaryCard
                                 ForEach(getSortedSubTypes(), id: \.0) { subType, count in
-                                    RetailCategoryRow(
-                                        subType: subType,
-                                        invoiceCount: count,
+                                    CategorySummaryRow(
+                                        iconColor: subType.color,
+                                        icon: {
+                                            Image(systemName: subType.sfSymbolName)
+                                                .font(.headingCompact)
+                                                .foregroundStyle(subType.color)
+                                        },
+                                        title: subType.displayName,
+                                        count: count,
                                         destination: RetailInvoicesListView(
                                             subType: subType,
                                             invoiceService: invoiceService

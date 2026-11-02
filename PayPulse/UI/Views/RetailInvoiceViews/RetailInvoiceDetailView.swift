@@ -37,12 +37,14 @@ struct RetailInvoiceDetailView: View {
                     Text("Invoice ID")
                         .font(.bodyLarge)
                         .foregroundStyle(Color.secondaryDarkGray)
+                        .opacity(0.6)
 
                     Text(invoice.invoiceID)
                         .font(.bodyStandard)
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                         .foregroundStyle(Color.secondaryDarkGray)
+                        .opacity(0.6)
                 }
                 .padding(.horizontal)
 
@@ -144,6 +146,7 @@ struct RetailInvoiceDetailView: View {
             }
         }
         .alert("Delete Invoice", isPresented: $showDeleteConfirmation) {
+            Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
                 UINotificationFeedbackGenerator().notificationOccurred(.warning)
                 Task {
@@ -168,7 +171,6 @@ struct RetailInvoiceDetailView: View {
                     }
                 }
             }
-            Button("Cancel", role: .cancel) {}
         } message: {
             Text("This will permanently delete the invoice from \(invoice.vendorName). This action cannot be undone.")
         }

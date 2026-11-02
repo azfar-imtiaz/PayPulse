@@ -19,7 +19,7 @@ struct LabeledTextField: View {
             Text(labelText)
                 .foregroundStyle(Color.secondaryDarkGray)
                 .font(.formLabel)
-                .padding(.leading, Spacing.md)
+                .padding(.leading, Spacing.xxl)
             
             InputTextField(text: $text, placeholderText: placeholderText, isEmail: isEmail, isSecure: isSecure)
         }
