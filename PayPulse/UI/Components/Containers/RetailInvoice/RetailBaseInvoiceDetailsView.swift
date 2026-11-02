@@ -49,6 +49,7 @@ struct RetailBaseInvoiceDetailsView: View {
 
     private func copyTextToClipboard(text: String) {
         UIPasteboard.general.string = text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         toastMessage = "Total amount copied!"
         showToast = true
     }

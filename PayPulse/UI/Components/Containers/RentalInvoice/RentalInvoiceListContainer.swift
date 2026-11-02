@@ -12,7 +12,9 @@ struct RentalInvoiceListContainer: View {
     @Binding var selectedYear : Int
     let vendor                : String
     let yearlyInvoices        : OrderedDictionary<Int, [RentalInvoice]>
-    
+    var refreshAction         : () async -> Void = {}
+    @Namespace private var zoomNamespace
+
     var body: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: Radius.pill)
@@ -28,7 +30,7 @@ struct RentalInvoiceListContainer: View {
 
                 ScrollView(.vertical, showsIndicators: false) {
                     if let invoices = yearlyInvoices[selectedYear], !invoices.isEmpty {
-                        ForEach(invoices) { invoice in
+                        ForEach(Array(invoices.enumerated()), id: \.element.id) { index, invoice in
                             InvoiceListRow(
                                 monthLabel: invoice.getDueMonthName(),
                                 monthColor: .accentDeepOrange,
@@ -37,11 +39,15 @@ struct RentalInvoiceListContainer: View {
                                 dueDate: invoice.dueDate,
                                 totalAmount: invoice.totalAmount,
                                 currency: "SEK",
-                                trailingIndicator: .statusBadge
+                                trailingIndicator: .statusBadge,
+                                transitionID: invoice.invoiceID,
+                                namespace: zoomNamespace
                             ) {
                                 RentalDetailsView(invoice: invoice)
                             }
                             .padding([.horizontal, .top])
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            .animation(.easeOut.delay(Double(index) * 0.03), value: selectedYear)
                         }
                     } else {
                         NoInvoicesForYearView(year: selectedYear)
@@ -49,6 +55,9 @@ struct RentalInvoiceListContainer: View {
                 }
                 .id(selectedYear)
                 .transition(.opacity)
+                .refreshable {
+                    await refreshAction()
+                }
             }
         }
     }

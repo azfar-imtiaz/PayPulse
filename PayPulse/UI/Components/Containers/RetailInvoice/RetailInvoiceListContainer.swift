@@ -12,6 +12,8 @@ struct RetailInvoiceListContainer: View {
     @Binding var selectedYear: Int
     let subType: RetailInvoiceSubType
     let viewModel: RetailInvoicesViewModel
+    var refreshAction: () async -> Void = {}
+    @Namespace private var zoomNamespace
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -41,11 +43,15 @@ struct RetailInvoiceListContainer: View {
                                 dueDate: invoice.getFormattedDate(),
                                 totalAmount: Int(invoice.totalAmount),
                                 currency: invoice.displayCurrency,
-                                trailingIndicator: .dot(subType.color)
+                                trailingIndicator: .dot(subType.color),
+                                transitionID: invoice.invoiceID,
+                                namespace: zoomNamespace
                             ) {
                                 RetailInvoiceDetailView(invoice: invoice, subType: subType, retailViewModel: viewModel)
                             }
                             .padding([.horizontal, .top])
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                            .animation(.easeOut.delay(Double(index) * 0.03), value: selectedYear)
                         }
                     } else {
                         NoInvoicesForYearView(year: selectedYear)
@@ -53,6 +59,9 @@ struct RetailInvoiceListContainer: View {
                 }
                 .id(selectedYear)
                 .transition(.opacity)
+                .refreshable {
+                    await refreshAction()
+                }
             }
         }
     }

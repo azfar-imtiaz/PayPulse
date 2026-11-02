@@ -30,6 +30,7 @@ struct HeaderYears: View {
             .padding(.horizontal, Spacing.md)
             .scrollTargetBehavior(.viewAligned)
         }
+        .sensoryFeedback(.selection, trigger: selectedYear)
     }
     
     private func scrollItemToCenter(selectedYear: Int, years: [Int], in proxy: ScrollViewProxy) {

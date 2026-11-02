@@ -38,7 +38,10 @@ struct RentalLandingPage: View {
                         RentalListView(
                             viewModel: viewModel,
                             selectedYear: $selectedYear,
-                            showSpinner: $showSpinner
+                            showSpinner: $showSpinner,
+                            refreshAction: {
+                                ingestLatestInvoice()
+                            }
                         ) {
                             ingestInvoicesWithPolling()
                         }
@@ -58,6 +61,7 @@ struct RentalLandingPage: View {
                         }
                     }
                 }
+                .sensoryFeedback(.selection, trigger: selectedTab)
                 .onAppear {
                     loadingText = "Loading invoices..."
                     if !viewModel.invoicesHaveLoaded {

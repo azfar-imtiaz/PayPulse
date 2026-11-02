@@ -145,6 +145,7 @@ struct RetailInvoiceDetailView: View {
         }
         .alert("Delete Invoice", isPresented: $showDeleteConfirmation) {
             Button("Delete", role: .destructive) {
+                UINotificationFeedbackGenerator().notificationOccurred(.warning)
                 Task {
                     do {
                         try await retailViewModel.deleteRetailInvoice(
