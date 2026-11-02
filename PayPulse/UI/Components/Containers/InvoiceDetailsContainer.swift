@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct InvoiceDetailsContainer<Content: View>: View {
+    var borderOpacity: CGFloat = 1.0
     @ViewBuilder let invoiceDetailsView: Content
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             invoiceDetailsView
         }
         .padding()
         .background(
-            RectangleRoundedCorners()
+            RectangleRoundedCorners(color: Color.secondaryDarkGray.opacity(borderOpacity))
         )
     }
 }

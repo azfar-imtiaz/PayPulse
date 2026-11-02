@@ -172,6 +172,7 @@ struct ContentView: View {
                         monthColor: .accentDeepOrange,
                         alignment: .center,
                         showMonthGutter: false,
+                        cardBorderOpacity: 0.15,
                         vendor: "Wallenstam",
                         dueDate: invoice.dueDate,
                         totalAmount: invoice.totalAmount,
