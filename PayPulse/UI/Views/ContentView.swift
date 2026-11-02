@@ -95,6 +95,7 @@ struct ContentView: View {
 
                         if !recentRentalInvoices.isEmpty {
                             recentActivitySection
+                                .padding(.top, Spacing.md)
                         }
                     }
                     .padding(.horizontal)
