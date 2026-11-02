@@ -16,6 +16,7 @@ struct ContentView: View {
 
     @StateObject private var rentalViewModel : RentalInvoicesViewModel
     @StateObject private var retailViewModel : RetailInvoicesViewModel
+    @Namespace private var recentActivityNamespace
 
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.colorScheme) private var colorScheme
@@ -94,6 +95,10 @@ struct ContentView: View {
                                 viewModel: retailViewModel
                             )
                         )
+
+                        if !recentRentalInvoices.isEmpty {
+                            recentActivitySection
+                        }
                     }
                     .padding(.horizontal)
                     .padding(.vertical, Spacing.xl)
@@ -145,6 +150,50 @@ struct ContentView: View {
                         .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                 )
         )
+    }
+
+    // Retail isn't included yet for the same reason as the summary card -
+    // only counts are fetched for retail today, not full invoice data.
+    private var recentActivitySection: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            Text("Recent")
+                .font(.headingStandard)
+                .foregroundStyle(Color.secondaryDarkGray)
+                .padding(.top, Spacing.sm)
+
+            ForEach(recentRentalInvoices, id: \.invoiceID) { invoice in
+                InvoiceListRow(
+                    monthLabel: invoice.getDueMonthName(),
+                    monthColor: .accentDeepOrange,
+                    alignment: .center,
+                    vendor: "Wallenstam",
+                    dueDate: invoice.dueDate,
+                    totalAmount: invoice.totalAmount,
+                    currency: "SEK",
+                    trailingIndicator: .statusBadge,
+                    transitionID: "home_recent_\(invoice.invoiceID)",
+                    namespace: recentActivityNamespace
+                ) {
+                    RentalDetailsView(invoice: invoice)
+                }
+            }
+        }
+    }
+
+    private var recentRentalInvoices: [RentalInvoice] {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd-MM-yyyy"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+
+        return rentalViewModel.invoices.values
+            .flatMap { $0 }
+            .sorted { lhs, rhs in
+                let lhsDate = formatter.date(from: lhs.dueDate) ?? .distantPast
+                let rhsDate = formatter.date(from: rhs.dueDate) ?? .distantPast
+                return lhsDate > rhsDate
+            }
+            .prefix(5)
+            .map { $0 }
     }
 
     private var currentMonthRentalTotal: Int {
