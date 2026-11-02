@@ -15,31 +15,10 @@ struct PaymentDetailsView: View {
     @Binding var showTotalAmountToast: Bool
     
     var body: some View {
-        InvoiceDetailsContainer {
-            KeyValueRow(
-                key: "Due Date",
-                value: dueDate
-            )
-
-            Divider()
-
-            KeyValueRow(
-                key: "OCR Reference",
-                value: ocrRef,
-                showCopyButton: true,
-                copyButtonAction: {
-                    copyTextToClipboard(
-                        text: ocrRef,
-                        isOCR: true
-                    )
-                }
-            )
-
-            Divider()
-
-            KeyValueRow(
-                key: "Total Amount",
-                value: Utils.formatCurrency(Double(totalAmount), currency: "SEK"),
+        VStack(alignment: .leading, spacing: Spacing.lg) {
+            ReceiptHeroTotal(
+                amount: Double(totalAmount),
+                currency: "SEK",
                 showCopyButton: true,
                 copyButtonAction: {
                     copyTextToClipboard(
@@ -48,6 +27,29 @@ struct PaymentDetailsView: View {
                     )
                 }
             )
+
+            InvoiceDetailsContainer {
+                KeyValueRow(
+                    key: "Due Date",
+                    value: dueDate,
+                    keyOpacity: 0.6
+                )
+
+                Divider()
+
+                KeyValueRow(
+                    key: "OCR Reference",
+                    value: ocrRef,
+                    showCopyButton: true,
+                    copyButtonAction: {
+                        copyTextToClipboard(
+                            text: ocrRef,
+                            isOCR: true
+                        )
+                    },
+                    keyOpacity: 0.6
+                )
+            }
         }
     }
     

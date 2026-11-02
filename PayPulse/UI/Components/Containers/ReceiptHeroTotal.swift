@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ReceiptHeroTotal: View {
-    let amount: Int
+    let amount: Double
     let currency: String
     var showCopyButton: Bool = false
     var copyButtonAction: (() -> Void)? = nil
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: Spacing.sm) {
-            Text(Utils.formatCurrency(Double(amount), currency: currency))
+            Text(Utils.formatCurrency(amount, currency: currency))
                 .font(.headingLarge)
                 .foregroundStyle(Color.accentDeepOrange)
                 .monospacedDigit()
@@ -28,6 +28,6 @@ struct ReceiptHeroTotal: View {
 }
 
 #Preview {
-    ReceiptHeroTotal(amount: 12500, currency: "SEK", showCopyButton: true, copyButtonAction: {})
+    ReceiptHeroTotal(amount: 12500.0, currency: "SEK", showCopyButton: true, copyButtonAction: {})
         .padding()
 }
