@@ -63,9 +63,6 @@ struct ContentView: View {
                     VStack(spacing: 12) {
                         summaryCard
 
-                        // Reserved slot for a future Scan button - inert for now
-                        scanSlot
-
                         CategorySummaryRow(
                             iconColor: Color.accentDeepOrange,
                             icon: {
@@ -128,9 +125,15 @@ struct ContentView: View {
     private var summaryCard: some View {
         VStack(alignment: .leading, spacing: 4) {
             if rentalViewModel.invoicesHaveLoaded {
-                Text(Utils.formatCurrency(Double(currentMonthRentalTotal), currency: "SEK"))
-                    .font(.headingMedium)
-                    .foregroundStyle(Color.accentDeepOrange)
+                if currentMonthRentalTotal > 0 {
+                    Text(Utils.formatCurrency(Double(currentMonthRentalTotal), currency: "SEK"))
+                        .font(.headingMedium)
+                        .foregroundStyle(Color.accentDeepOrange)
+                } else {
+                    Text("Invoice not available yet")
+                        .font(.headingMedium)
+                        .foregroundStyle(Color.accentDeepOrange)
+                }
             } else {
                 Text("-")
                     .font(.headingMedium)
@@ -156,8 +159,8 @@ struct ContentView: View {
     // only counts are fetched for retail today, not full invoice data.
     private var recentActivitySection: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            Text("Recent")
-                .font(.headingStandard)
+            Text("Recent rental invoices")
+                .font(.bodyLarge)
                 .foregroundStyle(Color.secondaryDarkGray)
                 .padding(.top, Spacing.sm)
 
@@ -201,47 +204,6 @@ struct ContentView: View {
             .flatMap { $0 }
             .filter { $0.isDueInCurrentMonth() }
             .reduce(0) { $0 + $1.totalAmount }
-    }
-
-    // Reserved for a future Scan button - intentionally inert, no action wired yet.
-    private var scanSlot: some View {
-        HStack(spacing: 16) {
-            ZStack {
-                Circle()
-                    .fill(Color.disabledGray.opacity(0.15))
-                    .frame(width: 52, height: 52)
-                Image(systemName: "camera.fill")
-                    .font(.headingCompact)
-                    .foregroundStyle(Color.disabledGray)
-            }
-
-            Text("Scan Invoice")
-                .font(.bodyLarge)
-                .foregroundStyle(Color.disabledGray)
-
-            Spacer()
-
-            Text("Soon")
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.disabledGray)
-                .padding(.horizontal, Spacing.sm)
-                .padding(.vertical, Spacing.xs)
-                .background(
-                    Capsule()
-                        .fill(Color.disabledGray.opacity(0.15))
-                )
-        }
-        .padding(.horizontal, Spacing.lg)
-        .padding(.vertical, Spacing.lg)
-        .background(
-            RoundedRectangle(cornerRadius: Radius.xl)
-                .fill(Color.primaryOffWhite)
-                .overlay(
-                    RoundedRectangle(cornerRadius: Radius.xl)
-                        .stroke(Color.disabledGray.opacity(0.3), style: StrokeStyle(lineWidth: 1, dash: [4, 4]))
-                )
-        )
     }
 
     private func fetchInvoiceCounts() {
