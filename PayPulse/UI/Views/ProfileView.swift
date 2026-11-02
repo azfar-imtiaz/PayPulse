@@ -42,13 +42,13 @@ struct ProfileView: View {
                                 .foregroundStyle(Color.secondaryDarkGray)
 
                             VStack(alignment: .leading, spacing: 0) {
-                                KeyValueRow(key: "Name", value: viewModel.username, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true)
+                                KeyValueRow(key: "Name", value: viewModel.username, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
                                     .padding(.vertical, Spacing.sm)
                                 Divider()
-                                KeyValueRow(key: "Email", value: viewModel.userEmail, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true)
+                                KeyValueRow(key: "Email", value: viewModel.userEmail, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
                                     .padding(.vertical, Spacing.sm)
                                 Divider()
-                                KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true)
+                                KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
                                     .padding(.vertical, Spacing.sm)
                             }
                         }

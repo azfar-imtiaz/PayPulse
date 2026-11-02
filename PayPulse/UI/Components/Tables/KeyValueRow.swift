@@ -17,6 +17,7 @@ struct KeyValueRow: View {
     var copyButtonAction: (() -> Void)? = nil
     var keyOpacity: CGFloat = 1.0
     var useLargeFont: Bool = false
+    var allowValueShrink: Bool = true
 
     var body: some View {
         HStack(spacing: 5) {
@@ -59,7 +60,7 @@ struct KeyValueRow: View {
         }
         .foregroundStyle(Color.secondaryDarkGray)
         .lineLimit(1)
-        .minimumScaleFactor(0.7)
+        .minimumScaleFactor(allowValueShrink ? 0.7 : 1.0)
         .frame(maxWidth: .infinity, alignment: .trailing)
     }
 }
