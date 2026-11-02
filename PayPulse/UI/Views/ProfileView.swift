@@ -34,26 +34,29 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack(spacing: Spacing.lg) {
+                VStack(spacing: Spacing.xl) {
                     SoftCard {
-                        VStack(alignment: .leading, spacing: Spacing.md) {
+                        VStack(alignment: .leading, spacing: Spacing.lg) {
                             Text("Account Information")
                                 .font(.headingSmall)
                                 .foregroundStyle(Color.secondaryDarkGray)
 
                             VStack(alignment: .leading, spacing: 0) {
                                 KeyValueRow(key: "Name", value: viewModel.username, makeValueBold: true, keyOpacity: 0.6)
+                                    .padding(.vertical, Spacing.sm)
                                 Divider()
                                 KeyValueRow(key: "Email", value: viewModel.userEmail, makeValueBold: true, keyOpacity: 0.6)
+                                    .padding(.vertical, Spacing.sm)
                                 Divider()
                                 KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, makeValueBold: true, keyOpacity: 0.6)
+                                    .padding(.vertical, Spacing.sm)
                             }
                         }
                     }
                     .padding(.horizontal)
 
                     SoftCard {
-                        VStack(alignment: .leading, spacing: Spacing.md) {
+                        VStack(alignment: .leading, spacing: Spacing.lg) {
                             Text("Connected accounts")
                                 .font(.headingSmall)
                                 .foregroundStyle(Color.secondaryDarkGray)

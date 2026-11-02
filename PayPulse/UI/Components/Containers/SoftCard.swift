@@ -14,7 +14,7 @@ struct SoftCard<Content: View>: View {
         VStack(alignment: .leading, spacing: 0) {
             content
         }
-        .padding(Spacing.lg)
+        .padding(Spacing.xl)
         .background(
             RoundedRectangle(cornerRadius: Radius.xl)
                 .fill(Color.primaryOffWhite)

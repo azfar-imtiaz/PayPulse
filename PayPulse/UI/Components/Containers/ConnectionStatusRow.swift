@@ -50,7 +50,7 @@ struct ConnectionStatusRow: View {
                     .fill((isConnected ? Color.green : Color.secondaryDarkGray).opacity(0.12))
             )
         }
-        .padding(.vertical, Spacing.sm)
+        .padding(.vertical, Spacing.md)
     }
 }
 
