@@ -35,89 +35,93 @@ struct ProfileView: View {
         NavigationStack {
             ZStack {
                 VStack(spacing: Spacing.xl) {
-                    SoftCard {
-                        VStack(alignment: .leading, spacing: Spacing.xl) {
-                            Text("Account Information")
-                                .font(.headingSmall)
-                                .foregroundStyle(Color.secondaryDarkGray)
+                    if viewModel.hasLoadedUserInfo {
+                        SoftCard {
+                            VStack(alignment: .leading, spacing: Spacing.xl) {
+                                Text("Account Information")
+                                    .font(.headingSmall)
+                                    .foregroundStyle(Color.secondaryDarkGray)
 
-                            VStack(alignment: .leading, spacing: 0) {
-                                KeyValueRow(key: "Name", value: viewModel.username, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
-                                    .padding(.vertical, Spacing.sm)
-                                Divider()
-                                KeyValueRow(key: "Email", value: viewModel.userEmail, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
-                                    .padding(.vertical, Spacing.sm)
-                                Divider()
-                                KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
-                                    .padding(.vertical, Spacing.sm)
+                                VStack(alignment: .leading, spacing: 0) {
+                                    KeyValueRow(key: "Name", value: viewModel.username, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
+                                        .padding(.vertical, Spacing.sm)
+                                    Divider()
+                                    KeyValueRow(key: "Email", value: viewModel.userEmail, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
+                                        .padding(.vertical, Spacing.sm)
+                                    Divider()
+                                    KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
+                                        .padding(.vertical, Spacing.sm)
+                                }
                             }
                         }
-                    }
-                    .padding(.horizontal)
+                        .padding(.horizontal)
 
-                    SoftCard {
-                        VStack(alignment: .leading, spacing: Spacing.lg) {
-                            Text("Connected accounts")
-                                .font(.headingSmall)
-                                .foregroundStyle(Color.secondaryDarkGray)
+                        SoftCard {
+                            VStack(alignment: .leading, spacing: Spacing.lg) {
+                                Text("Connected accounts")
+                                    .font(.headingSmall)
+                                    .foregroundStyle(Color.secondaryDarkGray)
 
-                            VStack(spacing: 0) {
-                                ConnectionStatusRow(
-                                    markText: "G",
-                                    markColor: Color(red: 0.78, green: 0.31, blue: 0.23),
-                                    name: "Gmail",
-                                    isConnected: viewModel.gmailConnectionStatus
-                                )
-                                Divider()
-                                ConnectionStatusRow(
-                                    markText: "O",
-                                    markColor: Color(red: 0.18, green: 0.44, blue: 0.69),
-                                    name: "Outlook",
-                                    isConnected: viewModel.outlookConnectionStatus
-                                )
+                                VStack(spacing: 0) {
+                                    ConnectionStatusRow(
+                                        markText: "G",
+                                        markColor: Color(red: 0.78, green: 0.31, blue: 0.23),
+                                        name: "Gmail",
+                                        isConnected: viewModel.gmailConnectionStatus
+                                    )
+                                    Divider()
+                                    ConnectionStatusRow(
+                                        markText: "O",
+                                        markColor: Color(red: 0.18, green: 0.44, blue: 0.69),
+                                        name: "Outlook",
+                                        isConnected: viewModel.outlookConnectionStatus
+                                    )
+                                }
                             }
                         }
-                    }
-                    .padding(.horizontal)
-
-                    Spacer()
-
-                    if !viewModel.gmailConnectionStatus {
-                        GoogleButton {
-                            connectToGmail()
-                        }
+                        .padding(.horizontal)
 
                         Spacer()
 
-                    }
-
-                    if !viewModel.outlookConnectionStatus {
-                        SecondaryButton(
-                            buttonView: Text("Connect Outlook"),
-                            action: {
-                                connectToOutlook()
+                        if !viewModel.gmailConnectionStatus {
+                            GoogleButton {
+                                connectToGmail()
                             }
-                        )
 
+                            Spacer()
+
+                        }
+
+                        if !viewModel.outlookConnectionStatus {
+                            SecondaryButton(
+                                buttonView: Text("Connect Outlook"),
+                                action: {
+                                    connectToOutlook()
+                                }
+                            )
+
+                            Spacer()
+                        }
+
+                        // Action Buttons
+                        VStack(spacing: 16) {
+                            SoftButton(
+                                buttonView: Text("Log out"),
+                                action: {
+                                    showLogoutConfirmation = true
+                                }
+                            )
+
+                            DestructiveButton(
+                                buttonView: Text("Delete Account"),
+                                action: {
+                                    showDeleteConfirmation = true
+                                },
+                                isDisabled: isDeleting
+                            )
+                        }
+                    } else {
                         Spacer()
-                    }
-
-                    // Action Buttons
-                    VStack(spacing: 16) {
-                        SoftButton(
-                            buttonView: Text("Log out"),
-                            action: {
-                                showLogoutConfirmation = true
-                            }
-                        )
-
-                        DestructiveButton(
-                            buttonView: Text("Delete Account"),
-                            action: {
-                                showDeleteConfirmation = true
-                            },
-                            isDisabled: isDeleting
-                        )
                     }
                 }
                 .onAppear {

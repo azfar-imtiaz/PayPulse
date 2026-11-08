@@ -17,6 +17,7 @@ class UserViewModel: ObservableObject {
     @Published var outlookConnectionStatus : Bool = false
     @Published var errorMessage  : String?
     @Published var successMessage: String?
+    @Published var hasLoadedUserInfo: Bool = false
 
     private let userService: UserService
     private let gmailService: GmailAuthService
@@ -51,6 +52,8 @@ class UserViewModel: ObservableObject {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
             Self.logger.error("(getUserInfo): The following error occurred: \(error.localizedDescription)")
         }
+
+        self.hasLoadedUserInfo = true
     }
     
     @MainActor
