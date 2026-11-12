@@ -141,12 +141,10 @@ struct ContentView: View {
         .padding(Spacing.xl)
         .background(
             RoundedRectangle(cornerRadius: Radius.sm)
-                .fill(Color.primaryOffWhite)
-                .overlay(
-                    RoundedRectangle(cornerRadius: Radius.sm)
-                        .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
-                )
+                .fill(Color.invoiceCardBackground)
         )
+        .shadow(color: Color.black.opacity(0.06), radius: 1, x: 0, y: 1)
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 6)
     }
 
     private var recentActivitySection: some View {
@@ -164,7 +162,6 @@ struct ContentView: View {
                         monthColor: .accentDeepOrange,
                         alignment: .center,
                         showMonthGutter: false,
-                        cardBorderOpacity: 0.15,
                         vendor: item.vendorName ?? "Wallenstam",
                         dueDate: item.getFormattedDueDate(),
                         totalAmount: Int(item.totalAmount.rounded()),

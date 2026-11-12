@@ -9,6 +9,7 @@ import SwiftUI
 
 extension Color {
     static let primaryOffWhite = Color("PrimaryColor")
+    static let invoiceCardBackground = Color("CardBackground")
     static let secondaryDarkGray = Color("SecondaryColor")
     static let accentDeepOrange = Color("AccentColorOrange")
     static let accentDeepRed = Color("AccentColorRed")
