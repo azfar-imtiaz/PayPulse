@@ -11,16 +11,11 @@ struct InvoiceDetailsContainer<Content: View>: View {
     @ViewBuilder let invoiceDetailsView: Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            invoiceDetailsView
+        SoftCard {
+            VStack(alignment: .leading, spacing: 16) {
+                invoiceDetailsView
+            }
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: Radius.sm)
-                .fill(Color.invoiceCardBackground)
-        )
-        .shadow(color: Color.black.opacity(0.06), radius: 1, x: 0, y: 1)
-        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 6)
     }
 }
 

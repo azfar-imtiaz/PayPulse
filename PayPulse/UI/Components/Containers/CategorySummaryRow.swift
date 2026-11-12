@@ -18,53 +18,47 @@ struct CategorySummaryRow<Icon: View, Destination: View>: View {
         NavigationLink {
             destination
         } label: {
-            HStack(spacing: 16) {
-                // Soft-tinted icon bubble
-                ZStack {
-                    Circle()
-                        .fill(iconColor.opacity(0.15))
-                        .frame(width: 52, height: 52)
-                    icon
-                }
+            SoftCard {
+                HStack(spacing: 16) {
+                    // Soft-tinted icon bubble
+                    ZStack {
+                        Circle()
+                            .fill(iconColor.opacity(0.15))
+                            .frame(width: 52, height: 52)
+                        icon
+                    }
 
-                // Category name
-                Text(title)
-                    .font(.bodyLarge)
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    // Category name
+                    Text(title)
+                        .font(.bodyLarge)
+                        .foregroundStyle(Color.secondaryDarkGray)
 
-                Spacer()
+                    Spacer()
 
-                // Count badge
-                if let count {
-                    Text("\(count)")
-                        .font(.footnote)
+                    // Count badge
+                    if let count {
+                        Text("\(count)")
+                            .font(.footnote)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(iconColor)
+                            .padding(.horizontal, Spacing.sm)
+                            .padding(.vertical, Spacing.xs)
+                            .background(
+                                Capsule()
+                                    .fill(iconColor.opacity(0.15))
+                            )
+                    } else {
+                        ProgressView()
+                            .scaleEffect(0.7)
+                    }
+
+                    // Disclosure chevron
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundStyle(iconColor)
-                        .padding(.horizontal, Spacing.sm)
-                        .padding(.vertical, Spacing.xs)
-                        .background(
-                            Capsule()
-                                .fill(iconColor.opacity(0.15))
-                        )
-                } else {
-                    ProgressView()
-                        .scaleEffect(0.7)
+                        .foregroundStyle(Color.secondaryDarkGray)
                 }
-
-                // Disclosure chevron
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Color.secondaryDarkGray)
             }
-            .padding(.horizontal, Spacing.lg)
-            .padding(.vertical, Spacing.lg)
-            .background(
-                RoundedRectangle(cornerRadius: Radius.sm)
-                    .fill(Color.invoiceCardBackground)
-            )
-            .shadow(color: Color.black.opacity(0.06), radius: 1, x: 0, y: 1)
-            .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 6)
         }
         .buttonStyle(PressScaleButtonStyle())
     }

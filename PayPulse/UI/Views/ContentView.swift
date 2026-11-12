@@ -123,28 +123,23 @@ struct ContentView: View {
     }
 
     private var summaryCard: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if homeViewModel.summaryHasLoaded {
-                Text(Utils.formatCurrency(currentMonthCombinedTotal, currency: "SEK"))
-                    .font(.headingMedium)
-                    .foregroundStyle(Color.accentDeepOrange)
-            } else {
-                Text("-")
-                    .font(.headingMedium)
-                    .foregroundStyle(Color.accentDeepOrange)
+        SoftCard(padding: Spacing.xl) {
+            VStack(alignment: .leading, spacing: 4) {
+                if homeViewModel.summaryHasLoaded {
+                    Text(Utils.formatCurrency(currentMonthCombinedTotal, currency: "SEK"))
+                        .font(.headingMedium)
+                        .foregroundStyle(Color.accentDeepOrange)
+                } else {
+                    Text("-")
+                        .font(.headingMedium)
+                        .foregroundStyle(Color.accentDeepOrange)
+                }
+                Text("This month's spending")
+                    .font(.bodyStandard)
+                    .foregroundStyle(Color.secondaryDarkGray)
             }
-            Text("This month's spending")
-                .font(.bodyStandard)
-                .foregroundStyle(Color.secondaryDarkGray)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Spacing.xl)
-        .background(
-            RoundedRectangle(cornerRadius: Radius.sm)
-                .fill(Color.invoiceCardBackground)
-        )
-        .shadow(color: Color.black.opacity(0.06), radius: 1, x: 0, y: 1)
-        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 6)
     }
 
     private var recentActivitySection: some View {
