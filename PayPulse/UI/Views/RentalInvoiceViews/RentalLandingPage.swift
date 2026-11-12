@@ -1,5 +1,5 @@
 //
-//  InvoicesView.swift
+//  RentalLandingPage.swift
 //  PayPulse
 //
 //  Created by Azfar Imtiaz on 2025-01-04.

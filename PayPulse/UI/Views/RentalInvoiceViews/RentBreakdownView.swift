@@ -1,5 +1,5 @@
 //
-//  RentBreakdownVie.swift
+//  RentBreakdownView.swift
 //  PayPulse
 //
 //  Created by Azfar Imtiaz on 2024-12-30.

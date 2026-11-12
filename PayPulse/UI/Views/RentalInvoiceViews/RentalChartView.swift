@@ -1,5 +1,5 @@
 //
-//  ChartView.swift
+//  RentalChartView.swift
 //  PayPulse
 //
 //  Created by Azfar Imtiaz on 2025-02-20.

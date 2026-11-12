@@ -1,5 +1,5 @@
 //
-//  RentalListViewV2.swift
+//  RentalListView.swift
 //  PayPulse
 //
 //  Created by Azfar Imtiaz on 2025-07-02.
