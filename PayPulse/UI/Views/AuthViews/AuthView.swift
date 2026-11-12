@@ -37,7 +37,7 @@ struct AuthView: View {
                                     .transition(.move(edge: .trailing).combined(with: .opacity))
                             }
                         }
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.gray)
                     }
                     .foregroundStyle(Color.secondaryDarkGray)
                     .font(.headingLarge)

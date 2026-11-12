@@ -27,9 +27,14 @@ struct RetailLandingPage: View {
             ZStack(alignment: .center) {
                 VStack(spacing: 0) {
                     HStack {
-                        Text("Your retail invoices,\ncategorized.")
-                            .font(.headingStandard)
-                            .foregroundStyle(Color.secondaryDarkGray)
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("Your retail invoices,")
+                                .foregroundStyle(Color.secondaryDarkGray)
+
+                            Text("categorized.")
+                                .foregroundStyle(Color.gray)
+                        }
+                        .font(.headingStandard)
 
                         Spacer()
                     }
