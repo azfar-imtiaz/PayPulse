@@ -17,12 +17,6 @@ struct RentBreakdownView: View {
     
     var body: some View {
         InvoiceDetailsContainer {
-            // Table header
-            KeyValueRow(key: "Category", value: "Amount", isHeader: true)
-
-            Divider()
-
-            // Table rows
             KeyValueRow(key: "Hyra", value: Utils.formatNumber(baseRent))
             KeyValueRow(key: "Kallvatten", value: Utils.formatNumber(kallvatten))
             KeyValueRow(key: "Varmvatten", value: Utils.formatNumber(varmvatten))
@@ -32,7 +26,7 @@ struct RentBreakdownView: View {
             Divider()
 
             // Total row
-            KeyValueRow(key: "Total", value: Utils.formatNumber(totalAmount), makeValueBold: true)
+            KeyValueRow(key: "Total", value: Utils.formatNumber(totalAmount))
         }
     }
 }

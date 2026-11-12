@@ -22,7 +22,6 @@ struct RentalDetailsView: View {
                 Text("Invoice ID")
                     .font(.bodyLarge)
                     .foregroundStyle(Color.secondaryDarkGray)
-                    .opacity(0.6)
 
                 Text(invoice.invoiceID)
                     .font(.bodyStandard)
