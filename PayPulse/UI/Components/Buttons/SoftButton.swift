@@ -19,7 +19,7 @@ struct SoftButton<Content: View>: View {
             foregroundColor: Color.secondaryText,
             background: {
                 RoundedRectangle(cornerRadius: Radius.md)
-                    .fill(Color.primarySurface)
+                    .fill(Color.invoiceCardBackground)
                     .shadow(color: Color.black.opacity(0.08), radius: 2, x: 0, y: 1)
             },
             usesPressScale: true
