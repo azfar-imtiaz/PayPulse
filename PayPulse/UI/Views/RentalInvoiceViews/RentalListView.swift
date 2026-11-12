@@ -25,7 +25,7 @@ struct RentalListView: View {
                 )
             }
         } else if viewModel.invoicesHaveLoaded {
-            NoInvoicesFoundView(showSpinner: $showSpinner, subtitle: "Click the button below to fetch rental invoices from your inbox.") {
+            NoInvoicesFoundView(subtitle: "Click the button below to fetch rental invoices from your inbox.", showSpinner: $showSpinner) {
                 try await loadInvoicesAction()
             }
         }

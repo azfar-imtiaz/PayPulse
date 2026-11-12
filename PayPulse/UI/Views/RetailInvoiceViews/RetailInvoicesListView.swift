@@ -37,7 +37,7 @@ struct RetailInvoicesListView: View {
                     )
                 }
             } else if viewModel.invoicesHaveLoadedForSubType {
-                NoInvoicesFoundView(showSpinner: $showSpinner, subtitle: "No invoices found in this category yet. Try reloading or check back later.") {
+                NoInvoicesFoundView(subtitle: "No invoices found in this category yet. Try reloading or check back later.", showSpinner: $showSpinner) {
                     loadInvoices()
                 }
             }

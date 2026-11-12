@@ -9,20 +9,24 @@ import SwiftUI
 import Lottie
 
 struct NoInvoicesFoundView: View {
-    @Binding var showSpinner : Bool     // needed in order to set the disabled status on the "Load invoices" button
+    var title                : String = "No invoices found!"
     var subtitle             : String
-    var loadInvoicesAction   : () async throws -> Void
+    var showAnimation        : Bool = true
+    @Binding var showSpinner : Bool     // needed in order to set the disabled status on the "Load invoices" button
+    var loadInvoicesAction   : (() async throws -> Void)?
 
     var body: some View {
         VStack(spacing: 30) {
             Spacer()
 
-            LottieView(animation: .named("empty"))
-                .playing(loopMode: .loop)
-                .frame(height: 300)
+            if showAnimation {
+                LottieView(animation: .named("empty"))
+                    .playing(loopMode: .loop)
+                    .frame(height: 300)
+            }
 
             Group {
-                Text("No invoices found!")
+                Text(title)
                     .font(.buttonStandard)
 
                 Text(subtitle)
@@ -32,18 +36,19 @@ struct NoInvoicesFoundView: View {
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, Spacing.xxl)
-                
-            
-            PrimaryButton(
-                buttonView: Text("Load invoices"),
-                action: {
-                    Task {
-                        try await loadInvoicesAction()
-                    }
-                },
-                isDisabled: showSpinner
-            )
-            
+
+            if let loadInvoicesAction {
+                PrimaryButton(
+                    buttonView: Text("Load invoices"),
+                    action: {
+                        Task {
+                            try await loadInvoicesAction()
+                        }
+                    },
+                    isDisabled: showSpinner
+                )
+            }
+
             Spacer()
         }
         .background(Color.primarySurface)
@@ -51,7 +56,16 @@ struct NoInvoicesFoundView: View {
 }
 
 #Preview {
-    NoInvoicesFoundView(showSpinner: .constant(false), subtitle: "Click the button below to fetch rental invoices from your inbox.") {
+    NoInvoicesFoundView(subtitle: "Click the button below to fetch rental invoices from your inbox.", showSpinner: .constant(false)) {
 
     }
+}
+
+#Preview {
+    NoInvoicesFoundView(
+        title: "No invoices found for 2025",
+        subtitle: "Select a different year or check back later",
+        showAnimation: false,
+        showSpinner: .constant(false)
+    )
 }

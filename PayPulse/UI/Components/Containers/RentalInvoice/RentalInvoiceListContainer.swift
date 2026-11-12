@@ -50,7 +50,12 @@ struct RentalInvoiceListContainer: View {
                             .animation(.easeOut.delay(Double(index) * 0.03), value: selectedYear)
                         }
                     } else {
-                        NoInvoicesForYearView(year: selectedYear)
+                        NoInvoicesFoundView(
+                            title: "No invoices found for \(selectedYear.description)",
+                            subtitle: "Select a different year or check back later",
+                            showAnimation: false,
+                            showSpinner: .constant(false)
+                        )
                     }
                 }
                 .id(selectedYear)
