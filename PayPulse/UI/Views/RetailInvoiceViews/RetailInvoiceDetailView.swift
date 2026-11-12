@@ -39,12 +39,18 @@ struct RetailInvoiceDetailView: View {
                         .bold()
                         .foregroundStyle(Color.secondaryDarkGray)
 
-                    Text(invoice.invoiceID)
-                        .font(.bodyStandard)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .foregroundStyle(Color.secondaryDarkGray)
-                        .opacity(0.6)
+                    HStack(spacing: 5) {
+                        Text(Utils.truncateInvoiceID(invoice.invoiceID))
+                            .font(.bodyStandard)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                            .foregroundStyle(Color.secondaryDarkGray)
+                            .opacity(0.6)
+
+                        CopyTextButton(size: 14, color: Color.secondaryDarkGray) {
+                            copyInvoiceIDToClipboard(invoice.invoiceID)
+                        }
+                    }
                 }
                 .padding(.horizontal)
 
@@ -253,6 +259,13 @@ struct RetailInvoiceDetailView: View {
         UIPasteboard.general.string = text
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         toastMessage = "Total amount copied!"
+        showToast = true
+    }
+
+    private func copyInvoiceIDToClipboard(_ text: String) {
+        UIPasteboard.general.string = text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        toastMessage = "Invoice ID copied!"
         showToast = true
     }
 

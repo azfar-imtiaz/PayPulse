@@ -12,6 +12,7 @@ struct RentalDetailsView: View {
     let invoice: RentalInvoice
     @State private var showOCRToast: Bool = false
     @State private var showTotalAmountToast: Bool = false
+    @State private var showInvoiceIDToast: Bool = false
     
     @Environment(\.presentToast) var presentToast
 
@@ -25,12 +26,18 @@ struct RentalDetailsView: View {
                         .bold()
                         .foregroundStyle(Color.secondaryDarkGray)
 
-                    Text(invoice.invoiceID)
-                        .font(.bodyStandard)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .foregroundStyle(Color.secondaryDarkGray)
-                        .opacity(0.6)
+                    HStack(spacing: 5) {
+                        Text(Utils.truncateInvoiceID(invoice.invoiceID))
+                            .font(.bodyStandard)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                            .foregroundStyle(Color.secondaryDarkGray)
+                            .opacity(0.6)
+
+                        CopyTextButton(size: 14, color: Color.secondaryDarkGray) {
+                            copyInvoiceIDToClipboard(invoice.invoiceID)
+                        }
+                    }
                 }
                 .padding(.horizontal)
 
@@ -93,6 +100,14 @@ struct RentalDetailsView: View {
                 }
             }
         }
+        .onChange(of: showInvoiceIDToast) { _, newValue in
+            if newValue {
+                showTextCopiedToast(text: "Invoice ID")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    showInvoiceIDToast = false
+                }
+            }
+        }
         .background(Color.primaryOffWhite)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
@@ -116,6 +131,12 @@ struct RentalDetailsView: View {
         UIPasteboard.general.string = text
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         showTotalAmountToast = true
+    }
+
+    func copyInvoiceIDToClipboard(_ text: String) {
+        UIPasteboard.general.string = text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        showInvoiceIDToast = true
     }
 }
 

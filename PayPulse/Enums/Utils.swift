@@ -40,6 +40,27 @@ enum Utils {
         return Date() > date
     }
     
+    /// Truncates a string to maxLength, appending "..." after the cutoff if it exceeds that length
+    static func truncate(_ text: String, maxLength: Int) -> String {
+        guard text.count > maxLength else { return text }
+        return "\(text.prefix(maxLength))..."
+    }
+
+    /// Truncates an invoice ID to a fixed number of characters after its "retail_invoice_"/"rental_invoice_"
+    /// prefix (if present), falling back to a flat character-count truncation otherwise
+    static func truncateInvoiceID(_ text: String, charsAfterPrefix: Int = 8, fallbackMaxLength: Int = 25) -> String {
+        let knownPrefixes = ["retail_invoice_", "rental_invoice_"]
+
+        for prefix in knownPrefixes {
+            if text.lowercased().hasPrefix(prefix) {
+                guard text.count > prefix.count + charsAfterPrefix else { return text }
+                return "\(text.prefix(prefix.count + charsAfterPrefix))..."
+            }
+        }
+
+        return truncate(text, maxLength: fallbackMaxLength)
+    }
+
     static func getCurrentYear() -> Int {
         let calender = Calendar.current
         let year = calender.component(.year, from: Date())
