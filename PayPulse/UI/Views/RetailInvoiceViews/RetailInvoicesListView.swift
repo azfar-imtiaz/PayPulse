@@ -17,6 +17,7 @@ struct RetailInvoicesListView: View {
     @State private var loadingText: String = ""
 
     @Environment(\.presentToast) var presentToast
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var authManager: AuthManager
 
     var body: some View {
@@ -27,7 +28,7 @@ struct RetailInvoicesListView: View {
                         selectedYear: $selectedYear,
                         subType: subType,
                         viewModel: viewModel,
-                        refreshAction: refreshInvoices
+                        refreshAction: { fetchLatestInvoices() }
                     )
                 }
             } else if viewModel.hasLoadedInvoices(for: subType) {
@@ -54,7 +55,45 @@ struct RetailInvoicesListView: View {
             ToolbarItem(placement: .principal) {
                 NavTitle(text: subType.displayName)
             }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    fetchLatestInvoices()
+                } label: {
+                    Utils.getIconColored(colorScheme: colorScheme, iconName: "refresh-ccw-dot")
+                }
+                .disabled(showSpinner)
+            }
         }
+    }
+
+    private func fetchLatestInvoices() {
+        showSpinner = true
+        loadingText = "Checking for new \(subType.displayName.lowercased()) invoices..."
+
+        Task {
+            defer { showSpinner = false }
+            await checkForLatestInvoices()
+        }
+    }
+
+    private func checkForLatestInvoices() async {
+        do {
+            _ = try await viewModel.fetchLatestInvoices(for: subType)
+            let toastValue = ToastValue(
+                icon: Icon(name: "circle-check"),
+                message: viewModel.successMessage ?? "Done."
+            )
+            presentToast(toastValue)
+        } catch let apiError as APIError {
+            Utils.handleAPITokenExpiration(apiError, authManager: authManager) {
+                let errorToast = ToastValue(
+                    icon: Icon(name: "circle-x"),
+                    message: "Failed to check for new invoices: \(viewModel.errorMessage ?? apiError.errorDescription ?? apiError.localizedDescription)"
+                )
+                presentToast(errorToast)
+            }
+        } catch {}
     }
 
     private func loadInvoices() {

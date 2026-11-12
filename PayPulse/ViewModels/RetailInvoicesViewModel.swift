@@ -82,6 +82,26 @@ class RetailInvoicesViewModel: ObservableObject {
         }
     }
 
+    /// Triggers a fetch-latest scan for one category and returns the count of new invoices found
+    func fetchLatestInvoices(for subType: RetailInvoiceSubType) async throws -> Int {
+        errorMessage = nil
+        successMessage = nil
+
+        do {
+            let response = try await invoiceService.fetchLatestRetailInvoices(subType: subType)
+            if response.newInvoicesFound > 0 {
+                successMessage = "\(response.newInvoicesFound) new invoice\(response.newInvoicesFound == 1 ? "" : "s") found! They'll appear shortly..."
+            } else {
+                successMessage = "No new invoices found, you're up-to-date!"
+            }
+            return response.newInvoicesFound
+        } catch {
+            errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
+            print("Failed to fetch latest \(subType.displayName) invoices: \(errorMessage ?? "Unknown error")")
+            throw error
+        }
+    }
+
     /// Deletes a retail invoice and updates local state on success
     func deleteRetailInvoice(invoiceID: String, subType: RetailInvoiceSubType) async throws {
         errorMessage = nil

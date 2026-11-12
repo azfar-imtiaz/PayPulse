@@ -31,39 +31,41 @@ struct RetailInvoiceListContainer: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     let invoicesWithMonthDisplay = viewModel.getInvoicesWithMonthDisplay(for: selectedYear, subType: subType)
 
-                    if !invoicesWithMonthDisplay.isEmpty {
-                        ForEach(Array(invoicesWithMonthDisplay.enumerated()), id: \.offset) { index, invoiceData in
-                            let (invoice, showMonth) = invoiceData
+                    Group {
+                        if !invoicesWithMonthDisplay.isEmpty {
+                            ForEach(Array(invoicesWithMonthDisplay.enumerated()), id: \.offset) { index, invoiceData in
+                                let (invoice, showMonth) = invoiceData
 
-                            InvoiceListRow(
-                                monthLabel: showMonth ? invoice.getMonthName() : nil,
-                                monthColor: subType.color,
-                                alignment: .firstTextBaseline,
-                                vendor: invoice.vendorName,
-                                dueDate: invoice.getFormattedDate(),
-                                totalAmount: Int(invoice.totalAmount),
-                                currency: invoice.displayCurrency,
-                                trailingIndicator: .dot(subType.color),
-                                transitionID: invoice.invoiceID,
-                                namespace: zoomNamespace
-                            ) {
-                                RetailInvoiceDetailView(invoice: invoice, subType: subType, retailViewModel: viewModel)
+                                InvoiceListRow(
+                                    monthLabel: showMonth ? invoice.getMonthName() : nil,
+                                    monthColor: subType.color,
+                                    alignment: .firstTextBaseline,
+                                    vendor: invoice.vendorName,
+                                    dueDate: invoice.getFormattedDate(),
+                                    totalAmount: Int(invoice.totalAmount),
+                                    currency: invoice.displayCurrency,
+                                    trailingIndicator: .dot(subType.color),
+                                    transitionID: invoice.invoiceID,
+                                    namespace: zoomNamespace
+                                ) {
+                                    RetailInvoiceDetailView(invoice: invoice, subType: subType, retailViewModel: viewModel)
+                                }
+                                .padding([.horizontal, .top])
+                                .transition(.opacity.combined(with: .move(edge: .bottom)))
+                                .animation(.easeOut.delay(Double(index) * 0.03), value: selectedYear)
                             }
-                            .padding([.horizontal, .top])
-                            .transition(.opacity.combined(with: .move(edge: .bottom)))
-                            .animation(.easeOut.delay(Double(index) * 0.03), value: selectedYear)
+                        } else {
+                            NoInvoicesFoundView(
+                                title: "No invoices found for \(selectedYear.description)",
+                                subtitle: "Select a different year or check back later",
+                                showAnimation: false,
+                                showSpinner: .constant(false)
+                            )
                         }
-                    } else {
-                        NoInvoicesFoundView(
-                            title: "No invoices found for \(selectedYear.description)",
-                            subtitle: "Select a different year or check back later",
-                            showAnimation: false,
-                            showSpinner: .constant(false)
-                        )
                     }
+                    .id(selectedYear)
+                    .transition(.opacity)
                 }
-                .id(selectedYear)
-                .transition(.opacity)
                 .refreshable {
                     await refreshAction()
                 }

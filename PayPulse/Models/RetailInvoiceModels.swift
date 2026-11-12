@@ -103,6 +103,20 @@ enum RetailInvoiceSubType: String, Codable, CaseIterable {
     }
 }
 
+// MARK: - Retail Fetch-Latest Response
+
+struct RetailFetchLatestResponse: Codable {
+    let newInvoicesFound: Int
+    let category: String
+    let candidatesScanned: Int
+    let dateRange: DateRange
+
+    struct DateRange: Codable {
+        let start: String
+        let end: String
+    }
+}
+
 // MARK: - Retail Invoice Base Model
 
 struct RetailInvoiceBase: Codable, Identifiable, Hashable {

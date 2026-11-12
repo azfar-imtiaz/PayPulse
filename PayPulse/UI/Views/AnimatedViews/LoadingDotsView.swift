@@ -14,7 +14,7 @@ struct LoadingDotsView: View {
     var body: some View {
         ZStack {
             if isLoading {
-                Color.black.opacity(0.6)
+                Color.black.opacity(0.78)
                     .ignoresSafeArea(edges: .all)
 
                 VStack(spacing: Spacing.xl) {
@@ -23,7 +23,8 @@ struct LoadingDotsView: View {
                     Text(loadingText.uppercased())
                         .font(.footnote)
                         .tracking(0.5)
-                        .foregroundStyle(.white.opacity(0.85))
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.6), radius: 3, x: 0, y: 1)
                 }
             }
         }

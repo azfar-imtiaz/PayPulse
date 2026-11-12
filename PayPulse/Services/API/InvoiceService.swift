@@ -131,6 +131,26 @@ class InvoiceService {
         return responseData.getCountsBySubType()
     }
 
+    /// Triggers an on-demand scan for new invoices in a single retail category
+    func fetchLatestRetailInvoices(subType: RetailInvoiceSubType) async throws -> RetailFetchLatestResponse {
+        let response: APISuccessResponse<RetailFetchLatestResponse> = try await apiClient.request(
+            path: "invoices/retail/fetch_latest",
+            method: .post,
+            parameters: ["category": subType.apiPath],
+            encoding: JSONEncoding.default
+        )
+
+        guard let responseData = response.data else {
+            throw APIError.decodingError(NSError(
+                domain: "InvoiceService",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "No fetch-latest data returned"]
+            ))
+        }
+
+        return responseData
+    }
+
     /// Deletes a retail invoice by its invoice ID
     func deleteRetailInvoice(invoiceID: String) async throws -> Bool {
         let response: APISuccessResponse<EmptyData> = try await apiClient.request(
