@@ -17,8 +17,17 @@ struct InvoiceDetailsContainer<Content: View>: View {
         }
         .padding()
         .background(
-            RectangleRoundedCorners(color: Color.secondaryDarkGray.opacity(borderOpacity))
+            RoundedRectangle(cornerRadius: Radius.sm)
+                .fill(Color.white)
+                /*
+                .overlay(
+                    RoundedRectangle(cornerRadius: Radius.sm)
+                        .stroke(Color.secondaryDarkGray.opacity(borderOpacity), lineWidth: 1)
+                )
+                 */
         )
+        .shadow(color: Color.black.opacity(0.06), radius: 1, x: 0, y: 1)
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 6)
     }
 }
 
@@ -28,6 +37,7 @@ struct InvoiceDetailsContainer<Content: View>: View {
             vendor: "Wallenstam",
             dueDate: "12-11-2021",
             totalAmount: 5000
-        )        
+        )
     }
+    .padding(.horizontal)
 }
