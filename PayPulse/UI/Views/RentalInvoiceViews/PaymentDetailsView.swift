@@ -10,58 +10,34 @@ import SwiftUI
 struct PaymentDetailsView: View {
     let dueDate     : String
     let ocrRef      : String
-    let totalAmount : Int
     @Binding var showOCRToast: Bool
-    @Binding var showTotalAmountToast: Bool
-    
+
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.lg) {
-            ReceiptHeroTotal(
-                amount: Double(totalAmount),
-                currency: "SEK",
-                showCopyButton: true,
-                copyButtonAction: {
-                    copyTextToClipboard(
-                        text: "\(totalAmount)",
-                        isOCR: false
-                    )
-                }
+        InvoiceDetailsContainer {
+            KeyValueRow(
+                key: "Due Date",
+                value: dueDate,
+                keyOpacity: 1.0
             )
 
-            InvoiceDetailsContainer {
-                KeyValueRow(
-                    key: "Due Date",
-                    value: dueDate,
-                    keyOpacity: 0.6
-                )
+            Divider()
 
-                Divider()
-
-                KeyValueRow(
-                    key: "OCR Reference",
-                    value: ocrRef,
-                    showCopyButton: true,
-                    copyButtonAction: {
-                        copyTextToClipboard(
-                            text: ocrRef,
-                            isOCR: true
-                        )
-                    },
-                    keyOpacity: 0.6
-                )
-            }
+            KeyValueRow(
+                key: "OCR Reference",
+                value: ocrRef,
+                showCopyButton: true,
+                copyButtonAction: {
+                    copyTextToClipboard(text: ocrRef)
+                },
+                keyOpacity: 1.0
+            )
         }
     }
-    
-    func copyTextToClipboard(text: String, isOCR: Bool) {
+
+    func copyTextToClipboard(text: String) {
         UIPasteboard.general.string = text
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        // The isOCR parameter is used to identify whether the OCR has been copied, or the totalAmount
-        if isOCR {
-            showOCRToast = true
-        } else {
-            showTotalAmountToast = true
-        }
+        showOCRToast = true
     }
 }
 
@@ -69,8 +45,6 @@ struct PaymentDetailsView: View {
     PaymentDetailsView(
         dueDate: "30-05-2025",
         ocrRef: "1231231231",
-        totalAmount: 15000,
-        showOCRToast: .constant(false),
-        showTotalAmountToast: .constant(false)
+        showOCRToast: .constant(false)
     )
 }

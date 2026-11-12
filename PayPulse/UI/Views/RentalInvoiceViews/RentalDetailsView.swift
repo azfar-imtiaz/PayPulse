@@ -16,57 +16,66 @@ struct RentalDetailsView: View {
     @Environment(\.presentToast) var presentToast
 
     var body: some View {
-        VStack(alignment: .leading) {
-            
-            VStack(alignment: .leading, spacing: 0) {
-                Text("Invoice ID")
-                    .font(.bodyLarge)
-                    .foregroundStyle(Color.secondaryDarkGray)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
 
-                Text(invoice.invoiceID)
-                    .font(.bodyStandard)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
-                    .foregroundStyle(Color.secondaryDarkGray)
-                    .opacity(0.6)
-            }
-            .padding([.horizontal, .top])
-            
-            Spacer()
-            
-            Text("Payment Details")
-                .font(.bodyLarge)
-                .foregroundStyle(Color.secondaryDarkGray)
-            .padding(.horizontal)
-            
-            PaymentDetailsView(
-                dueDate: invoice.dueDate,
-                ocrRef: invoice.ocr,
-                totalAmount: invoice.totalAmount,
-                showOCRToast: $showOCRToast,
-                showTotalAmountToast: $showTotalAmountToast
-            )
-            .padding(.horizontal)
-            
-            Spacer()
-            
-            Text("Rent Breakdown")
-                .font(.bodyLarge)
-                .foregroundStyle(Color.secondaryDarkGray)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("Invoice ID")
+                        .font(.bodyLarge)
+                        .bold()
+                        .foregroundStyle(Color.secondaryDarkGray)
+
+                    Text(invoice.invoiceID)
+                        .font(.bodyStandard)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                        .foregroundStyle(Color.secondaryDarkGray)
+                        .opacity(0.6)
+                }
                 .padding(.horizontal)
-            
-            RentBreakdownView(
-                baseRent: invoice.hyra,
-                kallvatten: invoice.kallvatten,
-                varmvatten: invoice.varmvatten,
-                electricity: invoice.el,
-                moms: invoice.moms,
-                totalAmount: invoice.totalAmount
-            )
-            .padding(.horizontal)             
-            
-            Spacer()
-            
+
+                ReceiptHeroTotal(
+                    amount: Double(invoice.totalAmount),
+                    currency: "SEK",
+                    showCopyButton: true,
+                    copyButtonAction: {
+                        copyTextToClipboard(text: "\(invoice.totalAmount)")
+                    }
+                )
+                .padding(.horizontal)
+
+                Text("Invoice details")
+                    .font(.bodyLarge)
+                    .bold()
+                    .foregroundStyle(Color.secondaryDarkGray)
+                    .padding(.horizontal)
+
+                PaymentDetailsView(
+                    dueDate: invoice.dueDate,
+                    ocrRef: invoice.ocr,
+                    showOCRToast: $showOCRToast
+                )
+                .padding(.horizontal)
+
+                Text("Rent Breakdown")
+                    .font(.bodyLarge)
+                    .bold()
+                    .foregroundStyle(Color.secondaryDarkGray)
+                    .padding(.horizontal)
+
+                RentBreakdownView(
+                    baseRent: invoice.hyra,
+                    kallvatten: invoice.kallvatten,
+                    varmvatten: invoice.varmvatten,
+                    electricity: invoice.el,
+                    moms: invoice.moms,
+                    totalAmount: invoice.totalAmount
+                )
+                .padding(.horizontal)
+
+                Spacer(minLength: 100)
+            }
+            .padding(.top)
         }
         .onChange(of: showOCRToast) { _, newValue in
             if newValue {
@@ -101,6 +110,12 @@ struct RentalDetailsView: View {
     func showTextCopiedToast(text: String) {
         let toast = ToastValue(icon: Image("copy"), message: "\(text) copied!")
         presentToast(toast)
+    }
+
+    func copyTextToClipboard(text: String) {
+        UIPasteboard.general.string = text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        showTotalAmountToast = true
     }
 }
 

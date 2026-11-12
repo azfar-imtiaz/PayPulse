@@ -10,51 +10,31 @@ import SwiftUI
 struct RetailBaseInvoiceDetailsView: View {
     let invoice: RetailInvoiceBase
     let subType: RetailInvoiceSubType
-    @Binding var showToast: Bool
-    @Binding var toastMessage: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.lg) {
-            ReceiptHeroTotal(
-                amount: invoice.totalAmount,
-                currency: invoice.displayCurrency,
-                showCopyButton: true,
-                copyButtonAction: {
-                    copyTextToClipboard(text: invoice.getFormattedAmount())
-                }
+        InvoiceDetailsContainer {
+            KeyValueRow(
+                key: "Category",
+                value: subType.displayName,
+                keyOpacity: 1.0
             )
 
-            InvoiceDetailsContainer {
-                KeyValueRow(
-                    key: "Category",
-                    value: subType.displayName,
-                    keyOpacity: 0.6
-                )
+            Divider()
 
-                Divider()
+            KeyValueRow(
+                key: "Vendor",
+                value: invoice.vendorName,
+                keyOpacity: 1.0
+            )
 
-                KeyValueRow(
-                    key: "Vendor",
-                    value: invoice.vendorName,
-                    keyOpacity: 0.6
-                )
+            Divider()
 
-                Divider()
-
-                KeyValueRow(
-                    key: "Invoice Date",
-                    value: invoice.getFormattedDate(),
-                    keyOpacity: 0.6
-                )
-            }
+            KeyValueRow(
+                key: "Invoice Date",
+                value: invoice.getFormattedDate(),
+                keyOpacity: 1.0
+            )
         }
-    }
-
-    private func copyTextToClipboard(text: String) {
-        UIPasteboard.general.string = text
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        toastMessage = "Total amount copied!"
-        showToast = true
     }
 }
 
@@ -67,8 +47,6 @@ struct RetailBaseInvoiceDetailsView: View {
             currency: "SEK",
             vendorName: "Test Vendor"
         ),
-        subType: .technology,
-        showToast: .constant(false),
-        toastMessage: .constant("")
+        subType: .technology
     )
 }

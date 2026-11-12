@@ -36,6 +36,7 @@ struct RetailInvoiceDetailView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Invoice ID")
                         .font(.bodyLarge)
+                        .bold()
                         .foregroundStyle(Color.secondaryDarkGray)
 
                     Text(invoice.invoiceID)
@@ -47,17 +48,26 @@ struct RetailInvoiceDetailView: View {
                 }
                 .padding(.horizontal)
 
+                ReceiptHeroTotal(
+                    amount: invoice.totalAmount,
+                    currency: invoice.displayCurrency,
+                    showCopyButton: true,
+                    copyButtonAction: {
+                        copyTextToClipboard(text: invoice.getFormattedAmount())
+                    }
+                )
+                .padding(.horizontal)
+
                 // Base Invoice Details section
                 Text("Invoice Details")
                     .font(.bodyLarge)
+                    .bold()
                     .foregroundStyle(Color.secondaryDarkGray)
                     .padding(.horizontal)
 
                 RetailBaseInvoiceDetailsView(
                     invoice: invoice,
-                    subType: subType,
-                    showToast: $showToast,
-                    toastMessage: $toastMessage
+                    subType: subType
                 )
                 .padding(.horizontal)
 
@@ -87,6 +97,7 @@ struct RetailInvoiceDetailView: View {
 
                     Text(getSecondSectionTitle(for: subType))
                         .font(.bodyLarge)
+                        .bold()
                         .foregroundStyle(Color.secondaryDarkGray)
                         .padding(.horizontal)
 
@@ -236,6 +247,13 @@ struct RetailInvoiceDetailView: View {
                 }
             }
         }
+    }
+
+    private func copyTextToClipboard(text: String) {
+        UIPasteboard.general.string = text
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        toastMessage = "Total amount copied!"
+        showToast = true
     }
 
     /// Returns the title for the first detail section based on invoice sub-type

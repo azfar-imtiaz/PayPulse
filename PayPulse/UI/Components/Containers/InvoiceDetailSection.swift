@@ -19,6 +19,7 @@ struct InvoiceDetailSection<Content: View>: View {
             VStack(alignment: .leading, spacing: 20) {
                 Text(title)
                     .font(.bodyLarge)
+                    .bold()
                     .foregroundStyle(Color.secondaryDarkGray)
                     .padding(.horizontal)
 
