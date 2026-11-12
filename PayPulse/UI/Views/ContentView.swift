@@ -33,11 +33,19 @@ struct ContentView: View {
         _homeViewModel = StateObject(wrappedValue: HomeViewModel(invoiceService: invoiceService))
     }
 
+    private var homeDataHasLoaded: Bool {
+        rentalViewModel.invoicesHaveLoaded
+            && retailViewModel.countsHaveLoaded
+            && homeViewModel.summaryHasLoaded
+            && homeViewModel.recentInvoicesHaveLoaded
+    }
+
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            ZStack(alignment: .center) {
+                VStack(spacing: 0) {
 
-                HStack {
+                    HStack {
                     Text("PayPulse")
                         .font(.headingLarge)
                         .foregroundStyle(Color.secondaryText)
@@ -103,21 +111,27 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .padding(.vertical, Spacing.xl)
                 }
-            }
-            .background(Color.primarySurface)
-            .onAppear {
-                // Check for pending welcome toast and login context
-                if let pendingToast = authManager.pendingToast,
-                   let loginContext = authManager.loginContext,
-                   loginContext != .keychain {
-                    // Only show toast for login and signup, not keychain authentication
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        presentToast(pendingToast)
-                        authManager.clearPendingToast()
-                        authManager.clearLoginContext()
-                    }
                 }
-                fetchInvoiceCounts()
+                .background(Color.primarySurface)
+                .onAppear {
+                    // Check for pending welcome toast and login context
+                    if let pendingToast = authManager.pendingToast,
+                       let loginContext = authManager.loginContext,
+                       loginContext != .keychain {
+                        // Only show toast for login and signup, not keychain authentication
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            presentToast(pendingToast)
+                            authManager.clearPendingToast()
+                            authManager.clearLoginContext()
+                        }
+                    }
+                    fetchInvoiceCounts()
+                }
+
+                LoadingDotsView(
+                    isLoading: Binding(get: { !homeDataHasLoaded }, set: { _ in }),
+                    loadingText: "Loading your invoices..."
+                )
             }
         }
     }
