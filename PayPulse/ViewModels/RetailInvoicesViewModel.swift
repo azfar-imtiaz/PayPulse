@@ -11,12 +11,11 @@ import OrderedCollections
 @MainActor
 class RetailInvoicesViewModel: ObservableObject {
     @Published var invoiceCounts: [RetailInvoiceSubType: Int] = [:]
-    @Published var retailInvoicesByYear: OrderedDictionary<Int, [RetailInvoiceBase]> = [:]
-    @Published var currentSubType: RetailInvoiceSubType?
+    @Published var invoicesBySubType: [RetailInvoiceSubType: OrderedDictionary<Int, [RetailInvoiceBase]>] = [:]
+    @Published var loadedSubTypes: Set<RetailInvoiceSubType> = []
     @Published var errorMessage: String?
     @Published var successMessage: String?
     @Published var countsHaveLoaded: Bool = false
-    @Published var invoicesHaveLoadedForSubType: Bool = false
     @Published var isDeletingInvoice: Bool = false
 
     private let invoiceService: InvoiceService
@@ -56,16 +55,25 @@ class RetailInvoicesViewModel: ObservableObject {
         return invoiceCounts.sorted { $0.value > $1.value }
     }
 
+    /// Returns the loaded invoices-by-year for a specific sub-type, defaulting to empty if not loaded
+    func invoicesByYear(for subType: RetailInvoiceSubType) -> OrderedDictionary<Int, [RetailInvoiceBase]> {
+        invoicesBySubType[subType] ?? [:]
+    }
+
+    /// Returns whether invoices have been loaded (successfully or not) for a specific sub-type
+    func hasLoadedInvoices(for subType: RetailInvoiceSubType) -> Bool {
+        loadedSubTypes.contains(subType)
+    }
+
     /// Fetches retail invoices for a specific sub-type
     func getRetailInvoices(for subType: RetailInvoiceSubType) async throws {
         errorMessage = nil
-        currentSubType = subType
 
         do {
             let invoices = try await invoiceService.getRetailInvoices(subType: subType)
             await MainActor.run {
-                self.retailInvoicesByYear = invoices
-                self.invoicesHaveLoadedForSubType = true
+                self.invoicesBySubType[subType] = invoices
+                self.loadedSubTypes.insert(subType)
             }
         } catch {
             self.errorMessage = (error as? APIError)?.localizedDescription ?? error.localizedDescription
@@ -84,10 +92,10 @@ class RetailInvoicesViewModel: ObservableObject {
             let success = try await invoiceService.deleteRetailInvoice(invoiceID: invoiceID)
             if success {
                 // Remove the invoice from the in-memory list
-                for year in retailInvoicesByYear.keys {
-                    retailInvoicesByYear[year]?.removeAll { $0.invoiceID == invoiceID }
-                    if retailInvoicesByYear[year]?.isEmpty == true {
-                        retailInvoicesByYear.removeValue(forKey: year)
+                for year in invoicesBySubType[subType]?.keys ?? [] {
+                    invoicesBySubType[subType]?[year]?.removeAll { $0.invoiceID == invoiceID }
+                    if invoicesBySubType[subType]?[year]?.isEmpty == true {
+                        invoicesBySubType[subType]?.removeValue(forKey: year)
                     }
                 }
                 // Decrement the count badge for this sub-type
@@ -105,9 +113,9 @@ class RetailInvoicesViewModel: ObservableObject {
         }
     }
 
-    /// Returns invoices with month display logic for a specific year
-    func getInvoicesWithMonthDisplay(for year: Int) -> [(RetailInvoiceBase, Bool)] {
-        guard let invoices = retailInvoicesByYear[year] else {
+    /// Returns invoices with month display logic for a specific year and sub-type
+    func getInvoicesWithMonthDisplay(for year: Int, subType: RetailInvoiceSubType) -> [(RetailInvoiceBase, Bool)] {
+        guard let invoices = invoicesBySubType[subType]?[year] else {
             return []
         }
 

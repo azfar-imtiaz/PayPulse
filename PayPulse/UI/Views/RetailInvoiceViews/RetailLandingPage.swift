@@ -56,7 +56,8 @@ struct RetailLandingPage: View {
                                         count: count,
                                         destination: RetailInvoicesListView(
                                             subType: subType,
-                                            invoiceService: invoiceService
+                                            invoiceService: invoiceService,
+                                            viewModel: viewModel
                                         )
                                     )
                                 }

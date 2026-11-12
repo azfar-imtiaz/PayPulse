@@ -29,7 +29,7 @@ struct RetailInvoiceListContainer: View {
                     .padding(.bottom, Spacing.sm)
 
                 ScrollView(.vertical, showsIndicators: false) {
-                    let invoicesWithMonthDisplay = viewModel.getInvoicesWithMonthDisplay(for: selectedYear)
+                    let invoicesWithMonthDisplay = viewModel.getInvoicesWithMonthDisplay(for: selectedYear, subType: subType)
 
                     if !invoicesWithMonthDisplay.isEmpty {
                         ForEach(Array(invoicesWithMonthDisplay.enumerated()), id: \.offset) { index, invoiceData in

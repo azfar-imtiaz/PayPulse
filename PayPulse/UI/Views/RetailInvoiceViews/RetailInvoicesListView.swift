@@ -11,7 +11,7 @@ import Toasts
 struct RetailInvoicesListView: View {
     let subType: RetailInvoiceSubType
     let invoiceService: InvoiceService
-    @StateObject private var viewModel: RetailInvoicesViewModel
+    @StateObject var viewModel: RetailInvoicesViewModel
     @State private var selectedYear: Int = Utils.getCurrentYear()
     @State private var showSpinner: Bool = false
     @State private var loadingText: String = ""
@@ -19,16 +19,10 @@ struct RetailInvoicesListView: View {
     @Environment(\.presentToast) var presentToast
     @EnvironmentObject var authManager: AuthManager
 
-    init(subType: RetailInvoiceSubType, invoiceService: InvoiceService) {
-        self.subType = subType
-        self.invoiceService = invoiceService
-        _viewModel = StateObject(wrappedValue: RetailInvoicesViewModel(invoiceService: invoiceService))
-    }
-
     var body: some View {
         ZStack(alignment: .center) {
-            if viewModel.invoicesHaveLoadedForSubType && viewModel.retailInvoicesByYear.count > 0 {
-                InvoiceYearListShell(years: Array(viewModel.retailInvoicesByYear.keys), selectedYear: $selectedYear) {
+            if viewModel.hasLoadedInvoices(for: subType) && viewModel.invoicesByYear(for: subType).count > 0 {
+                InvoiceYearListShell(years: Array(viewModel.invoicesByYear(for: subType).keys), selectedYear: $selectedYear) {
                     RetailInvoiceListContainer(
                         selectedYear: $selectedYear,
                         subType: subType,
@@ -36,7 +30,7 @@ struct RetailInvoicesListView: View {
                         refreshAction: refreshInvoices
                     )
                 }
-            } else if viewModel.invoicesHaveLoadedForSubType {
+            } else if viewModel.hasLoadedInvoices(for: subType) {
                 NoInvoicesFoundView(subtitle: "No invoices found in this category yet. Try reloading or check back later.", showSpinner: $showSpinner) {
                     loadInvoices()
                 }
@@ -47,7 +41,7 @@ struct RetailInvoicesListView: View {
         .navigationBarBackButtonHidden()
         .onAppear {
             loadingText = "Loading \(subType.displayName.lowercased()) invoices..."
-            if !viewModel.invoicesHaveLoadedForSubType {
+            if !viewModel.hasLoadedInvoices(for: subType) {
                 loadInvoices()
             }
         }
@@ -65,12 +59,12 @@ struct RetailInvoicesListView: View {
 
     private func loadInvoices() {
         showSpinner = true
-        viewModel.invoicesHaveLoadedForSubType = false
+        viewModel.loadedSubTypes.remove(subType)
 
         Task {
             defer {
                 showSpinner = false
-                viewModel.invoicesHaveLoadedForSubType = true
+                viewModel.loadedSubTypes.insert(subType)
             }
 
             await refreshInvoices()
@@ -100,6 +94,13 @@ struct RetailInvoicesListView: View {
             invoiceService: InvoiceService(
                 apiClient: PayPulseAPIClient(
                     authManager: AuthManager.shared
+                )
+            ),
+            viewModel: RetailInvoicesViewModel(
+                invoiceService: InvoiceService(
+                    apiClient: PayPulseAPIClient(
+                        authManager: AuthManager.shared
+                    )
                 )
             )
         )
