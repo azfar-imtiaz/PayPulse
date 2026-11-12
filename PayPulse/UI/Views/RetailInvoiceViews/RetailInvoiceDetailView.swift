@@ -37,17 +37,17 @@ struct RetailInvoiceDetailView: View {
                     Text("Invoice ID")
                         .font(.bodyLarge)
                         .bold()
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
 
                     HStack(spacing: 5) {
                         Text(Utils.truncateInvoiceID(invoice.invoiceID))
                             .font(.bodyStandard)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                            .foregroundStyle(Color.secondaryDarkGray)
+                            .foregroundStyle(Color.secondaryText)
                             .opacity(0.6)
 
-                        CopyTextButton(size: 14, color: Color.secondaryDarkGray) {
+                        CopyTextButton(size: 14, color: Color.secondaryText) {
                             copyInvoiceIDToClipboard(invoice.invoiceID)
                         }
                     }
@@ -68,7 +68,7 @@ struct RetailInvoiceDetailView: View {
                 Text("Invoice Details")
                     .font(.bodyLarge)
                     .bold()
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
                     .padding(.horizontal)
 
                 RetailBaseInvoiceDetailsView(
@@ -104,7 +104,7 @@ struct RetailInvoiceDetailView: View {
                     Text(getSecondSectionTitle(for: subType))
                         .font(.bodyLarge)
                         .bold()
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
                         .padding(.horizontal)
 
                     RetailDetailedInvoiceSummaryView(
@@ -139,7 +139,7 @@ struct RetailInvoiceDetailView: View {
                 }
             }
         }
-        .background(Color.primaryOffWhite)
+        .background(Color.primarySurface)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {

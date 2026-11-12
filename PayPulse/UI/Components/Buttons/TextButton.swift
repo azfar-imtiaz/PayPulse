@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TextButton: View {
     var buttonText   : String
-    var textColor    : Color = .secondaryDarkGray
+    var textColor    : Color = .secondaryText
     var font         : Font = .bodySmall
     var isUnderlined : Bool = false
     var action       : () -> Void

@@ -22,11 +22,11 @@ struct HeaderYearSelectionButton: View {
                 .padding(.vertical, Spacing.sm) // rounded 10->8, tight capsule pill
                 .font(.tableHeader)
                 .foregroundStyle(
-                    year == selectedYear ? Color.secondaryDarkGray : Color.primaryOffWhite
+                    year == selectedYear ? Color.secondaryText : Color.primarySurface
                 )
                 .background(
                     Capsule()
-                        .fill(year == selectedYear ? Color.primaryOffWhite : .clear)
+                        .fill(year == selectedYear ? Color.primarySurface : .clear)
                 )
         }
     }

@@ -31,7 +31,7 @@ struct CategorySummaryRow<Icon: View, Destination: View>: View {
                     // Category name
                     Text(title)
                         .font(.bodyLarge)
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
 
                     Spacer()
 
@@ -56,7 +56,7 @@ struct CategorySummaryRow<Icon: View, Destination: View>: View {
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
                 }
             }
         }
@@ -89,6 +89,6 @@ struct CategorySummaryRow<Icon: View, Destination: View>: View {
             )
         }
         .padding()
-        .background(Color.primaryOffWhite)
+        .background(Color.primarySurface)
     }
 }

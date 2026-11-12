@@ -122,11 +122,11 @@ struct PayPulseApp: App {
         
         UINavigationBar.appearance().largeTitleTextAttributes = [
             .font: UIFont(name: Typography.FontName.extraBold, size: Typography.Size.navigation)!,
-            .foregroundColor: UIColor(Color.secondaryDarkGray)
+            .foregroundColor: UIColor(Color.secondaryText)
         ]
         UINavigationBar.appearance().titleTextAttributes = [
             .font: UIFont(name: Typography.FontName.medium, size: Typography.Size.headline)!,
-            .foregroundColor: UIColor(Color.secondaryDarkGray)
+            .foregroundColor: UIColor(Color.secondaryText)
         ]
     }
     

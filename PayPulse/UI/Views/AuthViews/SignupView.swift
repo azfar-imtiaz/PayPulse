@@ -66,7 +66,7 @@ struct SignupView: View {
                 HStack(spacing: 0) {
                     Text("Already have an account? ")
                         .font(.bodyStandard)
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
 
                     TextButton(
                         buttonText: "Sign in!",

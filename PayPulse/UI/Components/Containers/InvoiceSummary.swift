@@ -32,7 +32,7 @@ struct InvoiceSummary: View {
             HStack(alignment: .top) {
                 Text(vendor)
                     .font(.buttonStandard)
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
                     .multilineTextAlignment(.leading)
                 Spacer()
 
@@ -58,7 +58,7 @@ struct InvoiceSummary: View {
                 Text(dueDate)
             }
             .font(.bodyStandard)
-            .foregroundStyle(Color.secondaryDarkGray)
+            .foregroundStyle(Color.secondaryText)
         }
     }
 }

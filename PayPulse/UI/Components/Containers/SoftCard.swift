@@ -28,5 +28,5 @@ struct SoftCard<Content: View>: View {
         Text("Template")
     }
     .padding()
-    .background(Color.secondaryDarkGray.opacity(0.1))
+    .background(Color.secondaryText.opacity(0.1))
 }

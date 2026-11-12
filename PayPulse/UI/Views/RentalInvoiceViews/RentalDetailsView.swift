@@ -24,17 +24,17 @@ struct RentalDetailsView: View {
                     Text("Invoice ID")
                         .font(.bodyLarge)
                         .bold()
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
 
                     HStack(spacing: 5) {
                         Text(Utils.truncateInvoiceID(invoice.invoiceID))
                             .font(.bodyStandard)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                            .foregroundStyle(Color.secondaryDarkGray)
+                            .foregroundStyle(Color.secondaryText)
                             .opacity(0.6)
 
-                        CopyTextButton(size: 14, color: Color.secondaryDarkGray) {
+                        CopyTextButton(size: 14, color: Color.secondaryText) {
                             copyInvoiceIDToClipboard(invoice.invoiceID)
                         }
                     }
@@ -54,7 +54,7 @@ struct RentalDetailsView: View {
                 Text("Invoice details")
                     .font(.bodyLarge)
                     .bold()
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
                     .padding(.horizontal)
 
                 PaymentDetailsView(
@@ -67,7 +67,7 @@ struct RentalDetailsView: View {
                 Text("Rent Breakdown")
                     .font(.bodyLarge)
                     .bold()
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
                     .padding(.horizontal)
 
                 RentBreakdownView(
@@ -108,7 +108,7 @@ struct RentalDetailsView: View {
                 }
             }
         }
-        .background(Color.primaryOffWhite)
+        .background(Color.primarySurface)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {

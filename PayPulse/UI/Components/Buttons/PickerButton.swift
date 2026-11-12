@@ -16,7 +16,7 @@ struct PickerButtonContent: View {
         HStack {
             Text(displayText)
                 .font(.buttonSmall)
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
                 .lineLimit(1)
                 .truncationMode(.tail)
 
@@ -24,7 +24,7 @@ struct PickerButtonContent: View {
 
             Image(systemName: "chevron.down")
                 .font(.buttonCompact)
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
                 .rotationEffect(.degrees(isShowingDropdown ? 180 : 0))
                 .animation(.easeInOut(duration: 0.2), value: isShowingDropdown)
         }
@@ -33,7 +33,7 @@ struct PickerButtonContent: View {
         .background(
             RoundedRectangle(cornerRadius: Radius.md)
                 .stroke(style: StrokeStyle(lineWidth: 1))
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
         )
     }
 }
@@ -51,7 +51,7 @@ struct PickerDropdownItem: View {
             HStack {
                 Text(displayText)
                     .font(.bodyStandard)
-                    .foregroundStyle(isSelected ? Color.accentColor : Color.secondaryDarkGray)
+                    .foregroundStyle(isSelected ? Color.accentColor : Color.secondaryText)
                 
                 Spacer()
                 
@@ -96,7 +96,7 @@ struct PickerDropdownMenu<T: Hashable>: View {
                 
                 if index < options.count - 1 {
                     Divider()
-                        .background(Color.secondaryDarkGray.opacity(0.3))
+                        .background(Color.secondaryText.opacity(0.3))
                 }
             }
         }

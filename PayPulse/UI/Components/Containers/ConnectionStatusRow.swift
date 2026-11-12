@@ -29,25 +29,25 @@ struct ConnectionStatusRow: View {
                 Text(name)
                     .font(.tableValue)
                     .fontWeight(.semibold)
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
             }
 
             Spacer()
 
             HStack(spacing: 5) {
                 Circle()
-                    .fill(isConnected ? Color.green : Color.secondaryDarkGray.opacity(0.4))
+                    .fill(isConnected ? Color.green : Color.secondaryText.opacity(0.4))
                     .frame(width: 5, height: 5)
                 Text(isConnected ? "Connected" : "Not connected")
                     .font(.footnote)
                     .fontWeight(.semibold)
             }
-            .foregroundStyle(isConnected ? Color.green : Color.secondaryDarkGray)
+            .foregroundStyle(isConnected ? Color.green : Color.secondaryText)
             .padding(.horizontal, Spacing.sm)
             .padding(.vertical, Spacing.xs)
             .background(
                 Capsule()
-                    .fill((isConnected ? Color.green : Color.secondaryDarkGray).opacity(0.12))
+                    .fill((isConnected ? Color.green : Color.secondaryText).opacity(0.12))
             )
         }
         .padding(.vertical, Spacing.md)

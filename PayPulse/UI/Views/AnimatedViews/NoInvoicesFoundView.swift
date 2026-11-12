@@ -28,7 +28,7 @@ struct NoInvoicesFoundView: View {
                 Text(subtitle)
                     .font(.bodyStandard)
             }
-            .foregroundStyle(Color.secondaryDarkGray)
+            .foregroundStyle(Color.secondaryText)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, Spacing.xxl)
@@ -46,7 +46,7 @@ struct NoInvoicesFoundView: View {
             
             Spacer()
         }
-        .background(Color.primaryOffWhite)
+        .background(Color.primarySurface)
     }
 }
 

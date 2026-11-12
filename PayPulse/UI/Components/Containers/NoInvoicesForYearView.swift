@@ -16,12 +16,12 @@ struct NoInvoicesForYearView: View {
 
             Text("No invoices found for \(year.description)")
                 .font(.headingStandard)
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
                 .multilineTextAlignment(.center)
 
             Text("Select a different year or check back later")
                 .font(.bodyStandard)
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
                 .multilineTextAlignment(.center)
 
             Spacer()

@@ -29,7 +29,7 @@ struct RetailLandingPage: View {
                     HStack {
                         VStack(alignment: .leading, spacing: 0) {
                             Text("Your retail invoices,")
-                                .foregroundStyle(Color.secondaryDarkGray)
+                                .foregroundStyle(Color.secondaryText)
 
                             Text("categorized.")
                                 .foregroundStyle(Color.gray)
@@ -69,7 +69,7 @@ struct RetailLandingPage: View {
                         Spacer()
                     }
                 }
-                .background(Color.primaryOffWhite)
+                .background(Color.primarySurface)
                 .onAppear {
                     loadingText = "Loading invoice counts..."
                     if !viewModel.countsHaveLoaded {
@@ -89,16 +89,16 @@ struct RetailLandingPage: View {
                 .foregroundStyle(Color.accentDeepOrange)
             Text("invoices across \(RetailInvoiceSubType.allCases.count) categories")
                 .font(.bodyStandard)
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.xl)
         .background(
             RoundedRectangle(cornerRadius: Radius.xl)
-                .fill(Color.primaryOffWhite)
+                .fill(Color.primarySurface)
                 .overlay(
                     RoundedRectangle(cornerRadius: Radius.xl)
-                        .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
+                        .stroke(Color.secondaryText.opacity(0.15), lineWidth: 1)
                 )
         )
     }

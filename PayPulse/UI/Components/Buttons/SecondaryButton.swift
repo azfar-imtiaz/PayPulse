@@ -16,11 +16,11 @@ struct SecondaryButton<Content: View>: View {
             buttonView: buttonView,
             action: action,
             font: .buttonStandard,
-            foregroundColor: Color.secondaryDarkGray,
+            foregroundColor: Color.secondaryText,
             background: {
                 RoundedRectangle(cornerRadius: Radius.md)
                     .stroke(style: StrokeStyle(lineWidth: 1))
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
             }
         )
     }

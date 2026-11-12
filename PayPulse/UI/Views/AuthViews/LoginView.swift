@@ -59,7 +59,7 @@ struct LoginView: View {
                 HStack(spacing: 0) {
                     Text("No account? Let's ")
                         .font(.bodyStandard)
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
 
                     TextButton(
                         buttonText: "Create one!",

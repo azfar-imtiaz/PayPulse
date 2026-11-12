@@ -15,14 +15,14 @@ struct InputTextField: View {
     
     var body: some View {
         inputField
-            .foregroundStyle(Color.secondaryDarkGray)
+            .foregroundStyle(Color.secondaryText)
             .font(.bodyLarge)
             .padding(.leading, Spacing.md)
             .frame(maxWidth: .infinity, minHeight: 50)
             .background(
                 RoundedRectangle(cornerRadius: Radius.md)
                     .stroke(style: StrokeStyle(lineWidth: 1))
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
             )
             .padding(.horizontal, Spacing.xxl)
     }

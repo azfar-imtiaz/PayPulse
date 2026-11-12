@@ -10,7 +10,7 @@ import SwiftUI
 struct RectangleRoundedCorners: View {
     var cornerRadius : CGFloat = Radius.sm
     var strokeWidth  : CGFloat = 1
-    var color        : Color = Color.secondaryDarkGray
+    var color        : Color = Color.secondaryText
     
     var body: some View {
         RoundedRectangle(cornerRadius: cornerRadius)

@@ -53,7 +53,7 @@ struct RentalLandingPage: View {
                         // the charts view shouldn't be displayed unless some invoices have been loaded
                         if viewModel.invoices.count > 0 {
                             RentalChartView(viewModel: viewModel)
-                                .background(Color.primaryOffWhite)
+                                .background(Color.primarySurface)
                                 .tabItem {
                                     Label("Charts", systemImage: "chart.xyaxis.line")
                                 }

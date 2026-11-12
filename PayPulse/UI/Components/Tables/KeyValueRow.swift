@@ -29,7 +29,7 @@ struct KeyValueRow: View {
                 }
             }
                 .font(isHeader ? .tableHeader : (useLargeFont ? .bodyLarge : .tableKey))
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
                 .opacity(keyOpacity)
 
             if showCopyButton, let action = copyButtonAction {
@@ -58,7 +58,7 @@ struct KeyValueRow: View {
                     .font(useLargeFont ? .bodyLarge : .tableValue)
             }
         }
-        .foregroundStyle(Color.secondaryDarkGray)
+        .foregroundStyle(Color.secondaryText)
         .lineLimit(1)
         .minimumScaleFactor(allowValueShrink ? 0.7 : 1.0)
         .frame(maxWidth: .infinity, alignment: .trailing)

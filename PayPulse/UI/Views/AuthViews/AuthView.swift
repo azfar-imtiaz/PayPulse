@@ -39,7 +39,7 @@ struct AuthView: View {
                         }
                         .foregroundStyle(Color.gray)
                     }
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
                     .font(.headingLarge)
                     .animation(.easeInOut(duration: 0.4), value: showingLogin)
                     
@@ -98,7 +98,7 @@ struct AuthView: View {
             
             LoadingDotsView(isLoading: $isLoading, loadingText: showingLogin ? "Logging in..." : "Signing up...")
         }
-        .background(Color.primaryOffWhite)
+        .background(Color.primarySurface)
         .onAppear {
             if let pendingToast = authManager.pendingToast {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

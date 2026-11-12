@@ -20,7 +20,7 @@ struct InvoiceDetailSection<Content: View>: View {
                 Text(title)
                     .font(.bodyLarge)
                     .bold()
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
                     .padding(.horizontal)
 
                 content()

@@ -40,7 +40,7 @@ struct ContentView: View {
                 HStack {
                     Text("PayPulse")
                         .font(.headingLarge)
-                        .foregroundStyle(Color.secondaryDarkGray)
+                        .foregroundStyle(Color.secondaryText)
                     Spacer()
                     NavigationLink {
                         ProfileView(userService: userService, gmailService: gmailService, outlookService: outlookService)
@@ -104,7 +104,7 @@ struct ContentView: View {
                     .padding(.vertical, Spacing.xl)
                 }
             }
-            .background(Color.primaryOffWhite)
+            .background(Color.primarySurface)
             .onAppear {
                 // Check for pending welcome toast and login context
                 if let pendingToast = authManager.pendingToast,
@@ -136,7 +136,7 @@ struct ContentView: View {
                 }
                 Text("This month's spending")
                     .font(.bodyStandard)
-                    .foregroundStyle(Color.secondaryDarkGray)
+                    .foregroundStyle(Color.secondaryText)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -147,7 +147,7 @@ struct ContentView: View {
             Text("Recent invoices")
                 .font(.headingSmall)
                 .fontWeight(.semibold)
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
                 .padding(.top, Spacing.sm)
 
             VStack(spacing: Spacing.md) {

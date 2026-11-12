@@ -18,12 +18,12 @@ struct RetailInvoiceListContainer: View {
     var body: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: Radius.pill)
-                .fill(Color.primaryOffWhite)
+                .fill(Color.primarySurface)
                 .ignoresSafeArea(edges: .bottom)
 
             VStack(spacing: 0) {
                 RoundedRectangle(cornerRadius: Radius.xs)
-                    .fill(Color.secondaryDarkGray.opacity(0.3))
+                    .fill(Color.secondaryText.opacity(0.3))
                     .frame(width: 36, height: 4)
                     .padding(.top, Spacing.sm) // rounded 10->8 to match .bottom below
                     .padding(.bottom, Spacing.sm)

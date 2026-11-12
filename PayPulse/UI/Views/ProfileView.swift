@@ -40,7 +40,7 @@ struct ProfileView: View {
                             VStack(alignment: .leading, spacing: Spacing.xl) {
                                 Text("Account Information")
                                     .font(.headingSmall)
-                                    .foregroundStyle(Color.secondaryDarkGray)
+                                    .foregroundStyle(Color.secondaryText)
 
                                 VStack(alignment: .leading, spacing: 0) {
                                     KeyValueRow(key: "Name", value: viewModel.username, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
@@ -60,7 +60,7 @@ struct ProfileView: View {
                             VStack(alignment: .leading, spacing: Spacing.lg) {
                                 Text("Connected accounts")
                                     .font(.headingSmall)
-                                    .foregroundStyle(Color.secondaryDarkGray)
+                                    .foregroundStyle(Color.secondaryText)
 
                                 VStack(spacing: 0) {
                                     ConnectionStatusRow(
@@ -127,7 +127,7 @@ struct ProfileView: View {
                 .onAppear {
                     loadUserInfo()
                 }
-                .background(Color.primaryOffWhite)
+                .background(Color.primarySurface)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitleDisplayMode(.inline)
                 

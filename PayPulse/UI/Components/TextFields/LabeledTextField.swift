@@ -17,7 +17,7 @@ struct LabeledTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(labelText)
-                .foregroundStyle(Color.secondaryDarkGray)
+                .foregroundStyle(Color.secondaryText)
                 .font(.formLabel)
                 .padding(.leading, Spacing.xxl)
             

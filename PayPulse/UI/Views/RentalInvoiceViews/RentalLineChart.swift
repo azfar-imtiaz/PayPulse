@@ -71,7 +71,7 @@ struct RentalLineChart: View {
                     let label = Utils.formatNumber(gridValue)
                     Text(label)
                         .font(.caption)
-                        .foregroundColor(Color.secondaryDarkGray)
+                        .foregroundColor(Color.secondaryText)
                         .frame(width: 40, alignment: .center)
                         .position(y: gridY - 10)
                         .padding(.leading, Spacing.xs) // rounded 5->4
@@ -88,7 +88,7 @@ struct RentalLineChart: View {
                     }
                 }
                 .trim(from: 0, to: animationProgress)
-                .stroke(Color.secondaryDarkGray, lineWidth: 2)
+                .stroke(Color.secondaryText, lineWidth: 2)
                 
                 // draw points with labels
                 ForEach(points.indices, id: \.self) { i in
@@ -125,7 +125,7 @@ struct RentalLineChart: View {
                             
                             Text(year)
                                 .font(.bodySmall)
-                                .foregroundStyle(Color.secondaryDarkGray)
+                                .foregroundStyle(Color.secondaryText)
                                 .position(x: x, y: height + 15)
                         }
                     }
@@ -134,7 +134,7 @@ struct RentalLineChart: View {
                         if i == 0 || data[i].0 != data[i-1].0 {
                             Text(label)
                                 .font(.bodySmall)
-                                .foregroundStyle(Color.secondaryDarkGray)
+                                .foregroundStyle(Color.secondaryText)
                                 .position(x: x, y: height + 15)
                         }
                     }
@@ -146,7 +146,7 @@ struct RentalLineChart: View {
                     else {
                         Text(label.prefix(3))
                             .font(.bodySmall)
-                            .foregroundStyle(Color.secondaryDarkGray)
+                            .foregroundStyle(Color.secondaryText)
                             .position(x: x, y: height + 15)
                     }
                 }

@@ -16,10 +16,10 @@ struct SoftButton<Content: View>: View {
             buttonView: buttonView,
             action: action,
             font: .buttonStandard,
-            foregroundColor: Color.secondaryDarkGray,
+            foregroundColor: Color.secondaryText,
             background: {
                 RoundedRectangle(cornerRadius: Radius.md)
-                    .fill(Color.primaryOffWhite)
+                    .fill(Color.primarySurface)
                     .shadow(color: Color.black.opacity(0.08), radius: 2, x: 0, y: 1)
             },
             usesPressScale: true
@@ -30,5 +30,5 @@ struct SoftButton<Content: View>: View {
 #Preview {
     SoftButton(buttonView: Text("Log out"), action: {})
         .padding()
-        .background(Color.secondaryDarkGray.opacity(0.1))
+        .background(Color.secondaryText.opacity(0.1))
 }

@@ -13,7 +13,7 @@ struct NavTitle: View {
     var body: some View {
         Text(text)
             .font(.navigationStandard)
-            .foregroundStyle(Color.secondaryDarkGray)
+            .foregroundStyle(Color.secondaryText)
     }
 }
 

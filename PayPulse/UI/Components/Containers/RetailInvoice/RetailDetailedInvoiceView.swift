@@ -60,7 +60,7 @@ struct RetailDetailedInvoiceItemsView: View {
                 InvoiceDetailsContainer {
                     Text("Additional details not yet available for \(subType.displayName)")
                         .font(.bodyStandard)
-                        .foregroundColor(Color.secondaryDarkGray)
+                        .foregroundColor(Color.secondaryText)
                         .padding()
                 }
             }
@@ -158,7 +158,7 @@ private struct FoodDeliveryItemsView: View {
                             if let description = item.description, !description.isEmpty {
                                 Text(description)
                                     .font(.caption)
-                                    .foregroundColor(Color.secondaryDarkGray)
+                                    .foregroundColor(Color.secondaryText)
                             }
                         }
 
@@ -171,7 +171,7 @@ private struct FoodDeliveryItemsView: View {
 
                             Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                 .font(.caption)
-                                .foregroundColor(Color.secondaryDarkGray)
+                                .foregroundColor(Color.secondaryText)
                         }
                     }
                 }
@@ -263,7 +263,7 @@ private struct MiscellaneousItemsView: View {
 
                                 Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                     .font(.caption)
-                                    .foregroundColor(Color.secondaryDarkGray)
+                                    .foregroundColor(Color.secondaryText)
                             }
                         }
                     }
@@ -368,7 +368,7 @@ private struct TechnologyItemsView: View {
 
                                 Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                     .font(.caption)
-                                    .foregroundColor(Color.secondaryDarkGray)
+                                    .foregroundColor(Color.secondaryText)
                             }
                         }
                     }
@@ -476,7 +476,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("From:")
                                                 .font(.caption)
-                                                .foregroundColor(Color.secondaryDarkGray)
+                                                .foregroundColor(Color.secondaryText)
                                             Text(segment.departureLocation!)
                                                 .font(.bodyStandard)
                                                 .foregroundColor(.primary)
@@ -486,7 +486,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("To:")
                                                 .font(.caption)
-                                                .foregroundColor(Color.secondaryDarkGray)
+                                                .foregroundColor(Color.secondaryText)
                                             Text(segment.arrivalLocation!)
                                                 .font(.bodyStandard)
                                                 .foregroundColor(.primary)
@@ -496,7 +496,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("Location:")
                                                 .font(.caption)
-                                                .foregroundColor(Color.secondaryDarkGray)
+                                                .foregroundColor(Color.secondaryText)
                                             Text(segment.departureLocation!)
                                                 .font(.bodyStandard)
                                                 .foregroundColor(.primary)
@@ -508,7 +508,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("Departure:")
                                                 .font(.caption)
-                                                .foregroundColor(Color.secondaryDarkGray)
+                                                .foregroundColor(Color.secondaryText)
                                             Text(segment.getFormattedDepartureDate())
                                                 .font(.caption)
                                                 .foregroundColor(.primary)
@@ -520,7 +520,7 @@ private struct TravelItemsView: View {
                                         HStack {
                                             Text("Arrival:")
                                                 .font(.caption)
-                                                .foregroundColor(Color.secondaryDarkGray)
+                                                .foregroundColor(Color.secondaryText)
                                             Text(segment.getFormattedArrivalDate())
                                                 .font(.caption)
                                                 .foregroundColor(.primary)
@@ -637,7 +637,7 @@ private struct ClothingItemsView: View {
 
                             Text(item.brand)
                                 .font(.caption)
-                                .foregroundColor(Color.secondaryDarkGray)
+                                .foregroundColor(Color.secondaryText)
                         }
 
                         Spacer()
@@ -649,7 +649,7 @@ private struct ClothingItemsView: View {
 
                             Text(Utils.formatCurrency(item.getTotalPrice(), currency: baseCurrency))
                                 .font(.caption)
-                                .foregroundColor(Color.secondaryDarkGray)
+                                .foregroundColor(Color.secondaryText)
                         }
                     }
                 }
