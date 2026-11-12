@@ -16,14 +16,7 @@ struct RentalListView: View {
 
     var body: some View {
         if viewModel.invoicesHaveLoaded && viewModel.invoices.count > 0 {
-            VStack {
-                HeaderYears(
-                    years: Array(viewModel.invoices.keys),
-                    selectedYear: $selectedYear
-                )
-                .padding(.horizontal)
-                .padding(.bottom, Spacing.xl)
-
+            InvoiceYearListShell(years: Array(viewModel.invoices.keys), selectedYear: $selectedYear) {
                 RentalInvoiceListContainer(
                     selectedYear: $selectedYear,
                     vendor: "Wallenstam",
@@ -31,7 +24,6 @@ struct RentalListView: View {
                     refreshAction: refreshAction
                 )
             }
-            .background(Color.invoiceHeaderBannerBackground)
         } else if viewModel.invoicesHaveLoaded {
             NoInvoicesFoundView(showSpinner: $showSpinner, subtitle: "Click the button below to fetch rental invoices from your inbox.") {
                 try await loadInvoicesAction()

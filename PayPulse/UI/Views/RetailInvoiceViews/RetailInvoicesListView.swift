@@ -28,14 +28,7 @@ struct RetailInvoicesListView: View {
     var body: some View {
         ZStack(alignment: .center) {
             if viewModel.invoicesHaveLoadedForSubType && viewModel.retailInvoicesByYear.count > 0 {
-                VStack {
-                    HeaderYears(
-                        years: Array(viewModel.retailInvoicesByYear.keys),
-                        selectedYear: $selectedYear
-                    )
-                    .padding(.horizontal)
-                    .padding(.bottom, Spacing.xl)
-
+                InvoiceYearListShell(years: Array(viewModel.retailInvoicesByYear.keys), selectedYear: $selectedYear) {
                     RetailInvoiceListContainer(
                         selectedYear: $selectedYear,
                         subType: subType,
@@ -43,7 +36,6 @@ struct RetailInvoicesListView: View {
                         refreshAction: refreshInvoices
                     )
                 }
-                .background(Color.invoiceHeaderBannerBackground)
             } else if viewModel.invoicesHaveLoadedForSubType {
                 NoInvoicesFoundView(showSpinner: $showSpinner, subtitle: "No invoices found in this category yet. Try reloading or check back later.") {
                     loadInvoices()
