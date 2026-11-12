@@ -19,41 +19,31 @@ struct RetailDetailedInvoiceItemsView: View {
                 if let foodDeliveryDetail = detailInvoice as? FoodDeliveryDetail {
                     FoodDeliveryItemsView(detail: foodDeliveryDetail, baseCurrency: baseCurrency)
                 } else {
-                    Text("Error: Could not display food delivery details")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "food delivery details")
                 }
             case .miscellaneous:
                 if let miscellaneousDetail = detailInvoice as? MiscellaneousDetail {
                     MiscellaneousItemsView(detail: miscellaneousDetail, baseCurrency: baseCurrency)
                 } else {
-                    Text("Error: Could not display miscellaneous details")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "miscellaneous details")
                 }
             case .clothing:
                 if let clothingDetail = detailInvoice as? ClothingDetail {
                     ClothingItemsView(detail: clothingDetail, baseCurrency: baseCurrency)
                 } else {
-                    Text("Error: Could not display clothing details")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "clothing details")
                 }
             case .travel:
                 if let travelDetail = detailInvoice as? TravelDetail {
                     TravelItemsView(detail: travelDetail)
                 } else {
-                    Text("Error: Could not display travel details")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "travel details")
                 }
             case .technology:
                 if let technologyDetail = detailInvoice as? TechnologyDetail {
                     TechnologyItemsView(detail: technologyDetail, baseCurrency: baseCurrency)
                 } else {
-                    Text("Error: Could not display technology details")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "technology details")
                 }
             default:
                 // For other sub-types that don't have detail implementations yet
@@ -81,49 +71,37 @@ struct RetailDetailedInvoiceSummaryView: View {
                 if let foodDeliveryDetail = detailInvoice as? FoodDeliveryDetail {
                     FoodDeliverySummaryView(detail: foodDeliveryDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
-                    Text("Error: Could not display food delivery summary")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "food delivery summary")
                 }
             case .miscellaneous:
                 if let miscellaneousDetail = detailInvoice as? MiscellaneousDetail {
                     MiscellaneousSummaryView(detail: miscellaneousDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
-                    Text("Error: Could not display miscellaneous summary")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "miscellaneous summary")
                 }
             case .subscriptions:
                 if let subscriptionDetail = detailInvoice as? SubscriptionDetail {
                     SubscriptionItemsView(detail: subscriptionDetail)
                 } else {
-                    Text("Error: Could not display subscription details")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "subscription details")
                 }
             case .clothing:
                 if let clothingDetail = detailInvoice as? ClothingDetail {
                     ClothingSummaryView(detail: clothingDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
-                    Text("Error: Could not display clothing summary")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "clothing summary")
                 }
             case .travel:
                 if let travelDetail = detailInvoice as? TravelDetail {
                     TravelSummaryView(detail: travelDetail)
                 } else {
-                    Text("Error: Could not display travel summary")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "travel summary")
                 }
             case .technology:
                 if let technologyDetail = detailInvoice as? TechnologyDetail {
                     TechnologySummaryView(detail: technologyDetail, baseCurrency: baseCurrency, actualTotal: actualTotal)
                 } else {
-                    Text("Error: Could not display technology summary")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "technology summary")
                 }
             default:
                 // For other sub-types, no summary available
@@ -322,9 +300,7 @@ struct RetailDetailedInvoicePassengerView: View {
                         TravelPassengerView(detail: travelDetail)
                     }
                 } else {
-                    Text("Error: Could not display travel passenger information")
-                        .font(.bodyStandard)
-                        .foregroundStyle(Color.accentDeepRed)
+                    ErrorRow(context: "travel passenger information")
                 }
             default:
                 // Other invoice types don't have passenger sections
