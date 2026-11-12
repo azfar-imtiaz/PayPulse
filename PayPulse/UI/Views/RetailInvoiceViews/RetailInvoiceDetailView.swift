@@ -34,10 +34,7 @@ struct RetailInvoiceDetailView: View {
 
                 // Invoice ID section
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("Invoice ID")
-                        .font(.bodyLarge)
-                        .bold()
-                        .foregroundStyle(Color.secondaryText)
+                    SectionTitle(text: "Invoice ID")
 
                     HStack(spacing: 5) {
                         Text(Utils.truncateInvoiceID(invoice.invoiceID))
@@ -65,10 +62,7 @@ struct RetailInvoiceDetailView: View {
                 .padding(.horizontal)
 
                 // Base Invoice Details section
-                Text("Invoice Details")
-                    .font(.bodyLarge)
-                    .bold()
-                    .foregroundStyle(Color.secondaryText)
+                SectionTitle(text: "Invoice Details")
                     .padding(.horizontal)
 
                 RetailBaseInvoiceDetailsView(
@@ -101,10 +95,7 @@ struct RetailInvoiceDetailView: View {
                         )
                     }
 
-                    Text(getSecondSectionTitle(for: subType))
-                        .font(.bodyLarge)
-                        .bold()
-                        .foregroundStyle(Color.secondaryText)
+                    SectionTitle(text: getSecondSectionTitle(for: subType))
                         .padding(.horizontal)
 
                     RetailDetailedInvoiceSummaryView(

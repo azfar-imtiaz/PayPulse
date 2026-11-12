@@ -17,10 +17,7 @@ struct InvoiceDetailSection<Content: View>: View {
     var body: some View {
         if isVisible {
             VStack(alignment: .leading, spacing: 20) {
-                Text(title)
-                    .font(.bodyLarge)
-                    .bold()
-                    .foregroundStyle(Color.secondaryText)
+                SectionTitle(text: title)
                     .padding(.horizontal)
 
                 content()

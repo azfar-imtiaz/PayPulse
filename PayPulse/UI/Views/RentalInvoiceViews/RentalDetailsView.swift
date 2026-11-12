@@ -21,10 +21,7 @@ struct RentalDetailsView: View {
             VStack(alignment: .leading, spacing: 20) {
 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("Invoice ID")
-                        .font(.bodyLarge)
-                        .bold()
-                        .foregroundStyle(Color.secondaryText)
+                    SectionTitle(text: "Invoice ID")
 
                     HStack(spacing: 5) {
                         Text(Utils.truncateInvoiceID(invoice.invoiceID))
@@ -51,10 +48,7 @@ struct RentalDetailsView: View {
                 )
                 .padding(.horizontal)
 
-                Text("Invoice details")
-                    .font(.bodyLarge)
-                    .bold()
-                    .foregroundStyle(Color.secondaryText)
+                SectionTitle(text: "Invoice details")
                     .padding(.horizontal)
 
                 PaymentDetailsView(
@@ -64,10 +58,7 @@ struct RentalDetailsView: View {
                 )
                 .padding(.horizontal)
 
-                Text("Rent Breakdown")
-                    .font(.bodyLarge)
-                    .bold()
-                    .foregroundStyle(Color.secondaryText)
+                SectionTitle(text: "Rent Breakdown")
                     .padding(.horizontal)
 
                 RentBreakdownView(
