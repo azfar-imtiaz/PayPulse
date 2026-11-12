@@ -43,7 +43,7 @@ struct RetailInvoicesListView: View {
                         refreshAction: refreshInvoices
                     )
                 }
-                .background(Color.secondaryDarkGray)
+                .background(Color.invoiceHeaderBannerBackground)
             } else if viewModel.invoicesHaveLoadedForSubType {
                 NoInvoicesFoundView(showSpinner: $showSpinner, subtitle: "No invoices found in this category yet. Try reloading or check back later.") {
                     loadInvoices()
