@@ -12,21 +12,18 @@ struct SoftButton<Content: View>: View {
     let action: () -> Void
 
     var body: some View {
-        Button {
-            action()
-        } label: {
-            buttonView
-                .font(.buttonStandard)
-                .foregroundStyle(Color.secondaryDarkGray)
-                .frame(maxWidth: .infinity, minHeight: 50)
-                .background(
-                    RoundedRectangle(cornerRadius: Radius.md)
-                        .fill(Color.primaryOffWhite)
-                        .shadow(color: Color.black.opacity(0.08), radius: 2, x: 0, y: 1)
-                )
-                .padding(.horizontal, Spacing.xxl)
-        }
-        .buttonStyle(PressScaleButtonStyle())
+        BaseButton(
+            buttonView: buttonView,
+            action: action,
+            font: .buttonStandard,
+            foregroundColor: Color.secondaryDarkGray,
+            background: {
+                RoundedRectangle(cornerRadius: Radius.md)
+                    .fill(Color.primaryOffWhite)
+                    .shadow(color: Color.black.opacity(0.08), radius: 2, x: 0, y: 1)
+            },
+            usesPressScale: true
+        )
     }
 }
 

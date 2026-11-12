@@ -11,23 +11,19 @@ struct DestructiveButton<Content: View>: View {
     let buttonView: Content
     let action: () -> Void
     var isDisabled: Bool = false
-    
+
     var body: some View {
-        Button {
-            if !isDisabled {
-                action()
+        BaseButton(
+            buttonView: buttonView,
+            action: action,
+            isDisabled: isDisabled,
+            font: .buttonLarge,
+            foregroundColor: Color.white,
+            background: {
+                RoundedRectangle(cornerRadius: Radius.md)
+                    .foregroundStyle(isDisabled ? Color.disabledGray : Color.accentDeepRed)
             }
-        } label: {
-            buttonView
-                .font(.buttonLarge)
-                .foregroundStyle(Color.white)
-                .frame(maxWidth: .infinity, minHeight: 50)
-                .background(
-                    RoundedRectangle(cornerRadius: Radius.md)
-                        .foregroundStyle(isDisabled ? Color.disabledGray : Color.accentDeepRed)
-                )
-                .padding(.horizontal, Spacing.xxl)
-        }
+        )
     }
 }
 
