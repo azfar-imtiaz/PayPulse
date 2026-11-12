@@ -15,7 +15,7 @@ struct SoftCard<Content: View>: View {
         content
             .padding(padding)
             .background(
-                RoundedRectangle(cornerRadius: Radius.sm)
+                RoundedRectangle(cornerRadius: Radius.xl)
                     .fill(Color.invoiceCardBackground)
             )
             .shadow(color: Color.black.opacity(0.06), radius: 1, x: 0, y: 1)
