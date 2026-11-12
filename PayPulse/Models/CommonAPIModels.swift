@@ -31,6 +31,7 @@ enum PayPulseErrorCode: String, Decodable {
     case jwtError = "JWT_ERROR"
     case invalidJson = "INVALID_JSON"
     case missingFields = "MISSING_FIELDS"
+    case invalidRequest = "INVALID_REQUEST"
     case invoiceParseError = "INVOICE_PARSE_ERROR"
     case dependencyFailure = "DEPENDENCY_FAILURE"
     case internalServerError = "INTERNAL_SERVER_ERROR"

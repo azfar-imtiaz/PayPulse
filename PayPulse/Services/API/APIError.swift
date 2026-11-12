@@ -42,6 +42,7 @@ enum APIError: Error, LocalizedError {
             case .invoiceParseError: return "Failed to parse invoice data. Please try again."
             case .jwtError: return "Failed to generate or parse JWT token. Please try again."
             case .missingFields: return "Missing required fields. Please check your input."
+            case .invalidRequest: return message
             case .dependencyFailure: return "Failed to complete the request. Please try again."
             case .internalServerError: return "An internal server error occurred. Please try again later."
             default: return "Server error (\(code.rawValue)): \(message)"
