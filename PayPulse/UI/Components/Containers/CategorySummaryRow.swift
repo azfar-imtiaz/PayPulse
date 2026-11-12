@@ -60,10 +60,10 @@ struct CategorySummaryRow<Icon: View, Destination: View>: View {
             .padding(.horizontal, Spacing.lg)
             .padding(.vertical, Spacing.lg)
             .background(
-                RoundedRectangle(cornerRadius: Radius.xl)
+                RoundedRectangle(cornerRadius: Radius.sm)
                     .fill(Color.primaryOffWhite)
                     .overlay(
-                        RoundedRectangle(cornerRadius: Radius.xl)
+                        RoundedRectangle(cornerRadius: Radius.sm)
                             .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                     )
             )

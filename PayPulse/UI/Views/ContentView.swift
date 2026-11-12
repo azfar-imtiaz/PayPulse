@@ -140,10 +140,10 @@ struct ContentView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(Spacing.xl)
         .background(
-            RoundedRectangle(cornerRadius: Radius.xl)
+            RoundedRectangle(cornerRadius: Radius.sm)
                 .fill(Color.primaryOffWhite)
                 .overlay(
-                    RoundedRectangle(cornerRadius: Radius.xl)
+                    RoundedRectangle(cornerRadius: Radius.sm)
                         .stroke(Color.secondaryDarkGray.opacity(0.15), lineWidth: 1)
                 )
         )
