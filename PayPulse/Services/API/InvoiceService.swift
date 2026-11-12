@@ -63,6 +63,40 @@ class InvoiceService {
         return modifiedInvoices
     }
     
+    // MARK: - Home Summary Methods
+
+    /// Fetches the combined rental + retail invoice summary for a given month (defaults to current month)
+    func getInvoiceSummary(month: String? = nil, includeItems: Bool = false) async throws -> InvoiceSummaryResponse? {
+        var parameters: Parameters = [:]
+        if let month {
+            parameters["month"] = month
+        }
+        if includeItems {
+            parameters["include"] = "items"
+        }
+
+        let response: APISuccessResponse<InvoiceSummaryResponse> = try await apiClient.request(
+            path: "invoices/summary",
+            method: .get,
+            parameters: parameters.isEmpty ? nil : parameters,
+            encoding: URLEncoding.queryString
+        )
+
+        return response.data
+    }
+
+    /// Fetches the N most recent invoices (rental + retail mixed, newest first)
+    func getRecentInvoices(limit: Int = 5) async throws -> RecentInvoicesResponse? {
+        let response: APISuccessResponse<RecentInvoicesResponse> = try await apiClient.request(
+            path: "invoices/recent",
+            method: .get,
+            parameters: ["limit": limit],
+            encoding: URLEncoding.queryString
+        )
+
+        return response.data
+    }
+
     // MARK: - Retail Invoice Methods
     
     /// Fetches retail invoices for a specific sub-type grouped by year
