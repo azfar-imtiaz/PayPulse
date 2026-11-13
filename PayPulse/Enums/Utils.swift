@@ -80,7 +80,8 @@ enum Utils {
 
     /// Maps currency symbols or codes to proper ISO currency codes
     static func mapCurrencyToCode(_ currencyInput: String) -> String {
-        switch currencyInput.uppercased() {
+        let normalized = currencyInput.trimmingCharacters(in: .whitespaces).uppercased()
+        switch normalized {
         case "$", "USD":
             return "USD"
         case "€", "EUR":
@@ -89,14 +90,20 @@ enum Utils {
             return "GBP"
         case "¥", "JPY":
             return "JPY"
-        case "SEK", "KR":
+        case "SEK", "KR", "KR.":
             return "SEK"
         case "NOK":
             return "NOK"
         case "DKK":
             return "DKK"
+        case "₨", "RS", "RS.", "PKR":
+            return "PKR"
         default:
-            // Default to SEK if currency is unrecognized
+            // The backend sends ISO 4217 codes, so pass any recognized code through
+            // (NumberFormatter supports them all); only fall back to SEK for unknown input.
+            if Locale.commonISOCurrencyCodes.contains(normalized) {
+                return normalized
+            }
             return "SEK"
         }
     }
@@ -118,6 +125,8 @@ enum Utils {
             return Locale(identifier: "nb_NO")
         case "DKK":
             return Locale(identifier: "da_DK")
+        case "PKR":
+            return Locale(identifier: "en_PK") // Rs 3,633
         default:
             // Default to Swedish locale for unknown currencies
             return Locale(identifier: "sv_SE")
