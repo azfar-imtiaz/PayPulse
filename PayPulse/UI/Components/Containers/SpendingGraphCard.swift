@@ -72,13 +72,13 @@ struct SpendingGraphCard: View {
     }
 
     private func deltaLabel(current: Double, previous: Double) -> some View {
-        let delta = current - previous
+        let delta = (current - previous).rounded()
         let symbol = delta > 0 ? "arrow.up" : (delta < 0 ? "arrow.down" : "equal")
         return HStack(spacing: 2) {
             Image(systemName: symbol)
             Text("\(Utils.formatCurrency(abs(delta), currency: "SEK")) vs. last month")
         }
-        .font(.bodySmall)
+        .font(.chipLabel)
         .foregroundStyle(Color.secondaryText.opacity(0.7))
         .lineLimit(1)
         .minimumScaleFactor(0.8)
