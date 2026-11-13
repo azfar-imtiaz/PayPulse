@@ -11,39 +11,34 @@ import Toasts
 struct RetailLandingPage: View {
     let invoiceService: InvoiceService
     @ObservedObject var viewModel: RetailInvoicesViewModel
+    /// Shared with Home: holds this and last month's summary (incl. per-item retail data)
+    @ObservedObject var summaryViewModel: HomeViewModel
     @State var showSpinner: Bool = false
     @State var loadingText: String = ""
 
     @Environment(\.presentToast) var presentToast
     @EnvironmentObject var authManager: AuthManager
 
-    init(invoiceService: InvoiceService, viewModel: RetailInvoicesViewModel) {
+    init(invoiceService: InvoiceService, viewModel: RetailInvoicesViewModel, summaryViewModel: HomeViewModel) {
         self.invoiceService = invoiceService
         self.viewModel = viewModel
+        self.summaryViewModel = summaryViewModel
     }
 
     var body: some View {
         NavigationStack {
             ZStack(alignment: .center) {
                 VStack(spacing: 0) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Your retail invoices,")
-                                .foregroundStyle(Color.secondaryText)
-
-                            Text("categorized.")
-                                .foregroundStyle(Color.gray)
-                        }
-                        .font(.headingStandard)
-
-                        Spacer()
-                    }
-                    .padding([.leading, .bottom])
+                    ScreenHeader(title: "Your retail invoices,", subtitle: "categorized.")
 
                     if viewModel.countsHaveLoaded {
                         ScrollView {
                             VStack(spacing: 12) {
-                                summaryCard
+                                monthCard
+
+                                allInvoicesHeader
+                                    .padding(.top, Spacing.lg)
+
                                 ForEach(getSortedSubTypes(), id: \.0) { subType, count in
                                     CategorySummaryRow(
                                         iconColor: subType.color,
@@ -54,6 +49,7 @@ struct RetailLandingPage: View {
                                         },
                                         title: subType.displayName,
                                         count: count,
+                                        subtitle: monthSubtitle(for: subType),
                                         destination: RetailInvoicesListView(
                                             subType: subType,
                                             invoiceService: invoiceService,
@@ -66,6 +62,7 @@ struct RetailLandingPage: View {
                             .padding(.vertical, Spacing.xl)
                         }
                         .padding(.top, Spacing.sm) // rounded 10->8
+                        .floatingTabBarScrollBehavior()
                     } else {
                         Spacer()
                     }
@@ -83,25 +80,43 @@ struct RetailLandingPage: View {
         }
     }
 
-    private var summaryCard: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("\(viewModel.getTotalCount())")
-                .font(.headingMedium)
-                .foregroundStyle(Color.accentDeepOrange)
-            Text("invoices across \(RetailInvoiceSubType.allCases.count) categories")
-                .font(.bodyStandard)
-                .foregroundStyle(Color.secondaryText)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(Spacing.xl)
-        .background(
-            RoundedRectangle(cornerRadius: Radius.xl)
-                .fill(Color.primarySurface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: Radius.xl)
-                        .stroke(Color.secondaryText.opacity(0.15), lineWidth: 1)
-                )
+    private var monthCard: some View {
+        let segments = summaryViewModel.retailSpendBySubtype()
+        return RetailMonthCard(
+            isLoaded: summaryViewModel.summaryHasLoaded,
+            monthName: monthName,
+            total: summaryViewModel.summary?.retail.totalAmount ?? 0,
+            previousAtSamePoint: summaryViewModel.previousRetailAtSamePoint(),
+            segments: segments
         )
+    }
+
+    private var allInvoicesHeader: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("All invoices")
+                .font(.headingSmall)
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.secondaryText)
+            Spacer()
+            Text("\(viewModel.getTotalCount()) total")
+                .font(.chipLabel)
+                .foregroundStyle(Color.secondaryText.opacity(0.6))
+                .monospacedDigit()
+        }
+        .padding(.horizontal, Spacing.xs)
+    }
+
+    private var monthName: String {
+        summaryViewModel.period.start.formatted(.dateTime.month(.wide))
+    }
+
+    /// Quiet second line on each category row: this month's spend in that category
+    private func monthSubtitle(for subType: RetailInvoiceSubType) -> String? {
+        guard summaryViewModel.summaryHasLoaded, summaryViewModel.summary != nil else { return nil }
+        let amount = summaryViewModel.retailSpendBySubtype().first(where: { $0.subType == subType })?.amount ?? 0
+        return amount > 0
+            ? "\(Utils.formatCurrency(amount, currency: "SEK")) this month"
+            : "Nothing this month"
     }
 
     private func getSortedSubTypes() -> [(RetailInvoiceSubType, Int)] {
@@ -149,6 +164,7 @@ struct RetailLandingPage: View {
     let invoiceService = InvoiceService(apiClient: PayPulseAPIClient(authManager: AuthManager.shared))
     RetailLandingPage(
         invoiceService: invoiceService,
-        viewModel: RetailInvoicesViewModel(invoiceService: invoiceService)
+        viewModel: RetailInvoicesViewModel(invoiceService: invoiceService),
+        summaryViewModel: HomeViewModel(invoiceService: invoiceService)
     )
 }

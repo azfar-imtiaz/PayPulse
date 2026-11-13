@@ -69,6 +69,7 @@ struct RetailInvoiceListContainer: View {
                 .refreshable {
                     await refreshAction()
                 }
+                .floatingTabBarScrollBehavior()
             }
         }
     }

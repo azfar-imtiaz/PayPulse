@@ -69,6 +69,7 @@ struct RentalInvoiceListContainer<Header: View>: View {
                 .refreshable {
                     await refreshAction()
                 }
+                .floatingTabBarScrollBehavior()
                 .onChange(of: selectedYear) {
                     withAnimation { proxy.scrollTo(Self.topAnchor, anchor: .top) }
                 }

@@ -28,6 +28,25 @@ struct RentalLandingPage: View {
         NavigationStack {
             ZStack(alignment: .center) {
                 VStack(spacing: 0) {
+                    ScreenHeader(
+                        title: "Your rental invoices",
+                        style: hasInvoices ? .onBanner : .standard
+                    ) {
+                        if hasInvoices {
+                            Button {
+                                ingestLatestInvoice()
+                            } label: {
+                                // The banner inverts the page colours, so use the opposite icon variant
+                                Utils.getIconColored(
+                                    colorScheme: colorScheme == .dark ? .light : .dark,
+                                    iconName: "refresh-ccw-dot"
+                                )
+                            }
+                            .disabled(showSpinner)
+                            .accessibilityLabel("Fetch latest invoice")
+                        }
+                    }
+
                     if viewModel.invoicesHaveLoaded {
                         RentalListView(
                             viewModel: viewModel,
@@ -42,7 +61,7 @@ struct RentalLandingPage: View {
                     }
                     Spacer(minLength: 0)
                 }
-                .background(Color.primarySurface)
+                .background(hasInvoices ? Color.invoiceHeaderBannerBackground : Color.primarySurface)
                 .onAppear {
                     loadingText = "Loading invoices..."
                     if !viewModel.invoicesHaveLoaded {
@@ -58,24 +77,12 @@ struct RentalLandingPage: View {
                     loadInvoices(isReload: true)
                 }
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    NavTitle(text: "Rental")
-                }
-
-                if viewModel.invoices.count > 0 {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            ingestLatestInvoice()
-                        } label: {
-                            Utils.getIconColored(colorScheme: colorScheme, iconName: "refresh-ccw-dot")
-                        }
-                        .disabled(showSpinner)
-                    }
-                }
-            }
         }
+    }
+
+    /// The year list (and its dark banner) only shows once invoices exist
+    private var hasInvoices: Bool {
+        viewModel.invoicesHaveLoaded && viewModel.invoices.count > 0
     }
 
     private func loadInvoices(isReload: Bool) {

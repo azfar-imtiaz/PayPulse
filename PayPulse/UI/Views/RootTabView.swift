@@ -53,15 +53,32 @@ struct RootTabView: View {
                 }
             }
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
+        // Overlay (not safeAreaInset): each tab's scroll view reserves the bar's height itself via
+        // `.floatingTabBarScrollBehavior()`, which stays reliable through the nested NavigationStacks.
+        .overlay(alignment: .bottom) {
             if tabBarVisibility.isVisible {
-                FloatingTabBar(items: tabItems, selection: $selectedTab)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                FloatingTabBar(
+                    items: tabItems,
+                    selection: $selectedTab,
+                    isCollapsed: tabBarVisibility.isCollapsed,
+                    onExpand: { tabBarVisibility.isCollapsed = false }
+                )
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
+                    // Reserve space for the expanded bar only, so content doesn't jump on collapse
+                    if !tabBarVisibility.isCollapsed {
+                        tabBarVisibility.barHeight = height
+                    }
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .environmentObject(tabBarVisibility)
         .onChange(of: selectedTab) { _, newTab in
             visitedTabs.insert(newTab)
+            // A freshly shown tab starts with the full bar
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                tabBarVisibility.isCollapsed = false
+            }
         }
     }
 
@@ -95,7 +112,7 @@ struct RootTabView: View {
         case .rental:
             RentalLandingPage(invoiceService: invoiceService, viewModel: rentalViewModel)
         case .retail:
-            RetailLandingPage(invoiceService: invoiceService, viewModel: retailViewModel)
+            RetailLandingPage(invoiceService: invoiceService, viewModel: retailViewModel, summaryViewModel: homeViewModel)
         }
     }
 }

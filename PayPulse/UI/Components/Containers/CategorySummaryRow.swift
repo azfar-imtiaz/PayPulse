@@ -12,6 +12,7 @@ struct CategorySummaryRow<Icon: View, Destination: View>: View {
     @ViewBuilder let icon: Icon
     let title: String
     let count: Int?
+    var subtitle: String? = nil
     let destination: Destination
 
     var body: some View {
@@ -28,10 +29,20 @@ struct CategorySummaryRow<Icon: View, Destination: View>: View {
                         icon
                     }
 
-                    // Category name
-                    Text(title)
-                        .font(.bodyLarge)
-                        .foregroundStyle(Color.secondaryText)
+                    // Category name, with an optional quiet second line
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(title)
+                            .font(.bodyLarge)
+                            .foregroundStyle(Color.secondaryText)
+
+                        if let subtitle {
+                            Text(subtitle)
+                                .font(.chipLabel)
+                                .foregroundStyle(Color.secondaryText.opacity(0.6))
+                                .monospacedDigit()
+                                .contentTransition(.numericText())
+                        }
+                    }
 
                     Spacer()
 

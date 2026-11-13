@@ -100,6 +100,7 @@ struct RentalDetailsView: View {
             }
         }
         .background(Color.primarySurface)
+        .floatingTabBarScrollBehavior()
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {

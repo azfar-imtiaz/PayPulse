@@ -129,6 +129,7 @@ struct ProfileView: View {
                 }
                 .background(Color.primarySurface)
                 .navigationBarBackButtonHidden(true)
+                .hidesFloatingTabBar()
                 .navigationBarTitleDisplayMode(.inline)
                 
                 LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)

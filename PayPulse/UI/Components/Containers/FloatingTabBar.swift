@@ -22,12 +22,15 @@ struct FloatingTabItem: Identifiable {
 struct FloatingTabBar: View {
     let items: [FloatingTabItem]
     @Binding var selection: RootTab
+    /// Minimized: only the selected tab's icon shows; tapping it expands the bar again
+    var isCollapsed: Bool = false
+    var onExpand: () -> Void = {}
 
     @Namespace private var pillNamespace
 
     var body: some View {
         HStack(spacing: Spacing.xs) {
-            ForEach(items) { item in
+            ForEach(items.filter { !isCollapsed || $0.tab == selection }) { item in
                 itemButton(item)
             }
         }
@@ -46,9 +49,15 @@ struct FloatingTabBar: View {
     private func itemButton(_ item: FloatingTabItem) -> some View {
         let isSelected = selection == item.tab
 
+        let showsLabel = isSelected && !isCollapsed
+
         return Button {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
-                selection = item.tab
+                if isCollapsed {
+                    onExpand()
+                } else {
+                    selection = item.tab
+                }
             }
         } label: {
             HStack(spacing: Spacing.sm) {
@@ -56,7 +65,7 @@ struct FloatingTabBar: View {
                     .font(.system(size: 17, weight: .semibold))
                     .frame(width: 22, height: 22)
 
-                if isSelected {
+                if showsLabel {
                     Text(item.title)
                         .font(.chipLabel)
                         .fixedSize()
@@ -75,7 +84,7 @@ struct FloatingTabBar: View {
                 }
             }
             .foregroundStyle(isSelected ? item.tint : Color.secondaryText.opacity(0.55))
-            .padding(.horizontal, isSelected ? Spacing.lg : Spacing.md)
+            .padding(.horizontal, showsLabel ? Spacing.lg : Spacing.md)
             .padding(.vertical, 10)
             .background {
                 if isSelected {
@@ -87,7 +96,7 @@ struct FloatingTabBar: View {
             .contentShape(Capsule())
         }
         .buttonStyle(PressScaleButtonStyle())
-        .accessibilityLabel(item.count.map { "\(item.title), \($0) invoices" } ?? item.title)
+        .accessibilityLabel(isCollapsed ? "Show tabs" : (item.count.map { "\(item.title), \($0) invoices" } ?? item.title))
         .accessibilityAddTraits(isSelected ? [.isSelected, .isButton] : .isButton)
     }
 }

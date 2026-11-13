@@ -37,29 +37,14 @@ struct ContentView: View {
             ZStack(alignment: .center) {
                 VStack(spacing: 0) {
 
-                    HStack {
-                    Text("PayPulse")
-                        .font(.headingLarge)
-                        .foregroundStyle(Color.secondaryText)
-                    Spacer()
-                    NavigationLink {
-                        ProfileView(userService: userService, gmailService: gmailService, outlookService: outlookService)
-                    } label: {
-                        Utils.getIconColored(colorScheme: colorScheme, iconName: "user")
+                    ScreenHeader(title: "PayPulse", subtitle: "All your invoices, one place.") {
+                        NavigationLink {
+                            ProfileView(userService: userService, gmailService: gmailService, outlookService: outlookService)
+                        } label: {
+                            Utils.getIconColored(colorScheme: colorScheme, iconName: "user")
+                        }
+                        .accessibilityLabel("Profile")
                     }
-                    .padding(.trailing)
-                }
-                .padding(.leading)
-                .padding(.top, Spacing.xl)
-
-                HStack {
-                    Text("All your invoices, one place.")
-                        .font(.headingStandard)
-                        .foregroundStyle(.gray)
-
-                    Spacer()
-                }
-                .padding([.leading, .bottom])
 
                 ScrollView {
                     VStack(spacing: 12) {
@@ -73,6 +58,7 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .padding(.vertical, Spacing.xl)
                 }
+                .floatingTabBarScrollBehavior()
                 }
                 .background(Color.primarySurface)
                 .onAppear {

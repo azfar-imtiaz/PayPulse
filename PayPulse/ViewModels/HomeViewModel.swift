@@ -88,6 +88,27 @@ class HomeViewModel: ObservableObject {
         )
     }
 
+    /// This period's retail spending per category (non-zero only), largest first.
+    func retailSpendBySubtype() -> [(subType: RetailInvoiceSubType, amount: Double)] {
+        var totals: [RetailInvoiceSubType: Double] = [:]
+        for item in summary?.retail.items ?? [] {
+            let subType = item.subType.flatMap { RetailInvoiceSubType(rawValue: $0) } ?? .miscellaneous
+            totals[subType, default: 0] += item.totalAmount
+        }
+        return totals
+            .filter { $0.value > 0 }
+            .map { (subType: $0.key, amount: $0.value) }
+            .sorted { $0.amount > $1.amount }
+    }
+
+    /// Last period's retail spending at the same point in the period as `now`, or nil if unavailable.
+    func previousRetailAtSamePoint(now: Date = Date()) -> Double? {
+        let series = previousSeries(includeRent: false)
+        guard !series.isEmpty else { return nil }
+        let progress = period.progress(for: now)
+        return series.last(where: { $0.progress <= progress })?.amount
+    }
+
     /// Previous period's full curve, or empty if it failed to load.
     func previousSeries(includeRent: Bool) -> [SpendingPoint] {
         guard let previousSummary else { return [] }

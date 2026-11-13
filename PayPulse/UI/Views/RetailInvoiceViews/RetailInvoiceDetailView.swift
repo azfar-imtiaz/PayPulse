@@ -131,6 +131,7 @@ struct RetailInvoiceDetailView: View {
             }
         }
         .background(Color.primarySurface)
+        .floatingTabBarScrollBehavior()
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {
