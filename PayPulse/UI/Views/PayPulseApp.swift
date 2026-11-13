@@ -54,7 +54,7 @@ struct PayPulseApp: App {
              */
             
             if authManager.isAuthenticated {
-                ContentView(
+                RootTabView(
                     invoiceService: invoiceService,
                     userService: userService,
                     gmailService: gmailService,

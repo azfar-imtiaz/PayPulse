@@ -33,34 +33,38 @@ struct RentalLandingPage: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .center) {
-                TabView(selection: $selectedTab) {
+                VStack(spacing: 0) {
                     if viewModel.invoicesHaveLoaded {
-                        RentalListView(
-                            viewModel: viewModel,
-                            selectedYear: $selectedYear,
-                            showSpinner: $showSpinner,
-                            refreshAction: {
-                                ingestLatestInvoice()
-                            }
-                        ) {
-                            ingestInvoicesWithPolling()
-                        }
-                            .tabItem {
-                                Label("Invoices", systemImage: "list.bullet.rectangle.portrait.fill")
-                            }
-                            .tag(TabTitles.invoices)
-                        
-                        // the charts view shouldn't be displayed unless some invoices have been loaded
+                        // the charts view shouldn't be selectable unless some invoices have been loaded
                         if viewModel.invoices.count > 0 {
-                            RentalChartView(viewModel: viewModel)
-                                .background(Color.primarySurface)
-                                .tabItem {
-                                    Label("Charts", systemImage: "chart.xyaxis.line")
+                            Picker("Section", selection: $selectedTab) {
+                                Text("Invoices").tag(TabTitles.invoices)
+                                Text("Charts").tag(TabTitles.graphs)
+                            }
+                            .pickerStyle(.segmented)
+                            .padding(.horizontal)
+                            .padding(.bottom, Spacing.sm)
+                        }
+
+                        switch selectedTab {
+                        case .invoices:
+                            RentalListView(
+                                viewModel: viewModel,
+                                selectedYear: $selectedYear,
+                                showSpinner: $showSpinner,
+                                refreshAction: {
+                                    ingestLatestInvoice()
                                 }
-                                .tag(TabTitles.graphs)
+                            ) {
+                                ingestInvoicesWithPolling()
+                            }
+                        case .graphs:
+                            RentalChartView(viewModel: viewModel)
                         }
                     }
+                    Spacer(minLength: 0)
                 }
+                .background(Color.primarySurface)
                 .sensoryFeedback(.selection, trigger: selectedTab)
                 .onAppear {
                     loadingText = "Loading invoices..."
@@ -68,29 +72,25 @@ struct RentalLandingPage: View {
                         loadInvoices(isReload: false)
                     }
                 }
-                
+
                 LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
             }
-        }
-        .navigationBarBackButtonHidden()
-        .onChange(of: viewModel.reloadInvoices) { _, newValue in
-            if newValue {
-                loadingText = "Reloading invoices..."
-                loadInvoices(isReload: true)
+            .onChange(of: viewModel.reloadInvoices) { _, newValue in
+                if newValue {
+                    loadingText = "Reloading invoices..."
+                    loadInvoices(isReload: true)
+                }
             }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButton()
-                    .disabled(showSpinner)
+            .onChange(of: viewModel.invoices.count) { _, newCount in
+                if newCount == 0 { selectedTab = .invoices }
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    NavTitle(text: "Rental")
+                }
 
-            ToolbarItem(placement: .principal) {
-                NavTitle(text: selectedTab.rawValue.capitalized)
-            }
-            
-            if selectedTab == .invoices {
-                if viewModel.invoices.count > 0 {
+                if selectedTab == .invoices && viewModel.invoices.count > 0 {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             ingestLatestInvoice()
@@ -103,7 +103,7 @@ struct RentalLandingPage: View {
             }
         }
     }
-    
+
     private func loadInvoices(isReload: Bool) {
         showSpinner = true
         viewModel.invoicesHaveLoaded = false

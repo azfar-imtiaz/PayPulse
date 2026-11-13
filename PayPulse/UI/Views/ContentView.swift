@@ -14,9 +14,9 @@ struct ContentView: View {
     let gmailService   : GmailAuthService
     let outlookService : OutlookAuthService
 
-    @StateObject private var rentalViewModel : RentalInvoicesViewModel
-    @StateObject private var retailViewModel : RetailInvoicesViewModel
-    @StateObject private var homeViewModel : HomeViewModel
+    @ObservedObject var rentalViewModel : RentalInvoicesViewModel
+    @ObservedObject var retailViewModel : RetailInvoicesViewModel
+    @ObservedObject var homeViewModel   : HomeViewModel
     @Namespace private var recentActivityNamespace
     @AppStorage("home.graph.includeRent") private var graphIncludesRent = false
     @AppStorage("home.graph.compareLastMonth") private var graphComparesLastMonth = true
@@ -24,16 +24,6 @@ struct ContentView: View {
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.presentToast) var presentToast
-
-    init(invoiceService: InvoiceService, userService: UserService, gmailService: GmailAuthService, outlookService: OutlookAuthService) {
-        self.invoiceService = invoiceService
-        self.userService = userService
-        self.gmailService = gmailService
-        self.outlookService = outlookService
-        _rentalViewModel = StateObject(wrappedValue: RentalInvoicesViewModel(invoiceService: invoiceService))
-        _retailViewModel = StateObject(wrappedValue: RetailInvoicesViewModel(invoiceService: invoiceService))
-        _homeViewModel = StateObject(wrappedValue: HomeViewModel(invoiceService: invoiceService))
-    }
 
     private var homeDataHasLoaded: Bool {
         rentalViewModel.invoicesHaveLoaded
@@ -74,36 +64,6 @@ struct ContentView: View {
                 ScrollView {
                     VStack(spacing: 12) {
                         summaryCard
-
-                        CategorySummaryRow(
-                            iconColor: Color.accentDeepOrange,
-                            icon: {
-                                Icon(name: "house", size: 24, color: .accentDeepOrange)
-                            },
-                            title: "Rental Invoices",
-                            count: rentalViewModel.invoicesHaveLoaded
-                                ? rentalViewModel.invoices.values.flatMap { $0 }.count
-                                : nil,
-                            destination: RentalLandingPage(
-                                invoiceService: invoiceService,
-                                viewModel: rentalViewModel
-                            )
-                        )
-
-                        CategorySummaryRow(
-                            iconColor: Color.accentDeepRed,
-                            icon: {
-                                Icon(name: "file-spreadsheet", size: 24, color: .accentDeepRed)
-                            },
-                            title: "Retail Invoices",
-                            count: retailViewModel.countsHaveLoaded
-                                ? retailViewModel.getTotalCount()
-                                : nil,
-                            destination: RetailLandingPage(
-                                invoiceService: invoiceService,
-                                viewModel: retailViewModel
-                            )
-                        )
 
                         if !homeViewModel.recentInvoices.isEmpty {
                             recentActivitySection
