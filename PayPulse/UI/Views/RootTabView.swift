@@ -36,29 +36,55 @@ struct RootTabView: View {
         _homeViewModel = StateObject(wrappedValue: HomeViewModel(invoiceService: invoiceService))
     }
 
+    @State private var visitedTabs: Set<RootTab> = [.home]
+
     var body: some View {
-        TabView(selection: $selectedTab) {
-            Tab("Home", systemImage: "square.grid.2x2", value: RootTab.home) {
-                ContentView(
-                    invoiceService: invoiceService,
-                    userService: userService,
-                    gmailService: gmailService,
-                    outlookService: outlookService,
-                    rentalViewModel: rentalViewModel,
-                    retailViewModel: retailViewModel,
-                    homeViewModel: homeViewModel
-                )
-            }
-
-            Tab("Rental", systemImage: "house", value: RootTab.rental) {
-                RentalLandingPage(invoiceService: invoiceService, viewModel: rentalViewModel)
-            }
-
-            Tab("Retail", systemImage: "bag", value: RootTab.retail) {
-                RetailLandingPage(invoiceService: invoiceService, viewModel: retailViewModel)
+        // A custom container rather than TabView: the system tab bar can't be reliably hidden
+        // on pushed screens. Visited tabs stay alive (state + navigation preserved); unvisited
+        // tabs aren't built until first selected, so their onAppear loads stay lazy.
+        ZStack {
+            ForEach(RootTab.allCases, id: \.self) { tab in
+                if visitedTabs.contains(tab) {
+                    tabContent(tab)
+                        .opacity(selectedTab == tab ? 1 : 0)
+                        .allowsHitTesting(selectedTab == tab)
+                        .accessibilityHidden(selectedTab != tab)
+                }
             }
         }
-        .tint(Color.accentDeepOrange)
-        .sensoryFeedback(.selection, trigger: selectedTab)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            FloatingTabBar(items: tabItems, selection: $selectedTab)
+        }
+        .onChange(of: selectedTab) { _, newTab in
+            visitedTabs.insert(newTab)
+        }
+    }
+
+    private var tabItems: [FloatingTabItem] {
+        [
+            FloatingTabItem(tab: .home, title: "Home", systemImage: "square.grid.2x2", tint: .accentDeepOrange),
+            FloatingTabItem(tab: .rental, title: "Rental", systemImage: "house", tint: .accentDeepOrange),
+            FloatingTabItem(tab: .retail, title: "Retail", systemImage: "bag", tint: .accentDeepRed),
+        ]
+    }
+
+    @ViewBuilder
+    private func tabContent(_ tab: RootTab) -> some View {
+        switch tab {
+        case .home:
+            ContentView(
+                invoiceService: invoiceService,
+                userService: userService,
+                gmailService: gmailService,
+                outlookService: outlookService,
+                rentalViewModel: rentalViewModel,
+                retailViewModel: retailViewModel,
+                homeViewModel: homeViewModel
+            )
+        case .rental:
+            RentalLandingPage(invoiceService: invoiceService, viewModel: rentalViewModel)
+        case .retail:
+            RetailLandingPage(invoiceService: invoiceService, viewModel: retailViewModel)
+        }
     }
 }
