@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum InvoiceTrailingIndicator {
-    case statusBadge
+    case none
     case dot(Color)
 }
 
@@ -19,7 +19,7 @@ struct InvoiceSummary: View {
     let currency: String
     let trailingIndicator: InvoiceTrailingIndicator
 
-    init(vendor: String, dueDate: String, totalAmount: Int, currency: String = "SEK", trailingIndicator: InvoiceTrailingIndicator = .statusBadge) {
+    init(vendor: String, dueDate: String, totalAmount: Int, currency: String = "SEK", trailingIndicator: InvoiceTrailingIndicator = .none) {
         self.vendor = vendor
         self.dueDate = dueDate
         self.totalAmount = totalAmount
@@ -37,14 +37,8 @@ struct InvoiceSummary: View {
                 Spacer()
 
                 switch trailingIndicator {
-                case .statusBadge:
-                    let hasPassed = Utils.hasDueDateExpired(dueDate)
-                    Text(hasPassed ? "PAID" : "DUE")
-                        .font(.badgeSmall)
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, Spacing.sm)
-                        .padding(.vertical, Spacing.xs)
-                        .background(Capsule().fill(hasPassed ? Color.green : Color.accentDeepOrange))
+                case .none:
+                    EmptyView()
                 case .dot(let color):
                     Circle()
                         .fill(color)

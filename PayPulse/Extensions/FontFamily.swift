@@ -89,7 +89,7 @@ extension Font {
     static let uiLabel = Font.custom(Typography.FontName.regular, size: 15, relativeTo: .footnote)
 
     /// Badge text - Smallest text in the app
-    /// Used for: PAID/DUE status badge
+    /// Used for: (currently unused)
     static let badgeSmall = Font.custom(Typography.FontName.bold, size: Typography.Size.badge, relativeTo: .caption2)
 
     /// Compact buttons - Semi-bold at body size

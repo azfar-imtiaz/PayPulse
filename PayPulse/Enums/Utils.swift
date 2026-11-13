@@ -27,19 +27,6 @@ enum Utils {
         }
     }
     
-    static func hasDueDateExpired(_ dateString: String) -> Bool {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        
-        guard let date = formatter.date(from: dateString) else {
-            // invalid format of date
-            return false
-        }
-        
-        return Date() > date
-    }
-    
     /// Truncates a string to maxLength, appending "..." after the cutoff if it exceeds that length
     static func truncate(_ text: String, maxLength: Int) -> String {
         guard text.count > maxLength else { return text }

@@ -39,7 +39,7 @@ struct RentalInvoiceListContainer: View {
                                 dueDate: invoice.dueDate,
                                 totalAmount: invoice.totalAmount,
                                 currency: "SEK",
-                                trailingIndicator: .statusBadge,
+                                trailingIndicator: .none,
                                 transitionID: invoice.invoiceID,
                                 namespace: zoomNamespace
                             ) {

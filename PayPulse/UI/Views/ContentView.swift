@@ -173,7 +173,7 @@ struct ContentView: View {
                         dueDate: item.getFormattedDueDate(),
                         totalAmount: Int(item.totalAmount.rounded()),
                         currency: item.currency ?? "SEK",
-                        trailingIndicator: .statusBadge,
+                        trailingIndicator: .dot(dotColor(for: item)),
                         transitionID: "home_recent_\(item.invoiceID)",
                         namespace: recentActivityNamespace
                     ) {
@@ -181,6 +181,15 @@ struct ContentView: View {
                     }
                 }
             }
+        }
+    }
+
+    private func dotColor(for item: InvoiceSummaryItem) -> Color {
+        switch item.invoiceType {
+        case .rental:
+            return .accentDeepOrange
+        case .retail:
+            return item.subType.flatMap { RetailInvoiceSubType(rawValue: $0) }?.color ?? RetailInvoiceSubType.miscellaneous.color
         }
     }
 

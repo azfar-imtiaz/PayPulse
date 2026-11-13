@@ -70,7 +70,7 @@ private struct InvoiceListRowPreviewContainer: View {
             dueDate: "12-11-2021",
             totalAmount: 5000,
             currency: "SEK",
-            trailingIndicator: .statusBadge,
+            trailingIndicator: .none,
             transitionID: "preview",
             namespace: namespace
         ) {
