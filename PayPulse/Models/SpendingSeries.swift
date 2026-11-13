@@ -42,6 +42,12 @@ struct SpendingPeriod: Equatable {
         return SpendingPeriod(start: prevStart, end: start)
     }
 
+    func next() -> SpendingPeriod {
+        let cal = Self.calendar
+        let nextEnd = cal.date(byAdding: .month, value: 1, to: end) ?? end
+        return SpendingPeriod(start: end, end: nextEnd)
+    }
+
     /// Number of whole days in the period.
     var dayCount: Int {
         max(Self.calendar.dateComponents([.day], from: start, to: end).day ?? 1, 1)

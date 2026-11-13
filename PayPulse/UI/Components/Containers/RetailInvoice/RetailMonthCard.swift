@@ -15,6 +15,8 @@ struct RetailMonthCard: View {
     let total: Double
     let previousAtSamePoint: Double?
     let segments: [(subType: RetailInvoiceSubType, amount: Double)]
+    /// Shows the "See invoices ›" hint when the card is tappable
+    var showsDisclosure: Bool = false
 
     private func share(_ amount: Double) -> Double {
         total > 0 ? amount / total : 0
@@ -28,6 +30,15 @@ struct RetailMonthCard: View {
                 if !segments.isEmpty {
                     legend
                 }
+                if showsDisclosure {
+                    HStack(spacing: 4) {
+                        Spacer()
+                        Text("See invoices")
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.chipLabel)
+                    .foregroundStyle(Color.secondaryText.opacity(0.6))
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -38,7 +49,7 @@ struct RetailMonthCard: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(isLoaded ? Utils.formatCurrency(total, currency: "SEK") : "-")
+            Text(isLoaded ? Utils.formatCurrency(total.rounded(), currency: "SEK") : "-")
                 .font(.headingMedium)
                 .foregroundStyle(Color.accentDeepRed)
                 .monospacedDigit()
@@ -89,27 +100,7 @@ struct RetailMonthCard: View {
     // MARK: - Split bar
 
     private var bar: some View {
-        GeometryReader { proxy in
-            let gap: CGFloat = 2
-            let available = proxy.size.width - gap * CGFloat(max(segments.count - 1, 0))
-
-            HStack(spacing: gap) {
-                if segments.isEmpty {
-                    Rectangle()
-                        .fill(Color.secondaryText.opacity(0.08))
-                } else {
-                    ForEach(segments, id: \.subType) { segment in
-                        Rectangle()
-                            .fill(segment.subType.color)
-                            .frame(width: max(available * share(segment.amount), 3))
-                    }
-                }
-            }
-            .clipShape(Capsule())
-        }
-        .frame(height: 14)
-        .animation(.snappy, value: segments.map(\.amount))
-        .accessibilityHidden(true)
+        CategorySplitBar(segments: segments)
     }
 
     // MARK: - Legend
@@ -130,6 +121,40 @@ struct RetailMonthCard: View {
                 .font(.chipLabel)
             }
         }
+    }
+}
+
+// MARK: - Category split bar
+
+/// One horizontal bar split into category colours; each segment's width is its share of the total.
+struct CategorySplitBar: View {
+    let segments: [(subType: RetailInvoiceSubType, amount: Double)]
+    var height: CGFloat = 14
+
+    private var total: Double { segments.reduce(0) { $0 + $1.amount } }
+
+    var body: some View {
+        GeometryReader { proxy in
+            let gap: CGFloat = 2
+            let available = proxy.size.width - gap * CGFloat(max(segments.count - 1, 0))
+
+            HStack(spacing: gap) {
+                if segments.isEmpty || total <= 0 {
+                    Rectangle()
+                        .fill(Color.secondaryText.opacity(0.08))
+                } else {
+                    ForEach(segments, id: \.subType) { segment in
+                        Rectangle()
+                            .fill(segment.subType.color)
+                            .frame(width: max(available * segment.amount / total, 3))
+                    }
+                }
+            }
+            .clipShape(Capsule())
+        }
+        .frame(height: height)
+        .animation(.snappy, value: segments.map(\.amount))
+        .accessibilityHidden(true)
     }
 }
 

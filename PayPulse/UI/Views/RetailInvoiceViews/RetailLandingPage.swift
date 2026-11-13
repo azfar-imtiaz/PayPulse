@@ -14,6 +14,7 @@ struct RetailLandingPage: View {
     /// Shared with Home: holds this and last month's summary (incl. per-item retail data)
     @ObservedObject var summaryViewModel: HomeViewModel
     @State var showSpinner: Bool = false
+    @Namespace private var monthCardNamespace
     @State var loadingText: String = ""
 
     @Environment(\.presentToast) var presentToast
@@ -80,15 +81,41 @@ struct RetailLandingPage: View {
         }
     }
 
+    @ViewBuilder
     private var monthCard: some View {
-        let segments = summaryViewModel.retailSpendBySubtype()
-        return RetailMonthCard(
+        let items = summaryViewModel.summary?.retail.items ?? []
+        let card = RetailMonthCard(
             isLoaded: summaryViewModel.summaryHasLoaded,
             monthName: monthName,
             total: summaryViewModel.summary?.retail.totalAmount ?? 0,
             previousAtSamePoint: summaryViewModel.previousRetailAtSamePoint(),
-            segments: segments
+            segments: summaryViewModel.retailSpendBySubtype(),
+            showsDisclosure: canOpenMonth
         )
+
+        if !canOpenMonth {
+            card
+        } else {
+            NavigationLink {
+                RetailMonthInvoicesView(
+                    invoiceService: invoiceService,
+                    retailViewModel: viewModel,
+                    period: summaryViewModel.period,
+                    items: items,
+                    previousItems: summaryViewModel.previousSummary?.retail.items
+                )
+                .navigationTransition(.zoom(sourceID: "retail-month", in: monthCardNamespace))
+            } label: {
+                card
+            }
+            .buttonStyle(PressScaleButtonStyle())
+            .matchedTransitionSource(id: "retail-month", in: monthCardNamespace)
+        }
+    }
+
+    /// The month screen can browse back to older months, so it opens even when this month is empty
+    private var canOpenMonth: Bool {
+        summaryViewModel.summaryHasLoaded && summaryViewModel.summary != nil
     }
 
     private var allInvoicesHeader: some View {

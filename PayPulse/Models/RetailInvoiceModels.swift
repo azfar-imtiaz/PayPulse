@@ -43,6 +43,20 @@ enum RetailInvoiceSubType: String, Codable, CaseIterable {
         }
     }
     
+    /// Compact label for tight spaces such as chart axes; `displayName` is used elsewhere
+    var shortName: String {
+        switch self {
+        case .foodDelivery:   return "Food"
+        case .clothing:       return "Clothing"
+        case .technology:     return "Tech"
+        case .subscriptions:  return "Subs"
+        case .grocery:        return "Grocery"
+        case .utility:        return "Utility"
+        case .miscellaneous:  return "Misc"
+        case .travel:         return "Travel"
+        }
+    }
+
     var iconName: String {
         switch self {
         case .foodDelivery:

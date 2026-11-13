@@ -52,7 +52,7 @@ struct SpendingGraphCard: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(isLoaded ? Utils.formatCurrency(total, currency: "SEK") : "-")
+            Text(isLoaded ? Utils.formatCurrency(total.rounded(), currency: "SEK") : "-")
                 .font(.headingMedium)
                 .foregroundStyle(Color.accentDeepOrange)
                 .monospacedDigit()
