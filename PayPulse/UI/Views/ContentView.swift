@@ -18,6 +18,8 @@ struct ContentView: View {
     @StateObject private var retailViewModel : RetailInvoicesViewModel
     @StateObject private var homeViewModel : HomeViewModel
     @Namespace private var recentActivityNamespace
+    @AppStorage("home.graph.includeRent") private var graphIncludesRent = false
+    @AppStorage("home.graph.compareLastMonth") private var graphComparesLastMonth = true
 
     @EnvironmentObject var authManager: AuthManager
     @Environment(\.colorScheme) private var colorScheme
@@ -137,23 +139,19 @@ struct ContentView: View {
     }
 
     private var summaryCard: some View {
-        SoftCard(padding: Spacing.xl) {
-            VStack(alignment: .leading, spacing: 4) {
-                if homeViewModel.summaryHasLoaded {
-                    Text(Utils.formatCurrency(currentMonthCombinedTotal, currency: "SEK"))
-                        .font(.headingMedium)
-                        .foregroundStyle(Color.accentDeepOrange)
-                } else {
-                    Text("-")
-                        .font(.headingMedium)
-                        .foregroundStyle(Color.accentDeepOrange)
-                }
-                Text("This month's spending")
-                    .font(.bodyStandard)
-                    .foregroundStyle(Color.secondaryText)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
+        let now = Date()
+        return SpendingGraphCard(
+            isLoaded: homeViewModel.summaryHasLoaded,
+            total: homeViewModel.total(includeRent: graphIncludesRent),
+            current: homeViewModel.currentSeries(includeRent: graphIncludesRent, now: now),
+            previous: homeViewModel.previousSeries(includeRent: graphIncludesRent),
+            todayProgress: homeViewModel.period.progress(for: now),
+            today: now,
+            hasRent: homeViewModel.hasRent,
+            hasPrevious: homeViewModel.hasPreviousMonth,
+            includeRent: $graphIncludesRent,
+            compareLastMonth: $graphComparesLastMonth
+        )
     }
 
     private var recentActivitySection: some View {
@@ -221,11 +219,6 @@ struct ContentView: View {
                 retailViewModel: retailViewModel
             )
         }
-    }
-
-    private var currentMonthCombinedTotal: Double {
-        guard let summary = homeViewModel.summary else { return 0 }
-        return (summary.rental?.totalAmount ?? 0) + summary.retail.totalAmount
     }
 
     private func fetchInvoiceCounts() {

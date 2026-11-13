@@ -99,6 +99,10 @@ extension Font {
     /// Compact headings - Medium weight at title size
     /// Used for: Retail category row titles
     static let headingCompact = Font.custom(Typography.FontName.medium, size: Typography.Size.title, relativeTo: .title2)
+
+    /// Chip labels - Semi-bold at caption size
+    /// Used for: Home graph toggles, tab bar labels and counts
+    static let chipLabel = Font.custom(Typography.FontName.semiBold, size: Typography.Size.caption, relativeTo: .caption)
 }
 
 // MARK: - Typography Helper
