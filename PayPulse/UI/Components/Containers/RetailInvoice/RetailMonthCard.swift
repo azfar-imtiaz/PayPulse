@@ -22,9 +22,15 @@ struct RetailMonthCard: View {
         total > 0 ? amount / total : 0
     }
 
+    /// Whole percent, but never "0%" for a category that has some spending
+    private func percentLabel(_ share: Double) -> String {
+        let percent = Int((share * 100).rounded())
+        return percent == 0 && share > 0 ? "<1%" : "\(percent)%"
+    }
+
     var body: some View {
         SoftCard(padding: Spacing.xl) {
-            VStack(alignment: .leading, spacing: Spacing.lg) {
+            VStack(alignment: .leading, spacing: Spacing.xl) {
                 header
                 bar
                 if !segments.isEmpty {
@@ -48,7 +54,7 @@ struct RetailMonthCard: View {
     // MARK: - Header
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
             Text(isLoaded ? Utils.formatCurrency(total.rounded(), currency: "SEK") : "-")
                 .font(.headingMedium)
                 .foregroundStyle(Color.accentDeepRed)
@@ -106,7 +112,7 @@ struct RetailMonthCard: View {
     // MARK: - Legend
 
     private var legend: some View {
-        FlowLayout(spacing: Spacing.md, lineSpacing: Spacing.sm) {
+        FlowLayout(spacing: Spacing.md, lineSpacing: Spacing.md) {
             ForEach(segments, id: \.subType) { segment in
                 HStack(spacing: 6) {
                     Circle()
@@ -114,7 +120,7 @@ struct RetailMonthCard: View {
                         .frame(width: 8, height: 8)
                     Text(segment.subType.displayName)
                         .foregroundStyle(Color.secondaryText)
-                    Text("\(Int((share(segment.amount) * 100).rounded()))%")
+                    Text(percentLabel(share(segment.amount)))
                         .foregroundStyle(Color.secondaryText.opacity(0.6))
                         .monospacedDigit()
                 }

@@ -101,17 +101,21 @@ struct RentalDetailsView: View {
         }
         .background(Color.primarySurface)
         .floatingTabBarScrollBehavior()
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButton()
-            }
-
-            ToolbarItem(placement: .principal) {
-                NavTitle(text: "Invoice Details")
-            }
+        // Fixed header with the back button in its title row; content scrolls beneath it
+        .safeAreaInset(edge: .top, spacing: 0) {
+            ScreenHeader(title: headerTitle, showsBackButton: true)
+                .background(Color.primarySurface)
         }
+        .navigationBarBackButtonHidden()
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+    /// "Rent · Nov 2026"; falls back when opened from a summary row without month data
+    private var headerTitle: String {
+        guard let month = Int(invoice.dueDateMonth), (1...12).contains(month), !invoice.dueDateYear.isEmpty else {
+            return "Rent invoice"
+        }
+        return "Rent · \(invoice.getDueMonthName()) \(invoice.dueDateYear)"
     }
 
     func showTextCopiedToast(text: String) {

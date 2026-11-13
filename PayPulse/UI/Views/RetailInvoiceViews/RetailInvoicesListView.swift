@@ -22,20 +22,43 @@ struct RetailInvoicesListView: View {
 
     var body: some View {
         ZStack(alignment: .center) {
-            if viewModel.hasLoadedInvoices(for: subType) && viewModel.invoicesByYear(for: subType).count > 0 {
-                InvoiceYearListShell(years: Array(viewModel.invoicesByYear(for: subType).keys), selectedYear: $selectedYear) {
-                    RetailInvoiceListContainer(
-                        selectedYear: $selectedYear,
-                        subType: subType,
-                        viewModel: viewModel,
-                        refreshAction: { fetchLatestInvoices() }
-                    )
+            VStack(spacing: 0) {
+                ScreenHeader(
+                    title: subType.displayName,
+                    style: hasInvoices ? .onBanner : .standard,
+                    showsBackButton: true
+                ) {
+                    Button {
+                        fetchLatestInvoices()
+                    } label: {
+                        // On the banner the page colours invert, so use the opposite icon variant
+                        Utils.getIconColored(
+                            colorScheme: hasInvoices ? (colorScheme == .dark ? .light : .dark) : colorScheme,
+                            iconName: "refresh-ccw-dot"
+                        )
+                    }
+                    .accessibilityLabel("Check for new \(subType.displayName.lowercased()) invoices")
                 }
-            } else if viewModel.hasLoadedInvoices(for: subType) {
-                NoInvoicesFoundView(subtitle: "No invoices found in this category yet. Try reloading or check back later.", showSpinner: $showSpinner) {
-                    loadInvoices()
+                .disabled(showSpinner) // back + refresh, as before, while a fetch is running
+
+                if hasInvoices {
+                    InvoiceYearListShell(years: Array(viewModel.invoicesByYear(for: subType).keys), selectedYear: $selectedYear) {
+                        RetailInvoiceListContainer(
+                            selectedYear: $selectedYear,
+                            subType: subType,
+                            viewModel: viewModel,
+                            refreshAction: { fetchLatestInvoices() }
+                        )
+                    }
+                } else if viewModel.hasLoadedInvoices(for: subType) {
+                    NoInvoicesFoundView(subtitle: "No invoices found in this category yet. Try reloading or check back later.", showSpinner: $showSpinner) {
+                        loadInvoices()
+                    }
                 }
+
+                Spacer(minLength: 0)
             }
+            .background(hasInvoices ? Color.invoiceHeaderBannerBackground : Color.primarySurface)
 
             LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
         }
@@ -46,25 +69,13 @@ struct RetailInvoicesListView: View {
                 loadInvoices()
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButton()
-                    .disabled(showSpinner)
-            }
+        // The back button lives in the header row, so the nav bar itself isn't needed
+        .toolbar(.hidden, for: .navigationBar)
+    }
 
-            ToolbarItem(placement: .principal) {
-                NavTitle(text: subType.displayName)
-            }
-
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    fetchLatestInvoices()
-                } label: {
-                    Utils.getIconColored(colorScheme: colorScheme, iconName: "refresh-ccw-dot")
-                }
-                .disabled(showSpinner)
-            }
-        }
+    /// The year list (and its dark banner) only shows once this category has invoices
+    private var hasInvoices: Bool {
+        viewModel.hasLoadedInvoices(for: subType) && viewModel.invoicesByYear(for: subType).count > 0
     }
 
     private func fetchLatestInvoices() {

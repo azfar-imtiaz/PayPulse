@@ -32,118 +32,111 @@ struct ProfileView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                VStack(spacing: Spacing.xl) {
-                    if viewModel.hasLoadedUserInfo {
-                        SoftCard {
-                            VStack(alignment: .leading, spacing: Spacing.xl) {
-                                Text("Account Information")
-                                    .font(.headingSmall)
-                                    .foregroundStyle(Color.secondaryText)
+        ZStack {
+            VStack(spacing: Spacing.xl) {
+                if viewModel.hasLoadedUserInfo {
+                    SoftCard {
+                        VStack(alignment: .leading, spacing: Spacing.xl) {
+                            Text("Account Information")
+                                .font(.headingSmall)
+                                .foregroundStyle(Color.secondaryText)
 
-                                VStack(alignment: .leading, spacing: 0) {
-                                    KeyValueRow(key: "Name", value: viewModel.username, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
-                                        .padding(.vertical, Spacing.sm)
-                                    Divider()
-                                    KeyValueRow(key: "Email", value: viewModel.userEmail, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
-                                        .padding(.vertical, Spacing.sm)
-                                    Divider()
-                                    KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
-                                        .padding(.vertical, Spacing.sm)
-                                }
+                            VStack(alignment: .leading, spacing: 0) {
+                                KeyValueRow(key: "Name", value: viewModel.username, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
+                                    .padding(.vertical, Spacing.sm)
+                                Divider()
+                                KeyValueRow(key: "Email", value: viewModel.userEmail, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
+                                    .padding(.vertical, Spacing.sm)
+                                Divider()
+                                KeyValueRow(key: "Created on", value: viewModel.userCreatedOn, keyWidth: 100, makeValueBold: true, keyOpacity: 0.6, useLargeFont: true, allowValueShrink: false)
+                                    .padding(.vertical, Spacing.sm)
                             }
                         }
-                        .padding(.horizontal)
+                    }
+                    .padding(.horizontal)
 
-                        SoftCard {
-                            VStack(alignment: .leading, spacing: Spacing.lg) {
-                                Text("Connected accounts")
-                                    .font(.headingSmall)
-                                    .foregroundStyle(Color.secondaryText)
+                    SoftCard {
+                        VStack(alignment: .leading, spacing: Spacing.lg) {
+                            Text("Connected accounts")
+                                .font(.headingSmall)
+                                .foregroundStyle(Color.secondaryText)
 
-                                VStack(spacing: 0) {
-                                    ConnectionStatusRow(
-                                        markText: "G",
-                                        markColor: Color(red: 0.78, green: 0.31, blue: 0.23),
-                                        name: "Gmail",
-                                        isConnected: viewModel.gmailConnectionStatus
-                                    )
-                                    Divider()
-                                    ConnectionStatusRow(
-                                        markText: "O",
-                                        markColor: Color(red: 0.18, green: 0.44, blue: 0.69),
-                                        name: "Outlook",
-                                        isConnected: viewModel.outlookConnectionStatus
-                                    )
-                                }
+                            VStack(spacing: 0) {
+                                ConnectionStatusRow(
+                                    markText: "G",
+                                    markColor: Color(red: 0.78, green: 0.31, blue: 0.23),
+                                    name: "Gmail",
+                                    isConnected: viewModel.gmailConnectionStatus
+                                )
+                                Divider()
+                                ConnectionStatusRow(
+                                    markText: "O",
+                                    markColor: Color(red: 0.18, green: 0.44, blue: 0.69),
+                                    name: "Outlook",
+                                    isConnected: viewModel.outlookConnectionStatus
+                                )
                             }
                         }
-                        .padding(.horizontal)
+                    }
+                    .padding(.horizontal)
+
+                    Spacer()
+
+                    if !viewModel.gmailConnectionStatus {
+                        GoogleButton {
+                            connectToGmail()
+                        }
 
                         Spacer()
 
-                        if !viewModel.gmailConnectionStatus {
-                            GoogleButton {
-                                connectToGmail()
+                    }
+
+                    if !viewModel.outlookConnectionStatus {
+                        SecondaryButton(
+                            buttonView: Text("Connect Outlook"),
+                            action: {
+                                connectToOutlook()
                             }
+                        )
 
-                            Spacer()
-
-                        }
-
-                        if !viewModel.outlookConnectionStatus {
-                            SecondaryButton(
-                                buttonView: Text("Connect Outlook"),
-                                action: {
-                                    connectToOutlook()
-                                }
-                            )
-
-                            Spacer()
-                        }
-
-                        // Action Buttons
-                        VStack(spacing: 16) {
-                            SoftButton(
-                                buttonView: Text("Log out"),
-                                action: {
-                                    showLogoutConfirmation = true
-                                }
-                            )
-
-                            DestructiveButton(
-                                buttonView: Text("Delete Account"),
-                                action: {
-                                    showDeleteConfirmation = true
-                                },
-                                isDisabled: isDeleting
-                            )
-                        }
-                    } else {
                         Spacer()
                     }
-                }
-                .onAppear {
-                    loadUserInfo()
-                }
-                .background(Color.primarySurface)
-                .navigationBarBackButtonHidden(true)
-                .hidesFloatingTabBar()
-                .navigationBarTitleDisplayMode(.inline)
-                
-                LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    BackButton()
-                }
 
-                ToolbarItem(placement: .principal) {
-                    NavTitle(text: "Profile")
+                    // Action Buttons
+                    VStack(spacing: 16) {
+                        SoftButton(
+                            buttonView: Text("Log out"),
+                            action: {
+                                showLogoutConfirmation = true
+                            }
+                        )
+
+                        DestructiveButton(
+                            buttonView: Text("Delete Account"),
+                            action: {
+                                showDeleteConfirmation = true
+                            },
+                            isDisabled: isDeleting
+                        )
+                    }
+                } else {
+                    Spacer()
                 }
             }
+            .onAppear {
+                loadUserInfo()
+            }
+            .background(Color.primarySurface)
+            .navigationBarBackButtonHidden(true)
+            .hidesFloatingTabBar()
+            
+            LoadingDotsView(isLoading: $showSpinner, loadingText: loadingText)
         }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            ScreenHeader(title: "Profile", showsBackButton: true)
+                .background(Color.primarySurface)
+        }
+        .toolbar(.hidden, for: .navigationBar)
         .alert("Confirm Logout", isPresented: $showLogoutConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Logout", role: .destructive) {

@@ -20,6 +20,8 @@ struct ScreenHeader<Trailing: View>: View {
     let title: String
     var subtitle: String? = nil
     var style: Style = .standard
+    /// Pushed screens put their back button in the title row instead of a nav bar
+    var showsBackButton: Bool = false
     @ViewBuilder var trailing: Trailing
 
     private var titleColor: Color {
@@ -32,7 +34,11 @@ struct ScreenHeader<Trailing: View>: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .center) {
+            HStack(alignment: .center, spacing: Spacing.md) {
+                if showsBackButton {
+                    BackButton(inverted: style == .onBanner)
+                }
+
                 Text(title)
                     .font(.headingLarge)
                     .foregroundStyle(titleColor)
@@ -59,8 +65,8 @@ struct ScreenHeader<Trailing: View>: View {
 }
 
 extension ScreenHeader where Trailing == EmptyView {
-    init(title: String, subtitle: String? = nil, style: Style = .standard) {
-        self.init(title: title, subtitle: subtitle, style: style) { EmptyView() }
+    init(title: String, subtitle: String? = nil, style: Style = .standard, showsBackButton: Bool = false) {
+        self.init(title: title, subtitle: subtitle, style: style, showsBackButton: showsBackButton) { EmptyView() }
     }
 }
 

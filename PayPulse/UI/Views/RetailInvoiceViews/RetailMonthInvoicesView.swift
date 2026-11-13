@@ -75,61 +75,54 @@ struct RetailMonthInvoicesView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: Spacing.lg) {
-                summary
-                rows
+        VStack(spacing: 0) {
+            ScreenHeader(title: monthTitle, showsBackButton: true) {
+                monthArrows
             }
-            .padding(.horizontal)
-            .padding(.vertical, Spacing.lg)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: Spacing.lg) {
+                    summary
+                    rows
+                }
+                .padding(.horizontal)
+                .padding(.bottom, Spacing.lg)
+            }
+            .floatingTabBarScrollBehavior()
         }
         .background(Color.primarySurface)
-        .floatingTabBarScrollBehavior()
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButton()
-            }
-            ToolbarItem(placement: .principal) {
-                monthSwitcher
-            }
-        }
+        // The back button lives in the header row, so the nav bar itself isn't needed
+        .toolbar(.hidden, for: .navigationBar)
         .sensoryFeedback(.selection, trigger: period)
     }
 
     // MARK: - Month switcher
 
-    private var monthSwitcher: some View {
-        HStack(spacing: Spacing.md) {
+    /// ‹ › sit in the header's trailing slot; the header title shows the month itself
+    private var monthArrows: some View {
+        HStack(spacing: Spacing.xs) {
             Button {
                 show(period.previous())
             } label: {
                 Image(systemName: "chevron.left")
-                    .frame(width: 32, height: 32)
+                    .frame(width: 36, height: 36)
                     .contentShape(Rectangle())
             }
             .accessibilityLabel("Previous month")
-
-            Text(monthTitle)
-                .font(.navigationStandard)
-                .foregroundStyle(Color.secondaryText)
-                .monospacedDigit()
-                .contentTransition(.numericText())
-                .frame(minWidth: 150)
 
             Button {
                 show(period.next())
             } label: {
                 Image(systemName: "chevron.right")
-                    .frame(width: 32, height: 32)
+                    .frame(width: 36, height: 36)
                     .contentShape(Rectangle())
             }
             .disabled(isLatestMonth)
             .opacity(isLatestMonth ? 0.25 : 1)
             .accessibilityLabel("Next month")
         }
-        .font(.system(size: 15, weight: .semibold))
+        .font(.system(size: 18, weight: .semibold))
         .foregroundStyle(Color.secondaryText)
     }
 

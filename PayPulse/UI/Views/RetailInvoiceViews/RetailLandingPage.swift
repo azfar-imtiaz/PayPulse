@@ -142,7 +142,7 @@ struct RetailLandingPage: View {
         guard summaryViewModel.summaryHasLoaded, summaryViewModel.summary != nil else { return nil }
         let amount = summaryViewModel.retailSpendBySubtype().first(where: { $0.subType == subType })?.amount ?? 0
         return amount > 0
-            ? "\(Utils.formatCurrency(amount, currency: "SEK")) this month"
+            ? "\(Utils.formatCurrency(amount.rounded(), currency: "SEK")) this month"
             : "Nothing this month"
     }
 

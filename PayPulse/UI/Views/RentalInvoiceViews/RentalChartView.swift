@@ -22,6 +22,8 @@ struct RentalChartView: View {
     }
     var body: some View {
         VStack {
+            ScreenHeader(title: "Rent charts", showsBackButton: true)
+
             if viewModel.invoicesHaveLoaded {
                 HStack {
                     PickerButton(
@@ -61,17 +63,10 @@ struct RentalChartView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.primarySurface)
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .hidesFloatingTabBar()
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButton()
-            }
-            ToolbarItem(placement: .principal) {
-                NavTitle(text: "Charts")
-            }
-        }
+        // The back button lives in the header row, so the nav bar itself isn't needed
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 

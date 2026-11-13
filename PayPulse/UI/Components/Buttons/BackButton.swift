@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct BackButton: View {
+    /// Use the opposite icon variant, for placement on the dark header banner
+    var inverted: Bool = false
+
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
 
@@ -15,8 +18,12 @@ struct BackButton: View {
         Button {
             dismiss()
         } label: {
-            Utils.getIconColored(colorScheme: colorScheme, iconName: "circle-arrow-left")
+            Utils.getIconColored(
+                colorScheme: inverted ? (colorScheme == .dark ? .light : .dark) : colorScheme,
+                iconName: "circle-arrow-left"
+            )
         }
+        .accessibilityLabel("Back")
     }
 }
 

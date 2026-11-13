@@ -132,27 +132,28 @@ struct RetailInvoiceDetailView: View {
         }
         .background(Color.primarySurface)
         .floatingTabBarScrollBehavior()
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButton()
-            }
-
-            ToolbarItem(placement: .principal) {
-                NavTitle(text: "Invoice Details")
-            }
-
-            ToolbarItem(placement: .topBarTrailing) {
+        // Fixed header: back button + vendor name, delete in the trailing slot; content scrolls beneath
+        .safeAreaInset(edge: .top, spacing: 0) {
+            ScreenHeader(
+                title: invoice.vendorName.isEmpty ? "Invoice" : invoice.vendorName,
+                showsBackButton: true
+            ) {
                 Button {
                     showDeleteConfirmation = true
                 } label: {
                     Image(systemName: "trash")
+                        .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(Color.accentDeepRed)
+                        .frame(width: 36, height: 36)
+                        .contentShape(Rectangle())
                 }
                 .disabled(retailViewModel.isDeletingInvoice)
+                .accessibilityLabel("Delete invoice")
             }
+            .background(Color.primarySurface)
         }
+        .navigationBarBackButtonHidden()
+        .toolbar(.hidden, for: .navigationBar)
         .alert("Delete Invoice", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) {}
             Button("Delete", role: .destructive) {
