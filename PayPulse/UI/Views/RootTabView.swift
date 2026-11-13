@@ -63,8 +63,14 @@ struct RootTabView: View {
     private var tabItems: [FloatingTabItem] {
         [
             FloatingTabItem(tab: .home, title: "Home", systemImage: "square.grid.2x2", tint: .accentDeepOrange),
-            FloatingTabItem(tab: .rental, title: "Rental", systemImage: "house", tint: .accentDeepOrange),
-            FloatingTabItem(tab: .retail, title: "Retail", systemImage: "bag", tint: .accentDeepRed),
+            FloatingTabItem(
+                tab: .rental, title: "Rental", systemImage: "house", tint: .accentDeepOrange,
+                count: rentalViewModel.invoicesHaveLoaded ? rentalViewModel.invoices.values.reduce(0) { $0 + $1.count } : nil
+            ),
+            FloatingTabItem(
+                tab: .retail, title: "Retail", systemImage: "bag", tint: .accentDeepRed,
+                count: retailViewModel.countsHaveLoaded ? retailViewModel.getTotalCount() : nil
+            ),
         ]
     }
 
