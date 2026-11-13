@@ -8,15 +8,9 @@
 import SwiftUI
 import Toasts
 
-enum TabTitles: String {
-    case invoices
-    case graphs
-}
-
 struct RentalLandingPage: View {
     let invoiceService             : InvoiceService
     @ObservedObject var viewModel  : RentalInvoicesViewModel
-    @State private var selectedTab : TabTitles = .invoices
     @State var selectedYear        : Int = Utils.getCurrentYear()
     @State var showSpinner         : Bool = false
     @State var loadingText         : String = ""
@@ -35,37 +29,20 @@ struct RentalLandingPage: View {
             ZStack(alignment: .center) {
                 VStack(spacing: 0) {
                     if viewModel.invoicesHaveLoaded {
-                        // the charts view shouldn't be selectable unless some invoices have been loaded
-                        if viewModel.invoices.count > 0 {
-                            Picker("Section", selection: $selectedTab) {
-                                Text("Invoices").tag(TabTitles.invoices)
-                                Text("Charts").tag(TabTitles.graphs)
+                        RentalListView(
+                            viewModel: viewModel,
+                            selectedYear: $selectedYear,
+                            showSpinner: $showSpinner,
+                            refreshAction: {
+                                ingestLatestInvoice()
                             }
-                            .pickerStyle(.segmented)
-                            .padding(.horizontal)
-                            .padding(.bottom, Spacing.sm)
-                        }
-
-                        switch selectedTab {
-                        case .invoices:
-                            RentalListView(
-                                viewModel: viewModel,
-                                selectedYear: $selectedYear,
-                                showSpinner: $showSpinner,
-                                refreshAction: {
-                                    ingestLatestInvoice()
-                                }
-                            ) {
-                                ingestInvoicesWithPolling()
-                            }
-                        case .graphs:
-                            RentalChartView(viewModel: viewModel)
+                        ) {
+                            ingestInvoicesWithPolling()
                         }
                     }
                     Spacer(minLength: 0)
                 }
                 .background(Color.primarySurface)
-                .sensoryFeedback(.selection, trigger: selectedTab)
                 .onAppear {
                     loadingText = "Loading invoices..."
                     if !viewModel.invoicesHaveLoaded {
@@ -81,16 +58,13 @@ struct RentalLandingPage: View {
                     loadInvoices(isReload: true)
                 }
             }
-            .onChange(of: viewModel.invoices.count) { _, newCount in
-                if newCount == 0 { selectedTab = .invoices }
-            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     NavTitle(text: "Rental")
                 }
 
-                if selectedTab == .invoices && viewModel.invoices.count > 0 {
+                if viewModel.invoices.count > 0 {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                             ingestLatestInvoice()

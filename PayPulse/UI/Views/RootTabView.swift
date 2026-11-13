@@ -37,6 +37,7 @@ struct RootTabView: View {
     }
 
     @State private var visitedTabs: Set<RootTab> = [.home]
+    @StateObject private var tabBarVisibility = FloatingTabBarVisibility()
 
     var body: some View {
         // A custom container rather than TabView: the system tab bar can't be reliably hidden
@@ -53,8 +54,12 @@ struct RootTabView: View {
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            FloatingTabBar(items: tabItems, selection: $selectedTab)
+            if tabBarVisibility.isVisible {
+                FloatingTabBar(items: tabItems, selection: $selectedTab)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
         }
+        .environmentObject(tabBarVisibility)
         .onChange(of: selectedTab) { _, newTab in
             visitedTabs.insert(newTab)
         }

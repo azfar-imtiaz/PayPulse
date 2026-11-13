@@ -11,6 +11,11 @@ struct RentalChartView: View {
     @State private var selectedYear: Int? = nil
     @State private var selectedParam: ParameterType = .totalRent
     @ObservedObject var viewModel: RentalInvoicesViewModel
+
+    init(viewModel: RentalInvoicesViewModel, initialYear: Int? = nil) {
+        self.viewModel = viewModel
+        _selectedYear = State(initialValue: initialYear)
+    }
     
     var filteredData: [(String, Int)] {
         viewModel.getFilteredData(for: selectedParam, selectedYear: selectedYear)
@@ -52,6 +57,19 @@ struct RentalChartView: View {
                         .padding([.top, .horizontal])
                         .padding(.bottom, 30) // deliberate outlier, doesn't fit the xs..xxl ramp cleanly; left as a reserved literal rather than distorting the scale
                 }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .background(Color.primarySurface)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden()
+        .hidesFloatingTabBar()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButton()
+            }
+            ToolbarItem(placement: .principal) {
+                NavTitle(text: "Charts")
             }
         }
     }

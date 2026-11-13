@@ -168,37 +168,6 @@ struct SpendingGraphCard: View {
     }
 }
 
-// MARK: - Toggle Chip
-
-private struct ToggleChip: View {
-    let title: String
-    let systemImage: String
-    @Binding var isOn: Bool
-
-    var body: some View {
-        Button {
-            withAnimation(.snappy) { isOn.toggle() }
-        } label: {
-            Label(title, systemImage: systemImage)
-                .font(.chipLabel)
-                .foregroundStyle(isOn ? Color.accentDeepOrange : Color.secondaryText.opacity(0.7))
-                .padding(.horizontal, Spacing.md)
-                .padding(.vertical, Spacing.sm)
-                .background(
-                    Capsule()
-                        .fill(isOn ? Color.accentDeepOrange.opacity(0.14) : Color.secondaryText.opacity(0.06))
-                )
-                .overlay(
-                    Capsule()
-                        .stroke(isOn ? Color.accentDeepOrange.opacity(0.35) : Color.clear, lineWidth: 1)
-                )
-        }
-        .buttonStyle(PressScaleButtonStyle())
-        .sensoryFeedback(.selection, trigger: isOn)
-        .accessibilityAddTraits(isOn ? .isSelected : [])
-    }
-}
-
 #Preview {
     @Previewable @State var includeRent = true
     @Previewable @State var compare = true

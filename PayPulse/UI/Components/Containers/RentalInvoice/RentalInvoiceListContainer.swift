@@ -8,12 +8,15 @@
 import SwiftUI
 import OrderedCollections
 
-struct RentalInvoiceListContainer: View {
+struct RentalInvoiceListContainer<Header: View>: View {
     @Binding var selectedYear : Int
     let vendor                : String
     let yearlyInvoices        : OrderedDictionary<Int, [RentalInvoice]>
     var refreshAction         : () async -> Void = {}
+    @ViewBuilder var header   : () -> Header
     @Namespace private var zoomNamespace
+
+    private static var topAnchor: String { "rental-list-top" }
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -28,7 +31,12 @@ struct RentalInvoiceListContainer: View {
                     .padding(.top, Spacing.sm) // rounded 10->8 to match .bottom below
                     .padding(.bottom, Spacing.sm)
 
+                ScrollViewReader { proxy in
                 ScrollView(.vertical, showsIndicators: false) {
+                    header()
+                        .padding([.horizontal, .top])
+                        .id(Self.topAnchor)
+
                     if let invoices = yearlyInvoices[selectedYear], !invoices.isEmpty {
                         ForEach(Array(invoices.enumerated()), id: \.element.id) { index, invoice in
                             InvoiceListRow(
@@ -58,13 +66,21 @@ struct RentalInvoiceListContainer: View {
                         )
                     }
                 }
-                .id(selectedYear)
-                .transition(.opacity)
                 .refreshable {
                     await refreshAction()
                 }
+                .onChange(of: selectedYear) {
+                    withAnimation { proxy.scrollTo(Self.topAnchor, anchor: .top) }
+                }
+                }
             }
         }
+    }
+}
+
+extension RentalInvoiceListContainer where Header == EmptyView {
+    init(selectedYear: Binding<Int>, vendor: String, yearlyInvoices: OrderedDictionary<Int, [RentalInvoice]>, refreshAction: @escaping () async -> Void = {}) {
+        self.init(selectedYear: selectedYear, vendor: vendor, yearlyInvoices: yearlyInvoices, refreshAction: refreshAction, header: { EmptyView() })
     }
 }
 
