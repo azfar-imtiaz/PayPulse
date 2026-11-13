@@ -18,6 +18,8 @@ class HomeViewModel: ObservableObject {
 
     /// The period the spending graph covers. Calendar month for now; custom periods come later.
     @Published private(set) var period: SpendingPeriod = .calendarMonth(containing: Date())
+    /// "Now" for the graph, captured when the summary loads so redraws don't shift the curve's end
+    @Published private(set) var referenceDate = Date()
 
     private let invoiceService: InvoiceService
     private static let logger = Logger(subsystem: "PayPulse", category: "HomeViewModel")
@@ -28,7 +30,8 @@ class HomeViewModel: ObservableObject {
 
     @MainActor
     func loadSummary() async {
-        period = .calendarMonth(containing: Date())
+        referenceDate = Date()
+        period = .calendarMonth(containing: referenceDate)
         let previousPeriod = period.previous()
 
         // Current month uses the backend default; only the comparison month needs an explicit value
@@ -79,12 +82,12 @@ class HomeViewModel: ObservableObject {
         return summary.retail.totalAmount + rent
     }
 
-    func currentSeries(includeRent: Bool, now: Date = Date()) -> [SpendingPoint] {
+    func currentSeries(includeRent: Bool, now: Date? = nil) -> [SpendingPoint] {
         SpendingSeries.build(
             items: summary?.retail.items ?? [],
             rentAmount: includeRent ? summary?.rental?.totalAmount : nil,
             period: period,
-            through: now
+            through: now ?? referenceDate
         )
     }
 
@@ -102,10 +105,10 @@ class HomeViewModel: ObservableObject {
     }
 
     /// Last period's retail spending at the same point in the period as `now`, or nil if unavailable.
-    func previousRetailAtSamePoint(now: Date = Date()) -> Double? {
+    func previousRetailAtSamePoint(now: Date? = nil) -> Double? {
         let series = previousSeries(includeRent: false)
         guard !series.isEmpty else { return nil }
-        let progress = period.progress(for: now)
+        let progress = period.progress(for: now ?? referenceDate)
         return series.last(where: { $0.progress <= progress })?.amount
     }
 

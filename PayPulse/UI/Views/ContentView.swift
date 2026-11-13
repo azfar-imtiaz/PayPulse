@@ -85,7 +85,7 @@ struct ContentView: View {
     }
 
     private var summaryCard: some View {
-        let now = Date()
+        let now = homeViewModel.referenceDate
         return SpendingGraphCard(
             isLoaded: homeViewModel.summaryHasLoaded,
             total: homeViewModel.total(includeRent: graphIncludesRent),

@@ -13,10 +13,13 @@ import Foundation
 /// `progress` is how far through the period the point sits (0 = start, 1 = end), so periods
 /// of different lengths (30 vs 31 days) overlay correctly on the same chart.
 struct SpendingPoint: Identifiable, Hashable {
+    /// Stable identity across rebuilds: 0 = period start, n = end of day n. Charts match points by
+    /// id when animating, so this must not depend on the exact time the series was built.
+    let index: Int
     let progress: Double
     let amount: Double
 
-    var id: Double { progress }
+    var id: Int { index }
 }
 
 // MARK: - Spending Period
@@ -104,7 +107,7 @@ enum SpendingSeries {
         // Last day index whose start is at or before `through`
         let lastDay = min(Int((endProgress * Double(days)).rounded(.down)), days - 1)
 
-        var points: [SpendingPoint] = [SpendingPoint(progress: 0, amount: baseline)]
+        var points: [SpendingPoint] = [SpendingPoint(index: 0, progress: 0, amount: baseline)]
         var running = baseline
         if lastDay >= 0 {
             for day in 0...lastDay {
@@ -113,9 +116,9 @@ enum SpendingSeries {
                 let progress = min(Double(day + 1) / Double(days), endProgress)
                 if let last = points.last, progress <= last.progress {
                     // `through` sits exactly on a day boundary: fold into the previous point
-                    points[points.count - 1] = SpendingPoint(progress: last.progress, amount: running)
+                    points[points.count - 1] = SpendingPoint(index: last.index, progress: last.progress, amount: running)
                 } else {
-                    points.append(SpendingPoint(progress: progress, amount: running))
+                    points.append(SpendingPoint(index: day + 1, progress: progress, amount: running))
                 }
             }
         }

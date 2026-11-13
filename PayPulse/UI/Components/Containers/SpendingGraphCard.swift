@@ -25,9 +25,11 @@ struct SpendingGraphCard: View {
 
     private var showsPrevious: Bool { compareLastMonth && hasPrevious && !previous.isEmpty }
 
+    /// Scale covers last month too even when its line is hidden, so toggling the comparison only
+    /// fades that line in/out instead of rescaling (and visibly moving) this month's curve.
     private var yMax: Double {
         let currentMax = current.map(\.amount).max() ?? 0
-        let previousMax = showsPrevious ? (previous.map(\.amount).max() ?? 0) : 0
+        let previousMax = hasPrevious ? (previous.map(\.amount).max() ?? 0) : 0
         return max(max(currentMax, previousMax) * 1.15, 1)
     }
 
@@ -57,6 +59,7 @@ struct SpendingGraphCard: View {
                 .foregroundStyle(Color.accentDeepOrange)
                 .monospacedDigit()
                 .contentTransition(.numericText(value: total))
+                .animation(.smooth(duration: 0.45), value: total)
 
             HStack(spacing: Spacing.sm) {
                 Text("Spent this month")
@@ -142,6 +145,10 @@ struct SpendingGraphCard: View {
         }
         .chartXScale(domain: 0...1)
         .chartYScale(domain: 0...yMax)
+        // Toggle state lives in @AppStorage, whose updates arrive outside the chip's withAnimation,
+        // so animate on the values directly: lines morph and the scale glides instead of jumping
+        .animation(.smooth(duration: 0.45), value: includeRent)
+        .animation(.smooth(duration: 0.45), value: compareLastMonth)
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
         .chartLegend(.hidden)
@@ -171,8 +178,8 @@ struct SpendingGraphCard: View {
 #Preview {
     @Previewable @State var includeRent = true
     @Previewable @State var compare = true
-    let current = (0...13).map { SpendingPoint(progress: Double($0) / 30, amount: 9800 + Double($0 * $0) * 20) }
-    let previous = (0...30).map { SpendingPoint(progress: Double($0) / 30, amount: 9800 + Double($0) * 180) }
+    let current = (0...13).map { SpendingPoint(index: $0, progress: Double($0) / 30, amount: 9800 + Double($0 * $0) * 20) }
+    let previous = (0...30).map { SpendingPoint(index: $0, progress: Double($0) / 30, amount: 9800 + Double($0) * 180) }
 
     SpendingGraphCard(
         isLoaded: true,

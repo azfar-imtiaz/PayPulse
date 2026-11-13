@@ -41,7 +41,8 @@ struct RentalTrendCard: View {
     private var average: Double { current.isEmpty ? 0 : Double(total) / Double(current.count) }
 
     private var yDomain: ClosedRange<Double> {
-        let values = (current + (showsPrevious ? previous : [])).map { Double($0.amount) }
+        // Include last year even when its line is hidden, so the toggle doesn't rescale this year's line
+        let values = (current + previous).map { Double($0.amount) }
         guard let lo = values.min(), let hi = values.max() else { return 0...1 }
         // Rent is flat-ish: zoom in on the band it moves in so changes are visible
         let pad = max((hi - lo) * 0.25, hi * 0.03, 1)
@@ -129,6 +130,9 @@ struct RentalTrendCard: View {
         }
         .chartXScale(domain: 1...12)
         .chartYScale(domain: yDomain)
+        // The compare toggle is @AppStorage (updates arrive outside withAnimation), so animate on the values
+        .animation(.smooth(duration: 0.45), value: comparePreviousYear)
+        .animation(.smooth(duration: 0.45), value: selectedYear)
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
         .chartLegend(.hidden)
