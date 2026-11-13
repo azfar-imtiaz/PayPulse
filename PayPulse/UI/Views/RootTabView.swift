@@ -38,6 +38,12 @@ struct RootTabView: View {
 
     @State private var visitedTabs: Set<RootTab> = [.home]
     @StateObject private var tabBarVisibility = FloatingTabBarVisibility()
+    /// +1 when moving right in the tab order (Home → Rental → Retail), -1 when moving left
+    @State private var direction: CGFloat = 1
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    /// How far content slides during a tab switch
+    private let slideDistance: CGFloat = 36
 
     var body: some View {
         // A custom container rather than TabView: the system tab bar can't be reliably hidden
@@ -48,8 +54,17 @@ struct RootTabView: View {
                 if visitedTabs.contains(tab) {
                     tabContent(tab)
                         .opacity(selectedTab == tab ? 1 : 0)
+                        .offset(x: restingOffset(for: tab))
                         .allowsHitTesting(selectedTab == tab)
                         .accessibilityHidden(selectedTab != tab)
+                        // First visit: the tab is inserted in the same animated transaction as
+                        // the selection change, so it slides in like an already-visited tab
+                        .transition(
+                            .asymmetric(
+                                insertion: .opacity.combined(with: .offset(x: reduceMotion ? 0 : direction * slideDistance)),
+                                removal: .opacity
+                            )
+                        )
                 }
             }
         }
@@ -59,7 +74,7 @@ struct RootTabView: View {
             if tabBarVisibility.isVisible {
                 FloatingTabBar(
                     items: tabItems,
-                    selection: $selectedTab,
+                    selection: tabSelection,
                     isCollapsed: tabBarVisibility.isCollapsed,
                     onExpand: { tabBarVisibility.isCollapsed = false }
                 )
@@ -73,13 +88,37 @@ struct RootTabView: View {
             }
         }
         .environmentObject(tabBarVisibility)
-        .onChange(of: selectedTab) { _, newTab in
-            visitedTabs.insert(newTab)
+        .onChange(of: selectedTab) {
             // A freshly shown tab starts with the full bar
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 tabBarVisibility.isCollapsed = false
             }
         }
+    }
+
+    /// Wraps the selection so direction and first-visit insertion change in the same transaction
+    /// as the selection itself (the tab bar sets it inside `withAnimation`).
+    private var tabSelection: Binding<RootTab> {
+        Binding(
+            get: { selectedTab },
+            set: { newTab in
+                guard newTab != selectedTab else { return }
+                direction = index(of: newTab) > index(of: selectedTab) ? 1 : -1
+                visitedTabs.insert(newTab)
+                selectedTab = newTab
+            }
+        )
+    }
+
+    private func index(of tab: RootTab) -> Int {
+        RootTab.allCases.firstIndex(of: tab) ?? 0
+    }
+
+    /// Hidden tabs rest just off to the side they sit on in the tab order, so selecting one
+    /// slides it in from that side while the outgoing tab drifts the other way.
+    private func restingOffset(for tab: RootTab) -> CGFloat {
+        guard tab != selectedTab, !reduceMotion else { return 0 }
+        return index(of: tab) < index(of: selectedTab) ? -slideDistance : slideDistance
     }
 
     private var tabItems: [FloatingTabItem] {
