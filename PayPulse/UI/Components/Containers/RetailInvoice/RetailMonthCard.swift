@@ -106,25 +106,27 @@ struct RetailMonthCard: View {
     // MARK: - Split bar
 
     private var bar: some View {
-        CategorySplitBar(segments: segments)
+        CategorySplitBar(segments: segments, height: 22)
+            .padding(.vertical, Spacing.xs)
     }
 
     // MARK: - Legend
 
     private var legend: some View {
-        FlowLayout(spacing: Spacing.md, lineSpacing: Spacing.md) {
+        FlowLayout(spacing: Spacing.lg, lineSpacing: Spacing.md) {
             ForEach(segments, id: \.subType) { segment in
-                HStack(spacing: 6) {
+                HStack(spacing: Spacing.sm) {
                     Circle()
                         .fill(segment.subType.color)
-                        .frame(width: 8, height: 8)
+                        .frame(width: 10, height: 10)
                     Text(segment.subType.displayName)
+                        .font(.buttonCompact)
                         .foregroundStyle(Color.secondaryText)
                     Text(percentLabel(share(segment.amount)))
+                        .font(.bodyStandard)
                         .foregroundStyle(Color.secondaryText.opacity(0.6))
                         .monospacedDigit()
                 }
-                .font(.chipLabel)
             }
         }
     }
